@@ -1,0 +1,13 @@
+export const toastConstants = {
+  SUCCESS_TIMEOUT: 1000,
+  INFO_TIMEOUT: 3000,
+  WARNING_TIMEOUT: 5000,
+  ERROR_TIMEOUT: 8000,
+  NOTICE_TIMEOUT: 30000,
+
+  SUCCESS_COLOR: 'indigo',
+  INFO_COLOR: 'gray',
+  WARNING_COLOR: 'orange',
+  ERROR_COLOR: 'red',
+  NOTICE_COLOR: 'pink',
+};
