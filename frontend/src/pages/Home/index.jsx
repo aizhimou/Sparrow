@@ -6,9 +6,11 @@ import {
 } from '../../helpers';
 import { StatusContext } from '../../context/Status/index.jsx';
 import {Center, Title} from "@mantine/core";
+import {UserContext} from "../../context/User/index.jsx";
 
 const Home = () => {
   const [statusState, statusDispatch] = useContext(StatusContext);
+  const [userState] = useContext(UserContext);
 
   const displayNotice = async () => {
     const res = await API.get('/api/notice');
@@ -24,9 +26,9 @@ const Home = () => {
     }
   };
 
-  // useEffect(() => {
-  //   displayNotice().then();
-  // }, []);
+  useEffect(() => {
+    // displayNotice().then();
+  }, []);
 
   return (
       <Center mt={150}>

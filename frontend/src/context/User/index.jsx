@@ -1,5 +1,3 @@
-// contexts/User/index.jsx
-
 import React from "react"
 import { reducer, initialState } from "./reducer"
 

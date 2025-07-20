@@ -56,7 +56,7 @@ const LoginForm = () => {
         userDispatch({type: 'login', payload: data});
         localStorage.setItem('user', JSON.stringify(data));
         navigate('/');
-        showSuccess('登录成功！');
+        showSuccess('Login successful!');
       } else {
         showError(msg);
       }

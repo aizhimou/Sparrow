@@ -1,5 +1,6 @@
 package top.asimov.sparrow.model;
 
+import com.baomidou.mybatisplus.annotation.TableId;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.time.LocalDateTime;
 import lombok.AllArgsConstructor;
@@ -12,7 +13,9 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class User {
-    private Long id;
+
+    @TableId
+    private String id;
     private String username;
     private Integer role; // -1: root, 0: admin, 1: user
 

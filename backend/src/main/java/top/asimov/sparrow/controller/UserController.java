@@ -46,14 +46,14 @@ public class UserController {
   }
 
   @PostMapping("/forbid")
-  public SaResult forbidUser(@RequestBody Long userId) {
+  public SaResult forbidUser(@RequestBody String userId) {
     User user = userService.forbidUser(userId);
     return SaResult.data(user);
   }
 
-  @PostMapping("/updatePassword")
-  public SaResult updatePassword(@RequestBody User user) {
-    userService.updatePassword(user.getId(), user.getPassword(), user.getNewPassword());
+  @PostMapping("/resetPassword")
+  public SaResult resetPassword(@RequestBody User user) {
+    userService.resetPassword(user.getId(), user.getPassword(), user.getNewPassword());
     return SaResult.data(user);
   }
 
@@ -64,19 +64,19 @@ public class UserController {
   }
 
   @PostMapping("/enable")
-  public SaResult enableUser(@RequestBody Long userId) {
+  public SaResult enableUser(@RequestBody String userId) {
     User user = userService.enableUser(userId);
     return SaResult.data(user);
   }
 
   @PostMapping("/upgrade")
-  public SaResult upgradeUser(@RequestBody Long userId) {
+  public SaResult upgradeUser(@RequestBody String userId) {
     User user = userService.upgradeUser(userId);
     return SaResult.data(user);
   }
 
   @PostMapping("/downgrade")
-  public SaResult downgradeUser(@RequestBody Long userId) {
+  public SaResult downgradeUser(@RequestBody String userId) {
     User user = userService.downgradeUser(userId);
     return SaResult.data(user);
   }

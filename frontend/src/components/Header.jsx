@@ -22,8 +22,9 @@ import {
   API, getSystemName,
   showSuccess
 } from "../helpers/index.js";
-import {useNavigate} from "react-router-dom";
+import {Link, useNavigate} from "react-router-dom";
 import {UserContext} from "../context/User/index.jsx";
+import { useMantineColorScheme, useMantineTheme } from '@mantine/core';
 
 function Header({isDark, toggleColorScheme}) {
 
@@ -61,31 +62,29 @@ function Header({isDark, toggleColorScheme}) {
     return headerLinks.map((link) => {
       if (link.login && !userState.user) return '';
       return (
-          <NavLink key={link.name}
-            href={link.to}
-            label={link.name}
-                   style={{
-                     color: 'light-dark',
-                     fontWeight: '700',}}
-            leftSection={<link.icon size={18} style={{ marginRight: -6 }} />}
-          />
+          <Link to={link.to} key={link.name} style={{ textDecoration: 'none', color: 'inherit'}}>
+            <Group mr='lg'>
+              {React.createElement(link.icon, { size: 16 })}
+              <Text fw={700} ml='-6'> {link.name} </Text>
+            </Group>
+          </Link>
       );
     });
   };
 
   async function logout() {
     await API.post('/api/logout');
-    showSuccess('注销成功!');
     userDispatch({ type: 'logout' });
     localStorage.removeItem('user');
+    showSuccess('Logout successful!');
     navigate('/login');
   }
 
   return (
       <Paper h={48} shadow="xs" withBorder style={{borderLeft: '0', borderRight: '0', borderTop: '0'}}>
-        <Group m='sm' justify="space-between">
+        <Group m='sm' justify="space-around">
           <Group>
-            <Group gap="xs" mr={10} ml={10} style={{cursor: 'pointer'}}>
+            <Group gap="xs" mr={10} style={{cursor: 'pointer'}}>
               <Image src={logo} w={30}></Image>
               <Title order={4}>{getSystemName()}</Title>
             </Group>
@@ -93,7 +92,7 @@ function Header({isDark, toggleColorScheme}) {
               {renderLinks()}
             </Flex>
           </Group>
-          <Group mr={10}>
+          <Group>
             { userState.user ?
                 <Menu mr={10} withArrow>
                   <Menu.Target>

@@ -1,6 +1,8 @@
 package top.asimov.sparrow.exception;
 
+import cn.dev33.satoken.exception.NotLoginException;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindException;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
@@ -61,6 +63,17 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(RuntimeException.class)
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     public SaResult handleRuntimeException(RuntimeException e) {
+        return SaResult.error(e.getMessage());
+    }
+
+    /**
+     * 处理未登录异常
+     * @param e 未登录异常
+     * @return 未登录错误响应
+     */
+    @ExceptionHandler(NotLoginException.class)
+    @ResponseStatus(HttpStatus.UNAUTHORIZED)
+    public SaResult handleNotLoginException(NotLoginException e) {
         return SaResult.error(e.getMessage());
     }
 

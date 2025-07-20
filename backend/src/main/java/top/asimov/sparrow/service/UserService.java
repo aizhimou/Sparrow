@@ -70,7 +70,7 @@ public class UserService {
     userMapper.insert(user);
   }
 
-  public void updatePassword(Long userId, String oldPassword, String newPassword) {
+  public void resetPassword(String userId, String oldPassword, String newPassword) {
     User user = userMapper.selectById(userId);
     if (ObjectUtils.isEmpty(user)) {
       throw new BusinessException("User not found");
@@ -90,7 +90,7 @@ public class UserService {
     userMapper.updateById(user);
   }
 
-  public void updateEmail(Long userId, String newEmail) {
+  public void updateEmail(String userId, String newEmail) {
     User user = userMapper.selectById(userId);
     if (ObjectUtils.isEmpty(user)) {
       throw new BusinessException("User not found");
@@ -100,7 +100,7 @@ public class UserService {
     userMapper.updateById(user);
   }
 
-  public User forbidUser(Long userId) {
+  public User forbidUser(String userId) {
     User user = userMapper.selectById(userId);
     if (ObjectUtils.isEmpty(user)) {
       throw new BusinessException("User not found");
@@ -111,7 +111,7 @@ public class UserService {
     return user;
   }
 
-  public User enableUser(Long userId) {
+  public User enableUser(String userId) {
     User user = userMapper.selectById(userId);
     if (ObjectUtils.isEmpty(user)) {
       throw new BusinessException("User not found");
@@ -123,7 +123,7 @@ public class UserService {
   }
 
 
-  public User upgradeUser(Long userId) {
+  public User upgradeUser(String userId) {
     User user = userMapper.selectById(userId);
     if (ObjectUtils.isEmpty(user)) {
       throw new BusinessException("User not found");
@@ -134,7 +134,7 @@ public class UserService {
     return user;
   }
 
-  public User downgradeUser(Long userId) {
+  public User downgradeUser(String userId) {
     User user = userMapper.selectById(userId);
     if (ObjectUtils.isEmpty(user)) {
       throw new BusinessException("User not found");

@@ -1,22 +1,27 @@
-import React, {useEffect, useState} from "react";
+import React, {useContext, useEffect, useState} from "react";
 import {API, showError, showSuccess} from "../helpers/index.js";
 import {
   Button,
-  Container, Divider, Flex, Box,
+  Divider,
   Group,
-  Input,
+  Input, PasswordInput,
   Stack,
   TextInput,
   Title,
-  Tooltip
 } from "@mantine/core";
+import {UserContext} from "../context/User/index.jsx";
+import {hasLength, useForm} from "@mantine/form";
 
 const UserSetting = () => {
   const [inputs, setInputs] = useState({
+    old_password: '',
+    new_password: '',
     email_verification_code: '',
     email: '',
   });
+
   const [status, setStatus] = useState({});
+  const [userState, userDispatch] = useContext(UserContext);
   const [focused, setFocused] = useState(false);
   const [showEmailBindModal, setShowEmailBindModal] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -32,6 +37,23 @@ const UserSetting = () => {
   const handleInputChange = (e, {name, value}) => {
     setInputs((inputs) => ({...inputs, [name]: value}));
   };
+
+  const resetPassword = async (values) => {
+    console.log(userState.user.id);
+    setLoading(true);
+    const res = await API.post('/api/user/resetPassword', {
+      id: userState.user.id,
+      password: values.oldPassword,
+      newPassword: values.newPassword,
+    });
+    const {code, msg} = res.data;
+    if (code === 200) {
+      showSuccess('Password reset successfully! Login again to see the changes.');
+    } else {
+      showError(msg);
+    }
+    setLoading(false);
+  }
 
   const generateToken = async () => {
     const res = await API.get('/api/user/token');
@@ -78,21 +100,51 @@ const UserSetting = () => {
     setLoading(false);
   };
 
+  const resetPasswordForm = useForm({
+    mode: 'uncontrolled',
+    initialValues: {
+      oldPassword: '',
+      newPassword: '',
+    },
+    validate: {
+      oldPassword: hasLength({min: 6}, 'Old password must be at least 6 characters long'),
+      newPassword: hasLength({min: 6}, 'New password must be at least 6 characters long'),
+    }
+  });
+
   return (
       <Stack mt='md'>
         <Stack mb='xs'>
           <Title order={5}>Reset Password</Title>
-          <Group>
-            <Input placeholder="Please enter new password" style={{ flex: 1 }}></Input>
-            <Button>Submit</Button>
-          </Group>
+          <form onSubmit={resetPasswordForm.onSubmit((values) => resetPassword(values))}>
+            <PasswordInput
+              name='oldPassword'
+              placeholder="Please enter your old password"
+              key={resetPasswordForm.key('oldPassword')}
+              {...resetPasswordForm.getInputProps('oldPassword')}
+            />
+            <PasswordInput mt='md'
+              name='newPassword'
+              placeholder="Please enter new password"
+              key={resetPasswordForm.key('newPassword')}
+              {...resetPasswordForm.getInputProps('newPassword')}
+            />
+            <Button mt='md' loading={loading} type='submit'>Submit</Button>
+          </form>
+        </Stack>
+        <Divider/>
+        <Stack mb='xs'>
+          <Title order={5}>Reset Password</Title>
+          <TextInput name='old_password' placeholder="Please enter your old password" onChange={handleInputChange}/>
+          <TextInput name='new_password' placeholder="Please enter new password" onChange={handleInputChange}/>
+          <Button loading={loading} onClick={resetPassword}>Submit</Button>
         </Stack>
         <Divider/>
         <Stack>
           <Title order={5}>Bind Email</Title>
           <Group>
             <Input placeholder="Please enter new email address" style={{ flex: 1 }}></Input>
-            <Button>Get verification code</Button>
+            <Button variant="outline" loading={loading}>Get verification code</Button>
           </Group>
           <Input placeholder="Verification Code"></Input>
           <Button>Confirm</Button>
