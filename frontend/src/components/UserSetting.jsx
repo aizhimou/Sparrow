@@ -4,9 +4,9 @@ import {
   Button,
   Divider,
   Group,
-  Input, PasswordInput,
+  Input,
+  PasswordInput,
   Stack,
-  TextInput,
   Title,
 } from "@mantine/core";
 import {UserContext} from "../context/User/index.jsx";
@@ -23,7 +23,6 @@ const UserSetting = () => {
   const [status, setStatus] = useState({});
   const [userState, userDispatch] = useContext(UserContext);
   const [focused, setFocused] = useState(false);
-  const [showEmailBindModal, setShowEmailBindModal] = useState(false);
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
@@ -48,22 +47,12 @@ const UserSetting = () => {
     });
     const {code, msg} = res.data;
     if (code === 200) {
-      showSuccess('Password reset successfully! Login again to see the changes.');
+      showSuccess('Password reset successfully! Use new password to login next time.');
     } else {
       showError(msg);
     }
     setLoading(false);
   }
-
-  const generateToken = async () => {
-    const res = await API.get('/api/user/token');
-    const {success, message, data} = res.data;
-    if (success) {
-      showSuccess(`令牌已重置并已复制到剪贴板：${data}`);
-    } else {
-      showError(message);
-    }
-  };
 
   const sendVerificationCode = async () => {
     if (inputs.email === '') {
@@ -75,25 +64,21 @@ const UserSetting = () => {
     );
     const {success, message} = res.data;
     if (success) {
-      showSuccess('验证码发送成功，请检查邮箱！');
+      showSuccess('Verification code sent to your email!');
     } else {
       showError(message);
     }
     setLoading(false);
   };
 
-  const bindEmail = async () => {
-    if (inputs.email_verification_code === '') {
-      return;
-    }
+  const bindEmail = async (values) => {
     setLoading(true);
     const res = await API.get(
         `/api/oauth/email/bind?email=${inputs.email}&code=${inputs.email_verification_code}`
     );
     const {success, message} = res.data;
     if (success) {
-      showSuccess('邮箱账户绑定成功！');
-      setShowEmailBindModal(false);
+      showSuccess('Email bound successfully! ');
     } else {
       showError(message);
     }
@@ -107,8 +92,24 @@ const UserSetting = () => {
       newPassword: '',
     },
     validate: {
-      oldPassword: hasLength({min: 6}, 'Old password must be at least 6 characters long'),
-      newPassword: hasLength({min: 6}, 'New password must be at least 6 characters long'),
+      oldPassword: hasLength({min: 6},
+          'Old password must be at least 6 characters long'),
+      newPassword: hasLength({min: 6},
+          'New password must be at least 6 characters long'),
+    }
+  });
+
+  const bindEmailForm = useForm({
+    mode: 'uncontrolled',
+    initialValues: {
+      email: '',
+      verificationCode: '',
+    },
+    validate: {
+      email: (value) => (/^\S+@\S+\.\S+$/.test(value) ? null
+          : 'Invalid email address'),
+      emailVerificationCode: hasLength({min: 6},
+          'Verification code must be at least 6 characters long'),
     }
   });
 
@@ -116,38 +117,45 @@ const UserSetting = () => {
       <Stack mt='md'>
         <Stack mb='xs'>
           <Title order={5}>Reset Password</Title>
-          <form onSubmit={resetPasswordForm.onSubmit((values) => resetPassword(values))}>
+          <form onSubmit={resetPasswordForm.onSubmit(
+              (values) => resetPassword(values))}>
             <PasswordInput
-              name='oldPassword'
-              placeholder="Please enter your old password"
-              key={resetPasswordForm.key('oldPassword')}
-              {...resetPasswordForm.getInputProps('oldPassword')}
+                name='oldPassword'
+                placeholder="Please enter your old password"
+                key={resetPasswordForm.key('oldPassword')}
+                {...resetPasswordForm.getInputProps('oldPassword')}
             />
             <PasswordInput mt='md'
-              name='newPassword'
-              placeholder="Please enter new password"
-              key={resetPasswordForm.key('newPassword')}
-              {...resetPasswordForm.getInputProps('newPassword')}
+                           name='newPassword'
+                           placeholder="Please enter new password"
+                           key={resetPasswordForm.key('newPassword')}
+                           {...resetPasswordForm.getInputProps('newPassword')}
             />
             <Button mt='md' loading={loading} type='submit'>Submit</Button>
           </form>
         </Stack>
         <Divider/>
-        <Stack mb='xs'>
-          <Title order={5}>Reset Password</Title>
-          <TextInput name='old_password' placeholder="Please enter your old password" onChange={handleInputChange}/>
-          <TextInput name='new_password' placeholder="Please enter new password" onChange={handleInputChange}/>
-          <Button loading={loading} onClick={resetPassword}>Submit</Button>
-        </Stack>
-        <Divider/>
         <Stack>
           <Title order={5}>Bind Email</Title>
-          <Group>
-            <Input placeholder="Please enter new email address" style={{ flex: 1 }}></Input>
-            <Button variant="outline" loading={loading}>Get verification code</Button>
-          </Group>
-          <Input placeholder="Verification Code"></Input>
-          <Button>Confirm</Button>
+          <form
+              onSubmit={bindEmailForm.onSubmit((values) => bindEmail(values))}>
+            <Group>
+              <Input name='email'
+                     placeholder="Please enter new email address"
+                     key={bindEmailForm.key('email')}
+                     {...bindEmailForm.getInputProps('email')}
+                     style={{flex: 1}}
+              />
+              <Button variant="outline" loading={loading} onClick={sendVerificationCode()}>Get verification code</Button>
+            </Group>
+            <Input
+                name='verificationCode'
+                placeholder="Please enter verification code from your email."
+                key={bindEmailForm.key('verificationCode')}
+                {...bindEmailForm.getInputProps('verificationCode')}
+            />
+            <Button type='submit' loading={loading}>Confirm</Button>
+          </form>
         </Stack>
       </Stack>
   );

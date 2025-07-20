@@ -30,7 +30,7 @@ const LoginForm = () => {
 
   useEffect(() => {
     if (searchParams.get("expired")) {
-      showError('未登录或登录已过期，请重新登录！');
+      showError('Not logged in or session expired, please login again.');
     }
     let status = localStorage.getItem('status');
     if (status) {
