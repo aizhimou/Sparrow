@@ -2,10 +2,9 @@ package top.asimov.sparrow.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import org.apache.ibatis.annotations.Mapper;
-import top.asimov.sparrow.model.Option;
-import top.asimov.sparrow.model.User;
+import top.asimov.sparrow.model.Config;
 
 @Mapper
-public interface OptionMapper extends BaseMapper<Option> {
+public interface ConfigMapper extends BaseMapper<Config> {
 
 }

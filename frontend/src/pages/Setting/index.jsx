@@ -1,6 +1,7 @@
 import React, { useContext, useEffect } from 'react';
 import {Center, Container, Stack, Tabs, Title} from "@mantine/core";
 import UserSetting from "../../components/UserSetting.jsx";
+import SystemSetting from "../../components/SystemSetting.jsx";
 
 const Setting = () => {
 
@@ -14,7 +15,7 @@ const Setting = () => {
 
           <Tabs.Panel value="systemSetting">
             <Stack mt="md">
-              System Setting Content
+              <SystemSetting/>
             </Stack>
           </Tabs.Panel>
 
