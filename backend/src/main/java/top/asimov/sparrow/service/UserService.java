@@ -13,14 +13,17 @@ import top.asimov.sparrow.model.User;
 import top.asimov.sparrow.exception.BusinessException;
 import top.asimov.sparrow.mapper.UserMapper;
 import top.asimov.sparrow.util.PasswordUtil;
+import top.asimov.sparrow.util.VerificationCodeManager;
 
 @Service
 public class UserService {
 
   private final UserMapper userMapper;
+  private final MailSenderService mailSenderService;
 
-  public UserService(UserMapper userMapper) {
+  public UserService(UserMapper userMapper, MailSenderService mailSenderService) {
     this.userMapper = userMapper;
+    this.mailSenderService = mailSenderService;
   }
 
   public User checkUserCredentials(String username, String password) {
@@ -45,6 +48,41 @@ public class UserService {
       return null;
     }
     return userMapper.selectById(userId);
+  }
+
+  public void sendVerificationEmail(String userId, String email) {
+    User user = userMapper.selectById(userId);
+    if (ObjectUtils.isEmpty(user)) {
+      throw new BusinessException("User not found");
+    }
+    if (!StringUtils.hasText(email)) {
+      throw new BusinessException("Email cannot be empty");
+    }
+
+    String code = VerificationCodeManager.generateCode();
+    VerificationCodeManager.saveCode(userId, email, code);
+
+    String emailContent = String.format(
+        "Hello %s,\n\nYour verification code is: %s\n\nThis code is valid for 5 minutes.",
+        user.getUsername(), code);
+    mailSenderService.send(email, "Verification Code - Sparrow", emailContent);
+  }
+
+  public void bindEmail(String userId, String email, String code) {
+    User user = userMapper.selectById(userId);
+    if (ObjectUtils.isEmpty(user)) {
+      throw new BusinessException("User not found");
+    }
+    if (!StringUtils.hasText(email)) {
+      throw new BusinessException("Email cannot be empty");
+    }
+    if (!VerificationCodeManager.checkCode(userId, email, code)) {
+      throw new BusinessException("Invalid or expired verification code");
+    }
+
+    user.setEmail(email);
+    //user.setUpdatedAt(LocalDateTime.now());
+    userMapper.updateById(user);
   }
 
   public IPage<User> listUsers(User user, Page<User> page) {

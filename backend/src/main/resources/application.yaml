@@ -30,4 +30,5 @@ logging:
       org.springframework.web: warn
       org.springframework.boot: warn
       org.apache.http: warn
-      top.asimov.sparrow: ${LOG_LEVEL_COM.NZC.CRAWLER:DEBUG}
+      org.mybatis: warn
+      top.asimov.sparrow: debug

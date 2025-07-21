@@ -81,7 +81,7 @@ function Header({isDark, toggleColorScheme}) {
   }
 
   return (
-      <Paper h={48} shadow="xs" withBorder style={{borderLeft: '0', borderRight: '0', borderTop: '0'}}>
+      <Paper h={40} shadow="xs" withBorder style={{borderLeft: '0', borderRight: '0', borderTop: '0'}}>
         <Group m='sm' justify="space-around">
           <Group>
             <Group gap="xs" mr={10} style={{cursor: 'pointer'}}>

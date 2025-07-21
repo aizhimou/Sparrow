@@ -31,6 +31,12 @@ public class ConfigService {
     return config.getValue();
   }
 
+  public List<Config> getConfigsByNames(List<String> names) {
+    QueryWrapper<Config> queryWrapper = new QueryWrapper<>();
+    queryWrapper.in("name", names);
+    return configMapper.selectList(queryWrapper);
+  }
+
   public int batchSetConfigs(List<Config> configList) {
     int result = 0;
     for (Config config : configList) {

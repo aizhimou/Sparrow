@@ -23,7 +23,12 @@ const UserSetting = () => {
   const [status, setStatus] = useState({});
   const [userState, userDispatch] = useContext(UserContext);
   const [focused, setFocused] = useState(false);
-  const [loading, setLoading] = useState(false);
+  let [loading, setLoading] = useState({
+    password: false,
+    email: false,
+    emailCode: false,
+  });
+
 
   useEffect(() => {
     let status = localStorage.getItem('status');
@@ -38,7 +43,6 @@ const UserSetting = () => {
   };
 
   const resetPassword = async (values) => {
-    console.log(userState.user.id);
     setLoading(true);
     const res = await API.post('/api/user/resetPassword', {
       id: userState.user.id,
@@ -55,20 +59,22 @@ const UserSetting = () => {
   }
 
   const sendVerificationCode = async () => {
-    if (inputs.email === '') {
+    const email = bindEmailForm.getValues().email;
+    if (email === '') {
       return;
     }
-    setLoading(true);
-    const res = await API.get(
-        `/api/verification?email=${inputs.email}`
+    setLoading(loading => ({...loading, emailCode: true}));
+    const user = {...userState.user, email};
+    const res = await API.post(
+        '/api/user/sendVerificationEmail', user
     );
-    const {success, message} = res.data;
-    if (success) {
-      showSuccess('Verification code sent to your email!');
+    const {code, msg} = res.data;
+    if (code === 200) {
+      showSuccess('Verification code sent to your email, please check your inbox or spam folder.');
     } else {
-      showError(message);
+      showError(msg);
     }
-    setLoading(false);
+    setLoading(loading => ({...loading, emailCode: false}));
   };
 
   const bindEmail = async (values) => {
@@ -114,29 +120,32 @@ const UserSetting = () => {
   });
 
   return (
-      <Stack mt='md'>
-        <Stack mb='xs'>
-          <Title order={5}>Reset Password</Title>
+      <Stack>
+        <Stack mt='lg'>
+          <Title order={4}>Reset Password</Title>
           <form onSubmit={resetPasswordForm.onSubmit(
               (values) => resetPassword(values))}>
-            <PasswordInput
-                name='oldPassword'
-                placeholder="Please enter your old password"
-                key={resetPasswordForm.key('oldPassword')}
-                {...resetPasswordForm.getInputProps('oldPassword')}
-            />
-            <PasswordInput mt='md'
-                           name='newPassword'
-                           placeholder="Please enter new password"
-                           key={resetPasswordForm.key('newPassword')}
-                           {...resetPasswordForm.getInputProps('newPassword')}
-            />
-            <Button mt='md' loading={loading} type='submit'>Submit</Button>
+              <PasswordInput
+                  name='oldPassword'
+                  placeholder="Please enter your old password"
+                  key={resetPasswordForm.key('oldPassword')}
+                  {...resetPasswordForm.getInputProps('oldPassword')}
+                  style={{flex: 1}}
+              />
+              <PasswordInput
+                  mt='sm'
+                   name='newPassword'
+                   placeholder="Please enter new password"
+                   key={resetPasswordForm.key('newPassword')}
+                   {...resetPasswordForm.getInputProps('newPassword')}
+                   style={{flex: 1}}
+              />
+            <Button mt='sm' loading={loading.password} type='submit' fullWidth>Confirm Reset</Button>
           </form>
         </Stack>
         <Divider/>
-        <Stack>
-          <Title order={5}>Bind Email</Title>
+        <Stack mt='md'>
+          <Title order={4}>Bind or rebind Email</Title>
           <form
               onSubmit={bindEmailForm.onSubmit((values) => bindEmail(values))}>
             <Group>
@@ -146,15 +155,16 @@ const UserSetting = () => {
                      {...bindEmailForm.getInputProps('email')}
                      style={{flex: 1}}
               />
-              <Button variant="outline" loading={loading} onClick={sendVerificationCode}>Get verification code</Button>
+              <Button variant="outline" loading={loading.emailCode} onClick={sendVerificationCode}>Get verification code</Button>
             </Group>
             <Input
+                mt='sm'
                 name='verificationCode'
                 placeholder="Please enter verification code from your email."
                 key={bindEmailForm.key('verificationCode')}
                 {...bindEmailForm.getInputProps('verificationCode')}
             />
-            <Button type='submit' loading={loading}>Confirm</Button>
+            <Button mt='sm' type='submit' loading={loading.email} fullWidth>Confirm Bind</Button>
           </form>
         </Stack>
       </Stack>

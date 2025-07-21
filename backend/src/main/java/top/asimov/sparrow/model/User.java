@@ -35,4 +35,7 @@ public class User {
 
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private transient String token; // For token management
+
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+    private transient String verificationCode; // For email verification
 }

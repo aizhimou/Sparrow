@@ -57,6 +57,18 @@ public class UserController {
     return SaResult.data(user);
   }
 
+  @PostMapping("/sendVerificationEmail")
+  public SaResult sendVerificationEmail(@RequestBody User user) {
+    userService.sendVerificationEmail(user.getId(), user.getEmail());
+    return SaResult.ok();
+  }
+
+  @PostMapping("/bindEmail")
+  public SaResult bindEmail(@RequestBody User user) {
+    userService.bindEmail(user.getId(), user.getEmail(), user.getVerificationCode());
+    return SaResult.ok();
+  }
+
   @PostMapping("/updateEmail")
   public SaResult updateEmail(@RequestBody User user) {
     userService.updateEmail(user.getId(), user.getEmail());

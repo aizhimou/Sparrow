@@ -110,7 +110,7 @@ const SystemSetting = () => {
         <Button onClick={() => updateOption('Notice', inputs.Notice)} loading={loading.Notice}>Save notice</Button>
       </Stack>
       <Divider/>
-      <Stack>
+      <Stack mt='md'>
         <Title order={4}>Registration Settings</Title>
         <Group gap="xl">
           <Checkbox
@@ -134,7 +134,7 @@ const SystemSetting = () => {
         </Group>
       </Stack>
       <Divider/>
-      <Stack>
+      <Stack mt='md'>
         <Title order={4}>SMTP Settings</Title>
         <Group justify="space-between" gap="sm">
           <TextInput
@@ -143,6 +143,7 @@ const SystemSetting = () => {
               value={inputs.SMTPServer}
               placeholder="SMTP server address"
               onChange={e => handleInputChange(e, { name: e.target.name, value: e.target.value })}
+              style={{flex: 1}}
           />
           <TextInput
               name="SMTPPort"
@@ -150,6 +151,7 @@ const SystemSetting = () => {
               value={inputs.SMTPPort}
               placeholder="SMTP server port"
               onChange={e => handleInputChange(e, { name: e.target.name, value: e.target.value })}
+              style={{flex: 1}}
           />
           <TextInput
               name="SMTPAccount"
@@ -157,6 +159,7 @@ const SystemSetting = () => {
               value={inputs.SMTPAccount}
               placeholder="SMTP account email"
               onChange={e => handleInputChange(e, { name: e.target.name, value: e.target.value })}
+              style={{flex: 1}}
           />
           <TextInput
               name="SMTPToken"
@@ -164,12 +167,13 @@ const SystemSetting = () => {
               value={inputs.SMTPToken}
               placeholder="SMTP account token or password"
               onChange={e => handleInputChange(e, { name: e.target.name, value: e.target.value })}
+              style={{flex: 1}}
               />
         </Group>
         <Button onClick={updateSMTPConfig} loading={loading.Smtp}>Save SMTP Configuration</Button>
       </Stack>
       <Divider/>
-      <Stack>
+      <Stack mt='md'>
         <Title order={4}>About Setting</Title>
         <Textarea
             resize="vertical"
