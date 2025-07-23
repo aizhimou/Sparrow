@@ -4,12 +4,12 @@ import {
   showError,
   showNotice,
 } from '../../helpers';
-import { StatusContext } from '../../context/Status/index.jsx';
+import { ConfigContext } from '../../context/Config/index.jsx';
 import {Center, Title} from "@mantine/core";
 import {UserContext} from "../../context/User/index.jsx";
 
 const Home = () => {
-  const [statusState, statusDispatch] = useContext(StatusContext);
+  const [statusState, statusDispatch] = useContext(ConfigContext);
   const [userState] = useContext(UserContext);
 
   const displayNotice = async () => {

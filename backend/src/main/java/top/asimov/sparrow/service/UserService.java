@@ -19,70 +19,9 @@ import top.asimov.sparrow.util.VerificationCodeManager;
 public class UserService {
 
   private final UserMapper userMapper;
-  private final MailSenderService mailSenderService;
 
-  public UserService(UserMapper userMapper, MailSenderService mailSenderService) {
+  public UserService(UserMapper userMapper) {
     this.userMapper = userMapper;
-    this.mailSenderService = mailSenderService;
-  }
-
-  public User checkUserCredentials(String username, String password) {
-    QueryChainWrapper<User> query = new QueryChainWrapper<>(userMapper);
-    query.eq("username", username);
-    User existUser = query.one();
-    if (ObjectUtils.isEmpty(existUser)) {
-      throw new BusinessException("User not found");
-    }
-
-    boolean verified = PasswordUtil.verifyPassword(password, existUser.getSalt(),
-        existUser.getPassword());
-    if (!verified) {
-      throw new BusinessException("Invalid password");
-    }
-    return existUser;
-  }
-
-  public User getCurrentUser() {
-    Long userId = StpUtil.getLoginIdAsLong();
-    if (ObjectUtils.isEmpty(userId)) {
-      return null;
-    }
-    return userMapper.selectById(userId);
-  }
-
-  public void sendVerificationEmail(String userId, String email) {
-    User user = userMapper.selectById(userId);
-    if (ObjectUtils.isEmpty(user)) {
-      throw new BusinessException("User not found");
-    }
-    if (!StringUtils.hasText(email)) {
-      throw new BusinessException("Email cannot be empty");
-    }
-
-    String code = VerificationCodeManager.generateCode();
-    VerificationCodeManager.saveCode(userId, email, code);
-
-    String emailContent = String.format(
-        "Hello %s,\n\nYour verification code is: %s\n\nThis code is valid for 5 minutes.",
-        user.getUsername(), code);
-    mailSenderService.send(email, "Verification Code - Sparrow", emailContent);
-  }
-
-  public void bindEmail(String userId, String email, String code) {
-    User user = userMapper.selectById(userId);
-    if (ObjectUtils.isEmpty(user)) {
-      throw new BusinessException("User not found");
-    }
-    if (!StringUtils.hasText(email)) {
-      throw new BusinessException("Email cannot be empty");
-    }
-    if (!VerificationCodeManager.checkCode(userId, email, code)) {
-      throw new BusinessException("Invalid or expired verification code");
-    }
-
-    user.setEmail(email);
-    //user.setUpdatedAt(LocalDateTime.now());
-    userMapper.updateById(user);
   }
 
   public IPage<User> listUsers(User user, Page<User> page) {
@@ -96,46 +35,21 @@ public class UserService {
     return userMapper.selectPage(page, queryWrapper);
   }
 
-  public void addUser(String username, String password, String email) {
+  public void addUser(User user) {
+    String username = user.getUsername();
+    String password = user.getPassword();
+    String email = user.getEmail();
+    if (!StringUtils.hasText(username) || !StringUtils.hasText(password)) {
+      throw new BusinessException("Username and password cannot be empty");
+    }
     String salt = PasswordUtil.generateSalt(16);
     String encryptedPassword = PasswordUtil.generateEncryptedPassword(password, salt);
-    User user = new User();
     user.setUsername(username);
     user.setPassword(encryptedPassword);
     user.setSalt(salt);
     user.setEmail(email);
     user.setRole(1);
     userMapper.insert(user);
-  }
-
-  public void resetPassword(String userId, String oldPassword, String newPassword) {
-    User user = userMapper.selectById(userId);
-    if (ObjectUtils.isEmpty(user)) {
-      throw new BusinessException("User not found");
-    }
-    // Verify old password
-    boolean verified = PasswordUtil.verifyPassword(oldPassword, user.getSalt(), user.getPassword());
-    if (!verified) {
-      throw new BusinessException("Old password is incorrect");
-    }
-
-    // Update to new password
-    String salt = PasswordUtil.generateSalt(16);
-    String encryptedPassword = PasswordUtil.generateEncryptedPassword(newPassword, salt);
-    user.setPassword(encryptedPassword);
-    user.setSalt(salt);
-    user.setUpdatedAt(LocalDateTime.now());
-    userMapper.updateById(user);
-  }
-
-  public void updateEmail(String userId, String newEmail) {
-    User user = userMapper.selectById(userId);
-    if (ObjectUtils.isEmpty(user)) {
-      throw new BusinessException("User not found");
-    }
-    user.setEmail(newEmail);
-    user.setUpdatedAt(LocalDateTime.now());
-    userMapper.updateById(user);
   }
 
   public User forbidUser(String userId) {
@@ -160,7 +74,6 @@ public class UserService {
     return user;
   }
 
-
   public User upgradeUser(String userId) {
     User user = userMapper.selectById(userId);
     if (ObjectUtils.isEmpty(user)) {
@@ -182,6 +95,5 @@ public class UserService {
     userMapper.updateById(user);
     return user;
   }
-
 
 }

@@ -15,7 +15,7 @@ const SystemSetting = () => {
   let [inputs, setInputs] = useState({
     RegisterEnabled: false,
     EmailVerificationEnabled: false,
-    PasswordResetEnabled: false,
+    ForgetPasswordEnabled: false,
     SMTPServer: '',
     SMTPPort: '',
     SMTPAccount: '',
@@ -126,9 +126,9 @@ const SystemSetting = () => {
               onChange={e => handleInputChange(e, { name: e.target.name, value: e.target.checked })}
           />
           <Checkbox
-              name='PasswordResetEnabled'
-              label='Allow password reset'
-              checked={inputs.PasswordResetEnabled === 'true'}
+              name='ForgetPasswordEnabled'
+              label='Allow forget password'
+              checked={inputs.ForgetPasswordEnabled === 'true'}
               onChange={e => handleInputChange(e, { name: e.target.name, value: e.target.checked })}
           />
         </Group>

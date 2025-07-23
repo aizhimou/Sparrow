@@ -13,10 +13,13 @@ import Setting from "./pages/Setting/index.jsx";
 import User from "./pages/User/index.jsx";
 import RegisterForm from "./components/RegisterForm.jsx";
 import PasswordResetForm from "./components/PasswordResetForm.jsx";
+import {ConfigContext} from "./context/Config/index.jsx";
+import {API, showError} from "./helpers/index.js";
 
 function App({isDark, toggleColorScheme}) {
 
   const [userState, userDispatch] = useContext(UserContext);
+  const [configState, configDispatch] = useContext(ConfigContext);
   let navigate = useNavigate();
 
   const loadUser = () => {
@@ -24,13 +27,25 @@ function App({isDark, toggleColorScheme}) {
     if (user) {
       let data = JSON.parse(user);
       userDispatch({ type: 'login', payload: data });
-    } else {
-      navigate("/login");
     }
   };
 
+  const loadConfig = async () => {
+    const res = await API.get('/api/config/public');
+    const { code, msg, data } = res.data;
+    if (code === 200) {
+      // console.log("fetch config data:", data);
+      configDispatch({ type: 'set', payload: data });
+      // console.log("Config loaded successfully:", configState.config);
+      localStorage.setItem("config", JSON.stringify(data));
+    } else {
+      showError(msg)
+    }
+  }
+
   useEffect(() => {
     loadUser();
+    loadConfig().then();
   }, []);
 
   return (

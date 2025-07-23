@@ -1,19 +1,17 @@
-// contexts/User/index.jsx
-
 import React from 'react';
 import { initialState, reducer } from './reducer';
 
-export const StatusContext = React.createContext({
+export const ConfigContext = React.createContext({
   state: initialState,
   dispatch: () => null,
 });
 
-export const StatusProvider = ({ children }) => {
+export const ConfigProvider = ({ children }) => {
   const [state, dispatch] = React.useReducer(reducer, initialState);
 
   return (
-    <StatusContext.Provider value={[state, dispatch]}>
+    <ConfigContext.Provider value={[state, dispatch]}>
       {children}
-    </StatusContext.Provider>
+    </ConfigContext.Provider>
   );
 };

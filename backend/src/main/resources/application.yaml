@@ -6,6 +6,7 @@ spring:
     name: crawler-chain
   datasource:
     url: jdbc:mysql://192.168.1.113:34785/sparrow?useUnicode=true&characterEncoding=UTF-8&useSSL=false
+#    url: jdbc:mysql://localhost:3306/sparrow?useUnicode=true&characterEncoding=UTF-8&useSSL=false
     username: sparrow
     password: abFYTNZYFwy2KWhi
 

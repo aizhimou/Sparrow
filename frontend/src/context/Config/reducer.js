@@ -3,12 +3,12 @@ export const reducer = (state, action) => {
     case 'set':
       return {
         ...state,
-        status: action.payload,
+        config: action.payload,
       };
     case 'unset':
       return {
         ...state,
-        status: undefined,
+        config: undefined,
       };
     default:
       return state;
@@ -16,5 +16,5 @@ export const reducer = (state, action) => {
 };
 
 export const initialState = {
-  status: undefined,
+  config: undefined,
 };

@@ -14,75 +14,92 @@ import {
   Anchor,
   Button, Image, Text
 } from "@mantine/core";
+import {useForm} from "@mantine/form";
+import {ConfigContext} from "../context/Config/index.jsx";
 
 const LoginForm = () => {
-  const [inputs, setInputs] = useState({
-    username: '',
-    password: '',
-  });
-  const [searchParams, setSearchParams] = useSearchParams();
-  const [submitted, setSubmitted] = useState(false);
-  const {username, password} = inputs;
-  const [userState, userDispatch] = useContext(UserContext);
-  let navigate = useNavigate();
 
-  const [status, setStatus] = useState({});
+  const [searchParams, setSearchParams] = useSearchParams();
+  const [userState, userDispatch] = useContext(UserContext);
+  const [configState, configDispatch] = useContext(ConfigContext);
+  const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
 
   useEffect(() => {
     if (searchParams.get("expired")) {
       showError('Not logged in or session expired, please login again.');
     }
-    let status = localStorage.getItem('status');
-    if (status) {
-      status = JSON.parse(status);
-      setStatus(status);
-    }
+    console.log(configState.config)
   }, []);
 
-  function handleChange(e) {
-    const {name, value} = e.target;
-    setInputs((inputs) => ({...inputs, [name]: value}));
-  }
-
-  async function handleSubmit(e) {
-    setSubmitted(true);
-    if (username && password) {
-      const res = await API.post('/api/login', {
-        username,
-        password,
-      });
-      const {code, msg, data} = res.data;
-      if (code === 200) {
-        userDispatch({type: 'login', payload: data});
-        localStorage.setItem('user', JSON.stringify(data));
-        navigate('/');
-        showSuccess('Login successful!');
-      } else {
-        showError(msg);
-      }
+  const loginForm = useForm({
+    initialValues: {
+      username: '',
+      password: ''
+    },
+    validate: {
+      username: (value) => (value.length >= 3 && value.length <= 20 ? null
+          : 'Username must be between 3 and 20 characters'),
+      password: (value) => (value.length >= 6 ? null
+          : 'Password must be at least 6 characters long'),
     }
-  }
+  })
+
+  const login = async () => {
+    setLoading(true);
+    const user = loginForm.getValues();
+    const res = await API.post('/api/auth/login', user);
+    const {code, msg, data} = res.data;
+    if (code !== 200) {
+      showError(msg);
+      return;
+    }
+    setLoading(false);
+    userDispatch({ type: 'login', payload: data });
+    localStorage.setItem('user', JSON.stringify(data));
+    navigate('/');
+  };
 
   return (
-      <>
       <Container pt="150px" size="xs">
         <Group justify="center">
           <Image src={logo} w={40}></Image>
           <Title>Login</Title>
         </Group>
         <Paper p="xl" withBorder mt="md">
-          <Stack>
-            <TextInput name="username" label="Username" placeholder="Please enter your username" onChange={handleChange}/>
-            <PasswordInput name="password" label="Password" placeholder="Please enter your password" onChange={handleChange}/>
-            <Button fullWidth onClick={handleSubmit}>Submit</Button>
-            <Group justify="space-between">
-              <Anchor component={Link} to="/reset" size="sm"> Forgot password? </Anchor>
-              <Anchor component={Link} to="/reset" size="sm"> Register a account </Anchor>
-            </Group>
-          </Stack>
+          <form onSubmit={loginForm.onSubmit(login)}>
+            <Stack>
+              <TextInput
+                  name="username"
+                  label="Username"
+                  placeholder="Please enter your username"
+                  key={loginForm.key('username')}
+                  {...loginForm.getInputProps('username')}
+              />
+              <PasswordInput
+                  name="password"
+                  label="Password"
+                  placeholder="Please enter your password"
+                  key={loginForm.key('password')}
+                  {...loginForm.getInputProps('password')}
+                  />
+              <Button type='submit'>Submit</Button>
+              <Group justify="space-between">
+                {/*{configState.config.ForgetPasswordEnabled ?
+                    <Anchor component={Link} to="/reset" size="sm"> Forgot
+                      password? </Anchor>
+                    : <></>
+                }*/}
+                {/*{configState.config.RegisterEnabled ?
+                    <Anchor component={Link} to="/register" size="sm"> Register a
+                      account </Anchor>
+                    : <></>
+                }*/}
+              </Group>
+            </Stack>
+          </form>
         </Paper>
       </Container>
-      </>
   );
 };
 

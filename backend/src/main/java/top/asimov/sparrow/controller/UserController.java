@@ -21,15 +21,6 @@ public class UserController {
     this.userService = userService;
   }
 
-  @GetMapping("/info")
-  public SaResult getUserInfo() {
-    User user = userService.getCurrentUser();
-    if (user == null) {
-      return SaResult.error("User not found");
-    }
-    return SaResult.data(user);
-  }
-
   @GetMapping("/list")
   public SaResult listUsers(@RequestParam(required = false) String name,
                             @RequestParam(required = false) String email,
@@ -41,37 +32,13 @@ public class UserController {
 
   @PostMapping("/add")
   public SaResult addUser(@RequestBody User user) {
-    userService.addUser(user.getUsername(), user.getPassword(), user.getEmail());
+    userService.addUser(user);
     return SaResult.data(user);
   }
 
   @PostMapping("/forbid")
   public SaResult forbidUser(@RequestBody String userId) {
     User user = userService.forbidUser(userId);
-    return SaResult.data(user);
-  }
-
-  @PostMapping("/resetPassword")
-  public SaResult resetPassword(@RequestBody User user) {
-    userService.resetPassword(user.getId(), user.getPassword(), user.getNewPassword());
-    return SaResult.data(user);
-  }
-
-  @PostMapping("/sendVerificationEmail")
-  public SaResult sendVerificationEmail(@RequestBody User user) {
-    userService.sendVerificationEmail(user.getId(), user.getEmail());
-    return SaResult.ok();
-  }
-
-  @PostMapping("/bindEmail")
-  public SaResult bindEmail(@RequestBody User user) {
-    userService.bindEmail(user.getId(), user.getEmail(), user.getVerificationCode());
-    return SaResult.ok();
-  }
-
-  @PostMapping("/updateEmail")
-  public SaResult updateEmail(@RequestBody User user) {
-    userService.updateEmail(user.getId(), user.getEmail());
     return SaResult.data(user);
   }
 

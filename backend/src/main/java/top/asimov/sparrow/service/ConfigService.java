@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.ObjectUtils;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 import org.springframework.stereotype.Service;
 import top.asimov.sparrow.mapper.ConfigMapper;
 import top.asimov.sparrow.model.Config;
@@ -15,6 +16,15 @@ public class ConfigService {
 
   public ConfigService(ConfigMapper configMapper) {
     this.configMapper = configMapper;
+  }
+
+  public Map<String, String> getPublicConfigs() {
+    List<String> publicConfigNames = List.of(
+        "RegisterEnabled", "EmailVerificationEnabled", "ForgetPasswordEnabled"
+    );
+    List<Config> configs = getConfigsByNames(publicConfigNames);
+    return configs.stream()
+        .collect(Collectors.toMap(Config::getName, Config::getValue));
   }
 
   public List<Config> getAllConfigs() {

@@ -4,7 +4,7 @@ import {StrictMode, useState} from 'react'
 import {BrowserRouter} from 'react-router-dom';
 import {createRoot} from 'react-dom/client'
 import {MantineProvider} from '@mantine/core';
-import {StatusProvider} from './context/Status/index.jsx';
+import {ConfigProvider} from './context/Config/index.jsx';
 import {UserProvider} from './context/User/index.jsx';
 import {Notifications} from '@mantine/notifications';
 import '@mantine/core/styles.css'
@@ -21,7 +21,7 @@ function Main() {
   }
   return (
       <StrictMode>
-        <StatusProvider>
+        <ConfigProvider>
           <UserProvider>
             <BrowserRouter>
               <MantineProvider forceColorScheme={colorScheme}>
@@ -30,7 +30,7 @@ function Main() {
               </MantineProvider>
             </BrowserRouter>
           </UserProvider>
-        </StatusProvider>
+        </ConfigProvider>
       </StrictMode>
   );
 }

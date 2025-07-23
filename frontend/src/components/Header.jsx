@@ -73,7 +73,7 @@ function Header({isDark, toggleColorScheme}) {
   };
 
   async function logout() {
-    await API.post('/api/logout');
+    await API.post('/api/auth/logout');
     userDispatch({ type: 'logout' });
     localStorage.removeItem('user');
     showSuccess('Logout successful!');

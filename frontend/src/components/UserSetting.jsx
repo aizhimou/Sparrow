@@ -13,40 +13,19 @@ import {UserContext} from "../context/User/index.jsx";
 import {hasLength, useForm} from "@mantine/form";
 
 const UserSetting = () => {
-  const [inputs, setInputs] = useState({
-    old_password: '',
-    new_password: '',
-    email_verification_code: '',
-    email: '',
-  });
 
-  const [status, setStatus] = useState({});
   const [userState, userDispatch] = useContext(UserContext);
-  const [focused, setFocused] = useState(false);
   let [loading, setLoading] = useState({
-    password: false,
-    email: false,
-    emailCode: false,
+    confirmPassword: false,
+    getVerificationCode: false,
+    confirmEmail: false,
   });
-
-
-  useEffect(() => {
-    let status = localStorage.getItem('status');
-    if (status) {
-      status = JSON.parse(status);
-      setStatus(status);
-    }
-  }, []);
-
-  const handleInputChange = (e, {name, value}) => {
-    setInputs((inputs) => ({...inputs, [name]: value}));
-  };
 
   const resetPassword = async (values) => {
-    setLoading(true);
+    setLoading(loading => ({...loading, confirmPassword: true}));
     const res = await API.post('/api/user/resetPassword', {
       id: userState.user.id,
-      password: values.oldPassword,
+      confirmPassword: values.oldPassword,
       newPassword: values.newPassword,
     });
     const {code, msg} = res.data;
@@ -55,16 +34,16 @@ const UserSetting = () => {
     } else {
       showError(msg);
     }
-    setLoading(false);
+    setLoading(loading => ({...loading, confirmPassword: false}));
   }
 
   const sendVerificationCode = async () => {
-    const email = bindEmailForm.getValues().email;
+    const email = bindEmailForm.getValues().getVerificationCode;
     if (email === '') {
       return;
     }
     setLoading(loading => ({...loading, emailCode: true}));
-    const user = {...userState.user, email};
+    const user = {...userState.user, getVerificationCode: email};
     const res = await API.post(
         '/api/user/sendVerificationEmail', user
     );
@@ -77,18 +56,21 @@ const UserSetting = () => {
     setLoading(loading => ({...loading, emailCode: false}));
   };
 
-  const bindEmail = async (values) => {
-    setLoading(true);
-    const res = await API.get(
-        `/api/oauth/email/bind?email=${inputs.email}&code=${inputs.email_verification_code}`
-    );
-    const {success, message} = res.data;
-    if (success) {
+  const bindEmail = async () => {
+    setLoading(loading => ({...loading, email: true}));
+    const user = {
+      ...userState.user,
+      getVerificationCode: bindEmailForm.getValues().getVerificationCode,
+      verificationCode: bindEmailForm.getValues().verificationCode
+    };
+    const res = await API.get('/api/user/bindEmail', user);
+    const {code, msg} = res.data;
+    if (code === 200) {
       showSuccess('Email bound successfully! ');
     } else {
-      showError(message);
+      showError(msg);
     }
-    setLoading(false);
+    setLoading(loading => ({...loading, email: false}));
   };
 
   const resetPasswordForm = useForm({
@@ -112,7 +94,7 @@ const UserSetting = () => {
       verificationCode: '',
     },
     validate: {
-      email: (value) => (/^\S+@\S+\.\S+$/.test(value) ? null
+      getVerificationCode: (value) => (/^\S+@\S+\.\S+$/.test(value) ? null
           : 'Invalid email address'),
       emailVerificationCode: hasLength({min: 6},
           'Verification code must be at least 6 characters long'),
@@ -140,7 +122,7 @@ const UserSetting = () => {
                    {...resetPasswordForm.getInputProps('newPassword')}
                    style={{flex: 1}}
               />
-            <Button mt='sm' loading={loading.password} type='submit' fullWidth>Confirm Reset</Button>
+            <Button mt='sm' loading={loading.confirmPassword} type='submit' fullWidth>Confirm Reset</Button>
           </form>
         </Stack>
         <Divider/>
@@ -155,7 +137,7 @@ const UserSetting = () => {
                      {...bindEmailForm.getInputProps('email')}
                      style={{flex: 1}}
               />
-              <Button variant="outline" loading={loading.emailCode} onClick={sendVerificationCode}>Get verification code</Button>
+              <Button variant="outline" loading={loading.confirmEmail} onClick={sendVerificationCode}>Get verification code</Button>
             </Group>
             <Input
                 mt='sm'
@@ -164,7 +146,7 @@ const UserSetting = () => {
                 key={bindEmailForm.key('verificationCode')}
                 {...bindEmailForm.getInputProps('verificationCode')}
             />
-            <Button mt='sm' type='submit' loading={loading.email} fullWidth>Confirm Bind</Button>
+            <Button mt='sm' type='submit' loading={loading.getVerificationCode} fullWidth>Confirm Bind</Button>
           </form>
         </Stack>
       </Stack>

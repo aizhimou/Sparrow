@@ -9,21 +9,21 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import top.asimov.sparrow.model.User;
-import top.asimov.sparrow.service.UserService;
+import top.asimov.sparrow.service.AuthService;
 
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api/auth")
 public class AuthController {
 
-  private final UserService userService;
+  private final AuthService authService;
 
-  public AuthController(UserService userService) {
-    this.userService = userService;
+  public AuthController(AuthService authService) {
+    this.authService = authService;
   }
 
   @PostMapping("/login")
   public SaResult login(@RequestBody User user) {
-    User exsitUser = userService.checkUserCredentials(user.getUsername(),user.getPassword());
+    User exsitUser = authService.checkUserCredentials(user.getUsername(),user.getPassword());
     if (ObjectUtils.isEmpty(exsitUser)) {
       return SaResult.error("username or password is incorrect");
     }
@@ -38,4 +38,22 @@ public class AuthController {
     StpUtil.logout();
     return SaResult.ok("Logout successful");
   }
+
+  @PostMapping("/sendRegistrationVerificationCode")
+  public SaResult sendVerificationCode(@RequestBody User user) {
+    authService.sendRegistrationVerificationCode(user.getEmail());
+    return SaResult.ok();
+  }
+
+  @PostMapping("/register")
+  public SaResult register(@RequestBody User user) {
+    int result = authService.userRegister(user);
+    return SaResult.ok().setData(result);
+  }
+
+  @PostMapping("/forgetPassword")
+  public SaResult forgetPassword(@RequestBody User user) {
+    return SaResult.ok();
+  }
+
 }
