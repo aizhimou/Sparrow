@@ -15,7 +15,6 @@ import {
   Button, Image, Text
 } from "@mantine/core";
 import {useForm} from "@mantine/form";
-import {ConfigContext} from "../context/Config/index.jsx";
 
 const LoginForm = () => {
 

@@ -12,28 +12,22 @@ import {
 } from "@mantine/core";
 import {useForm} from "@mantine/form";
 import logo from "../assets/react.svg";
-import {API} from "../helpers/index.js";
+import {API, showError, showSuccess} from "../helpers/index.js";
+import {useNavigate} from "react-router-dom";
 
 const RegisterForm = () => {
 
-  let [emailVerificationEnabled, setEmailVerificationEnabled] = useState(false);
+  let [emailVerificationEnabled, setEmailVerificationEnabled] = useState(null);
+  let navigator = useNavigate();
 
-  useEffect( () => {
-    const fetchEmailVerificationEnabled = async () => {
-      try {
-        const res = await API.get('/api/config/name/public?name=EmailVerificationEnabled');
-        const { code, msg, data } = res.data;
-        if (code !== 200) {
-          console.error(msg);
-          return;
-        }
-        setEmailVerificationEnabled(data === 'true');
-      } catch (err) {
-        console.error('load email verification config error:', err);
-      }
-    };
-
-    fetchEmailVerificationEnabled();
+  useEffect( async () => {
+    const res = await API.get('/api/config/name/public?name=EmailVerificationEnabled');
+    const {code, msg, data} = res.data;
+    if (code !== 200) {
+      console.error(msg);
+      return;
+    }
+    setEmailVerificationEnabled(data === 'true');
   }, []);
 
   const form = useForm({
@@ -51,18 +45,41 @@ const RegisterForm = () => {
           ? 'Password must be at least 6 characters long' : null),
       confirmPassword: (value, values) => (value !== values.password
           ? 'Passwords do not match' : null),
-      email: (value) => (/^\S+@\S+$/.test(value) ? null
-          : 'Invalid email address'),
-      verificationCode: (value) => (value.length === 6) ? null
-          : 'Verification code must be 6 characters long',
+      email: (value) => (emailVerificationEnabled ?
+          (/^\S+@\S+$/.test(value) ? null : 'Invalid email address') : null),
+      verificationCode: (value) => (emailVerificationEnabled ?
+          (value.length === 6 ? null : 'Verification code must be 6 characters long') : null),
     }
   })
 
-  const handleRegister = (values) => {
-    console.log('Registering user with values:', values);
+  const handleRegister = async () => {
+    const user = form.getValues();
+    if (form.validate().hasErrors) {
+      return;
+    }
+    const res = await API.post('/api/auth/register', user);
+    const {code, msg, data} = res.data;
+    if (code !== 200) {
+      showError(msg)
+      return;
+    }
+    showSuccess("Registration successful, please login.");
+    navigator('/login');
   }
 
-  const getVerificationCode = async (email) => {
+  const getVerificationCode = async () => {
+    const email = form.getInputProps('email').value;
+    if (!email) {
+      form.setFieldError('email', 'Email is required to get verification code');
+      return;
+    }
+    const res = await API.get(`/api/auth/sendRegistrationVerificationCode?email=${email}`);
+    const {code, msg, data} = res.data;
+    if (code !== 200) {
+      form.setFieldError('verificationCode', msg);
+      return;
+    }
+    showSuccess("Verification code sent to your email. Please check your inbox or spam folder.");
   }
 
   return (
@@ -118,7 +135,7 @@ const RegisterForm = () => {
                           {...form.getInputProps('verificationCode')}
                           style={{flex: 1}}
                       />
-                      <Button variant="outline">Get verification code</Button>
+                      <Button variant="outline" onClick={getVerificationCode}>Get verification code</Button>
                     </Group>
                   </> : <></>
               }

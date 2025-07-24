@@ -4,9 +4,11 @@ import cn.dev33.satoken.stp.SaTokenInfo;
 import cn.dev33.satoken.stp.StpUtil;
 import cn.dev33.satoken.util.SaResult;
 import org.springframework.util.ObjectUtils;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import top.asimov.sparrow.model.User;
 import top.asimov.sparrow.service.AuthService;
@@ -39,9 +41,9 @@ public class AuthController {
     return SaResult.ok("Logout successful");
   }
 
-  @PostMapping("/sendRegistrationVerificationCode")
-  public SaResult sendVerificationCode(@RequestBody User user) {
-    authService.sendRegistrationVerificationCode(user.getEmail());
+  @GetMapping("/sendRegistrationVerificationCode")
+  public SaResult sendVerificationCode(@RequestParam (name = "email") String email) {
+    authService.sendRegistrationVerificationCode(email);
     return SaResult.ok();
   }
 

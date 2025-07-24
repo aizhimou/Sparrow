@@ -32,21 +32,8 @@ function App() {
     }
   };
 
-  const loadConfig = async () => {
-    const res = await API.get('/api/config/public');
-    const {code, msg, data} = res.data;
-    if (code === 200) {
-      console.log("fetch config data:", data);
-      configDispatch({type: 'set', payload: data});
-      localStorage.setItem("config", JSON.stringify(data));
-    } else {
-      showError(msg)
-    }
-  }
-
   useEffect(() => {
     loadUser();
-    // loadConfig().then();
   }, []);
 
   return (
