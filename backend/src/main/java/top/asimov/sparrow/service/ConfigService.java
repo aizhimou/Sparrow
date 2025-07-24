@@ -3,8 +3,6 @@ package top.asimov.sparrow.service;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.ObjectUtils;
 import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
 import org.springframework.stereotype.Service;
 import top.asimov.sparrow.mapper.ConfigMapper;
 import top.asimov.sparrow.model.Config;
@@ -18,22 +16,24 @@ public class ConfigService {
     this.configMapper = configMapper;
   }
 
-  public Map<String, String> getPublicConfigs() {
-    List<String> publicConfigNames = List.of(
-        "RegisterEnabled", "EmailVerificationEnabled", "ForgetPasswordEnabled"
-    );
-    List<Config> configs = getConfigsByNames(publicConfigNames);
-    return configs.stream()
-        .collect(Collectors.toMap(Config::getName, Config::getValue));
-  }
-
   public List<Config> getAllConfigs() {
     return configMapper.selectList(null);
   }
 
-  public String getConfig(String Name) {
+  public String getConfig(String name) {
     QueryWrapper<Config> queryWrapper = new QueryWrapper<>();
-    queryWrapper.eq("name", Name);
+    queryWrapper.eq("name", name);
+    Config config = configMapper.selectOne(queryWrapper);
+    if (ObjectUtils.isEmpty(config)) {
+      return null;
+    }
+    return config.getValue();
+  }
+
+  public String getPublicConfig(String name) {
+    QueryWrapper<Config> queryWrapper = new QueryWrapper<>();
+    queryWrapper.eq("name", name);
+    queryWrapper.eq("is_public", 1);
     Config config = configMapper.selectOne(queryWrapper);
     if (ObjectUtils.isEmpty(config)) {
       return null;

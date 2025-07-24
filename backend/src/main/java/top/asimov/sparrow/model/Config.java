@@ -14,5 +14,6 @@ public class Config {
   private String id;
   private String name;
   private String value;
+  private int isPublic;
 
 }

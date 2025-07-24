@@ -2,7 +2,6 @@ package top.asimov.sparrow.controller;
 
 import cn.dev33.satoken.util.SaResult;
 import java.util.List;
-import java.util.Map;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -22,12 +21,6 @@ public class ConfigController {
     this.configService = configService;
   }
 
-  @GetMapping("/public")
-  public SaResult getPublicConfig() {
-    Map<String, String> publicConfigs = configService.getPublicConfigs();
-    return SaResult.ok().setData(publicConfigs);
-  }
-
   @GetMapping("/all")
   public SaResult getAllConfigs() {
     List<Config> allConfigs = configService.getAllConfigs();
@@ -38,6 +31,12 @@ public class ConfigController {
   public SaResult getConfig(@RequestParam(name = "name") String name) {
     String optionValue = configService.getConfig(name);
     return SaResult.ok().setData(optionValue);
+  }
+
+  @GetMapping("/name/public")
+  public SaResult getPublicConfig(@RequestParam(name = "name") String name) {
+    String configValue = configService.getPublicConfig(name);
+    return SaResult.ok().setData(configValue);
   }
 
   @PostMapping("/name")

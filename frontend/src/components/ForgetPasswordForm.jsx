@@ -1,6 +1,6 @@
 import React from "react";
 
-const PasswordResetForm = () => {
+const ForgetPasswordForm = () => {
   return (
     <div>
       <h2>Password Reset</h2>
@@ -13,4 +13,4 @@ const PasswordResetForm = () => {
   );
 }
 
-export default PasswordResetForm;
+export default ForgetPasswordForm;

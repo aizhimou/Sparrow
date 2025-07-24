@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useEffect, useState} from "react";
 import {
   Anchor,
   Button,
@@ -12,12 +12,29 @@ import {
 } from "@mantine/core";
 import {useForm} from "@mantine/form";
 import logo from "../assets/react.svg";
-import {UserContext} from "../context/User/index.jsx";
-import {ConfigContext} from "../context/Config/index.jsx";
+import {API} from "../helpers/index.js";
 
 const RegisterForm = () => {
 
-  const [ConfigState, ConfigDispatch] = React.useContext(ConfigContext);
+  let [emailVerificationEnabled, setEmailVerificationEnabled] = useState(false);
+
+  useEffect( () => {
+    const fetchEmailVerificationEnabled = async () => {
+      try {
+        const res = await API.get('/api/config/name/public?name=EmailVerificationEnabled');
+        const { code, msg, data } = res.data;
+        if (code !== 200) {
+          console.error(msg);
+          return;
+        }
+        setEmailVerificationEnabled(data === 'true');
+      } catch (err) {
+        console.error('load email verification config error:', err);
+      }
+    };
+
+    fetchEmailVerificationEnabled();
+  }, []);
 
   const form = useForm({
     initialValues: {
@@ -81,7 +98,7 @@ const RegisterForm = () => {
                   key={form.key('confirmPassword')}
                   {...form.getInputProps('confirmPassword')}
               />
-              {ConfigState.EmailVerificationEnabled && (
+              {emailVerificationEnabled ?
                   <>
                     <TextInput
                         label="Email"
@@ -103,8 +120,8 @@ const RegisterForm = () => {
                       />
                       <Button variant="outline">Get verification code</Button>
                     </Group>
-                  </>
-              )}
+                  </> : <></>
+              }
               <Button
                   mt='sm'
                   fullWidth

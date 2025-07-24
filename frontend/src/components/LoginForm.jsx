@@ -21,7 +21,6 @@ const LoginForm = () => {
 
   const [searchParams, setSearchParams] = useSearchParams();
   const [userState, userDispatch] = useContext(UserContext);
-  const [configState, configDispatch] = useContext(ConfigContext);
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
@@ -29,7 +28,6 @@ const LoginForm = () => {
     if (searchParams.get("expired")) {
       showError('Not logged in or session expired, please login again.');
     }
-    console.log(configState.config)
   }, []);
 
   const loginForm = useForm({
@@ -55,10 +53,38 @@ const LoginForm = () => {
       return;
     }
     setLoading(false);
-    userDispatch({ type: 'login', payload: data });
+    userDispatch({type: 'login', payload: data});
     localStorage.setItem('user', JSON.stringify(data));
     navigate('/');
   };
+
+  const handleForgerPassword = async () => {
+    const res = await API.get('/api/config/name/public?name=ForgetPasswordEnabled');
+    const {code, msg, data} = res.data;
+    if (code !== 200) {
+      showError(msg);
+      return;
+    }
+    if (data === 'true') {
+      navigate('/forgetPassword');
+    } else {
+      showError('Forget password feature is not enabled.');
+    }
+  }
+
+  const handleRegister = async () => {
+    const res = await API.get('/api/config/name/public?name=RegisterEnabled');
+    const {code, msg, data} = res.data;
+    if (code !== 200) {
+      showError(msg);
+      return;
+    }
+    if (data === 'true') {
+      navigate('/register');
+    } else {
+      showError('Register feature is not enabled.');
+    }
+  }
 
   return (
       <Container pt="150px" size="xs">
@@ -82,19 +108,16 @@ const LoginForm = () => {
                   placeholder="Please enter your password"
                   key={loginForm.key('password')}
                   {...loginForm.getInputProps('password')}
-                  />
-              <Button type='submit'>Submit</Button>
+              />
+              <Button
+                  type='submit'
+                  variant="gradient"
+                  gradient={{from: 'blue', to: 'cyan', deg: 90}}
+              >
+                Submit</Button>
               <Group justify="space-between">
-                {/*{configState.config.ForgetPasswordEnabled ?
-                    <Anchor component={Link} to="/reset" size="sm"> Forgot
-                      password? </Anchor>
-                    : <></>
-                }*/}
-                {/*{configState.config.RegisterEnabled ?
-                    <Anchor component={Link} to="/register" size="sm"> Register a
-                      account </Anchor>
-                    : <></>
-                }*/}
+                <Anchor onClick={handleForgerPassword} size="sm"> Forgot password? </Anchor>
+                <Anchor onClick={handleRegister} size="sm"> Register a account </Anchor>
               </Group>
             </Stack>
           </form>

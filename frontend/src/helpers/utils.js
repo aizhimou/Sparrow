@@ -16,20 +16,6 @@ export function isRoot() {
   return user.role === -1;
 }
 
-export function getTheme() {
-  let theme = localStorage.getItem('theme');
-  if (!theme) return 'light';
-  return theme;
-}
-
-export function setTheme(theme) {
-  if (theme !== 'light' && theme !== 'dark') {
-    console.error('Invalid theme value:', theme);
-    return;
-  }
-  localStorage.setItem('theme', theme);
-}
-
 export function getSystemName() {
   let system_name = localStorage.getItem('systemName');
   if (!system_name) return 'Sparrow';
