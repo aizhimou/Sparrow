@@ -8,7 +8,7 @@ import {
   NavLink,
   Title, Avatar, Menu, Text, useComputedColorScheme, useMantineColorScheme
 } from '@mantine/core';
-import logo from "../assets/react.svg";
+import logo from "../assets/sparrow.svg";
 import {
   IconMoon,
   IconSun,
@@ -94,7 +94,7 @@ function Header() {
         <Group m='sm' justify="space-around">
           <Group>
             <Group gap="xs" mr={10} style={{cursor: 'pointer'}}>
-              <Image src={logo} w={30}></Image>
+              <Image src={logo} w={40}></Image>
               <Title order={4}>{getSystemName()}</Title>
             </Group>
             <Flex>

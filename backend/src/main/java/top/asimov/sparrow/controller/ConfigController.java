@@ -41,7 +41,7 @@ public class ConfigController {
 
   @PostMapping("/name")
   public SaResult setConfig(@RequestBody Config config) {
-    int result = configService.setConfig(config.getName(), config.getValue());
+    int result = configService.setConfig(config);
     return SaResult.ok().setData(result);
   }
 

@@ -50,23 +50,27 @@ public class ConfigService {
   public int batchSetConfigs(List<Config> configList) {
     int result = 0;
     for (Config config : configList) {
-      result += setConfig(config.getName(), config.getValue());
+      result += setConfig(config);
     }
     return result;
   }
 
-  public int setConfig(String name, String value) {
+  public int setConfig(Config config) {
     // check if the option exists
     QueryWrapper<Config> queryWrapper = new QueryWrapper<>();
-    queryWrapper.eq("name", name);
+    queryWrapper.eq("name", config.getName());
     Config existConfig = configMapper.selectOne(queryWrapper);
     if (existConfig != null) {
       // update existing option
-      existConfig.setValue(value);
+      existConfig.setValue(config.getValue());
       return configMapper.updateById(existConfig);
     } else {
       // create new option
-      Config newConfig = Config.builder().name(name).value(value).build();
+      Config newConfig = Config.builder()
+          .name(config.getName())
+          .value(config.getValue())
+          .isPublic(config.getIsPublic())
+          .build();
       return configMapper.insert(newConfig);
     }
   }

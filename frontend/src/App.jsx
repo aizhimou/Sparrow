@@ -19,7 +19,6 @@ import Layout from "./components/Layout.jsx";
 function App() {
 
   const [userState, userDispatch] = useContext(UserContext);
-  const [configState, configDispatch] = useContext(ConfigContext);
   let navigate = useNavigate();
 
   const loadUser = () => {
@@ -27,8 +26,6 @@ function App() {
     if (user) {
       let data = JSON.parse(user);
       userDispatch({type: 'login', payload: data});
-    } else {
-      navigate("/login")
     }
   };
 
@@ -39,13 +36,15 @@ function App() {
   return (
       <Routes>
         <Route path='/' element={<Layout/>}>
-          <Route index element={<Home/>}/>
+          <Route index element={<PrivateRoute><Home/></PrivateRoute>}/>
+          <Route path='setting' element={<PrivateRoute><Setting/></PrivateRoute>}/>
+          <Route path='user' element={<PrivateRoute><User/></PrivateRoute>}/>
+          <Route path='about' element={<PrivateRoute><About/></PrivateRoute>}/>
+
           <Route path='login' element={<LoginForm/>}/>
           <Route path='register' element={<RegisterForm/>}/>
           <Route path='forgetPassword' element={<ForgetPasswordForm/>}/>
-          <Route path='setting' element={<Setting/>}/>
-          <Route path='user' element={<User/>}/>
-          <Route path='about' element={<About/>}/>
+
           <Route path='*' element={<NotFound/>}/>
         </Route>
       </Routes>

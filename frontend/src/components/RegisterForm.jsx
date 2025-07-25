@@ -11,23 +11,31 @@ import {
   Title
 } from "@mantine/core";
 import {useForm} from "@mantine/form";
-import logo from "../assets/react.svg";
+import logo from "../assets/sparrow.svg";
 import {API, showError, showSuccess} from "../helpers/index.js";
 import {useNavigate} from "react-router-dom";
 
 const RegisterForm = () => {
 
   let [emailVerificationEnabled, setEmailVerificationEnabled] = useState(null);
+  let [loading, setLoading] = useState(false);
   let navigator = useNavigate();
 
-  useEffect( async () => {
-    const res = await API.get('/api/config/name/public?name=EmailVerificationEnabled');
-    const {code, msg, data} = res.data;
-    if (code !== 200) {
-      console.error(msg);
-      return;
+  useEffect(() => {
+    async function fetchConfig() {
+      try {
+        const res = await API.get('/api/config/name/public?name=EmailVerificationEnabled');
+        const { code, msg, data } = res.data;
+        if (code !== 200) {
+          console.error(msg);
+          return;
+        }
+        setEmailVerificationEnabled(data === 'true');
+      } catch (error) {
+        console.error('API request failed:', error);
+      }
     }
-    setEmailVerificationEnabled(data === 'true');
+    fetchConfig();
   }, []);
 
   const form = useForm({
@@ -39,16 +47,10 @@ const RegisterForm = () => {
       verificationCode: ''
     },
     validate: {
-      username: (value) => (3 <= value.length && value.length <= 10 ? null
-          : 'Username must be between 3 and 20 characters'),
-      password: (value) => (value.length < 6
-          ? 'Password must be at least 6 characters long' : null),
-      confirmPassword: (value, values) => (value !== values.password
-          ? 'Passwords do not match' : null),
-      email: (value) => (emailVerificationEnabled ?
-          (/^\S+@\S+$/.test(value) ? null : 'Invalid email address') : null),
-      verificationCode: (value) => (emailVerificationEnabled ?
-          (value.length === 6 ? null : 'Verification code must be 6 characters long') : null),
+      username: (value) => (3 <= value.length && value.length <= 10 ? null : 'Username must be between 3 and 20 characters'),
+      password: (value) => (value.length < 6 ? 'Password must be at least 6 characters long' : null),
+      confirmPassword: (value, values) => (value !== values.password ? 'Passwords do not match' : null),
+      email: (value) => (emailVerificationEnabled ? (/^\S+@\S+$/.test(value) ? null : 'Invalid email address') : null)
     }
   })
 
@@ -68,17 +70,15 @@ const RegisterForm = () => {
   }
 
   const getVerificationCode = async () => {
+    setLoading(true);
     const email = form.getInputProps('email').value;
-    if (!email) {
-      form.setFieldError('email', 'Email is required to get verification code');
-      return;
-    }
     const res = await API.get(`/api/auth/sendRegistrationVerificationCode?email=${email}`);
-    const {code, msg, data} = res.data;
+    const {code, msg} = res.data;
     if (code !== 200) {
-      form.setFieldError('verificationCode', msg);
+      showError(msg);
       return;
     }
+    setLoading(false);
     showSuccess("Verification code sent to your email. Please check your inbox or spam folder.");
   }
 
@@ -135,7 +135,11 @@ const RegisterForm = () => {
                           {...form.getInputProps('verificationCode')}
                           style={{flex: 1}}
                       />
-                      <Button variant="outline" onClick={getVerificationCode}>Get verification code</Button>
+                      <Button
+                          variant="outline"
+                          onClick={getVerificationCode}
+                          loading={loading}
+                      >Get Code</Button>
                     </Group>
                   </> : <></>
               }

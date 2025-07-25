@@ -47,7 +47,7 @@ public class AuthService {
     }
 
     String registerEnabled = configService.getConfig("RegisterEnabled");
-    if (!Boolean.parseBoolean(registerEnabled)) {
+    if (!StringUtils.hasText(registerEnabled) || !Boolean.parseBoolean(registerEnabled)) {
       throw new BusinessException("User registration is disabled");
     }
 
@@ -94,7 +94,7 @@ public class AuthService {
     VerificationCodeManager.saveCode("new_user", email, code);
 
     String emailContent = String.format(
-        "Hello,\n\nYour registration verification code is: %s\n\nThis code is valid for 5 minutes.",
+        "Welcome! <br><br>Your registration verification code is: <b>%s</b> <br><br>This code is valid for 5 minutes.",
         code);
     String subject = "Sparrow Registration Verification Code";
     mailSenderService.send(email, subject, emailContent);
@@ -109,6 +109,61 @@ public class AuthService {
     if (!valid) {
       throw new BusinessException("Invalid or expired verification code");
     }
+  }
+
+  public void sendForgetPasswordVerificationCode(String email) {
+    if (!StringUtils.hasText(email)) {
+      throw new BusinessException("Email cannot be empty");
+    }
+
+    // check if email is registered
+    QueryChainWrapper<User> query = new QueryChainWrapper<>(userMapper);
+    query.eq("email", email);
+    User existingUser = query.one();
+    if (ObjectUtils.isEmpty(existingUser)) {
+      throw new BusinessException("Email is not registered");
+    }
+
+    String code = VerificationCodeManager.generateCode();
+    VerificationCodeManager.saveCode(existingUser.getId(), email, code);
+
+    String emailContent = String.format(
+        "Hello %s,<br><br>Your password reset verification code is: <b>%s</b> <br><br>This code is valid for 5 minutes.",
+        existingUser.getUsername(), code);
+    String subject = "Sparrow Password Reset Verification Code";
+    mailSenderService.send(email, subject, emailContent);
+  }
+
+  public void forgetPassword(User user) {
+    if (ObjectUtils.isEmpty(user.getEmail()) || !StringUtils.hasText(user.getVerificationCode())) {
+      throw new BusinessException("Email and verification code cannot be empty");
+    }
+
+    String forgetPasswordEnabled = configService.getConfig("ForgetPasswordEnabled");
+    if (!StringUtils.hasText(forgetPasswordEnabled) || !Boolean.parseBoolean(forgetPasswordEnabled)) {
+      throw new BusinessException("Password reset is disabled");
+    }
+
+    // check if email is registered
+    QueryChainWrapper<User> query = new QueryChainWrapper<>(userMapper);
+    query.eq("email", user.getEmail());
+    User existingUser = query.one();
+    if (ObjectUtils.isEmpty(existingUser)) {
+      throw new BusinessException("Email is not registered");
+    }
+
+    boolean valid = VerificationCodeManager.checkCode(existingUser.getId(), user.getEmail(),
+        user.getVerificationCode());
+    if (!valid) {
+      throw new BusinessException("Invalid or expired verification code");
+    }
+
+    String salt = PasswordUtil.generateSalt(10);
+    existingUser.setPassword(PasswordUtil.generateEncryptedPassword(user.getPassword(), salt));
+    existingUser.setSalt(salt);
+    existingUser.setUpdatedAt(LocalDateTime.now());
+
+    userMapper.updateById(existingUser);
   }
 
 }

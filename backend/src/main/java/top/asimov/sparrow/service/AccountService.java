@@ -34,7 +34,7 @@ public class AccountService {
     VerificationCodeManager.saveCode(userId, email, code);
 
     String emailContent = String.format(
-        "Hello %s,\n\nYour verification code is: %s\n\nThis code is valid for 5 minutes.",
+        "Hello %s,<br><br>Your verification code is: %s<br><br>This code is valid for 5 minutes.",
         user.getUsername(), code);
     mailSenderService.send(email, "Verification Code - Sparrow", emailContent);
   }

@@ -42,7 +42,7 @@ public class AuthController {
   }
 
   @GetMapping("/sendRegistrationVerificationCode")
-  public SaResult sendVerificationCode(@RequestParam (name = "email") String email) {
+  public SaResult sendVerificationCode(@RequestParam(name = "email") String email) {
     authService.sendRegistrationVerificationCode(email);
     return SaResult.ok();
   }
@@ -53,8 +53,15 @@ public class AuthController {
     return SaResult.ok().setData(result);
   }
 
+  @GetMapping("/sendForgetPasswordVerificationCode")
+  public SaResult sendForgetPasswordVerificationCode(@RequestParam(name = "email") String email) {
+    authService.sendForgetPasswordVerificationCode(email);
+    return SaResult.ok();
+  }
+
   @PostMapping("/forgetPassword")
   public SaResult forgetPassword(@RequestBody User user) {
+    authService.forgetPassword(user);
     return SaResult.ok();
   }
 

@@ -30,6 +30,8 @@ const SystemSetting = () => {
       About: false,
   });
 
+  let publicConfig = ["RegisterEnabled", "EmailVerificationEnabled", "ForgetPasswordEnabled"];
+
   const getOptions = async () => {
     const res = await API.get('/api/config/all');
     const { code, msg, data } = res.data;
@@ -65,6 +67,7 @@ const SystemSetting = () => {
     const res = await API.post('/api/config/name', {
       name,
       value,
+      isPublic: publicConfig.includes(name) ? 1 : 0
     });
     const { code, msg } = res.data;
     if (code === 200) {

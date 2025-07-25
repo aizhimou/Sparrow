@@ -137,7 +137,7 @@ const UserSetting = () => {
                      {...bindEmailForm.getInputProps('email')}
                      style={{flex: 1}}
               />
-              <Button variant="outline" loading={loading.confirmEmail} onClick={sendVerificationCode}>Get verification code</Button>
+              <Button variant="outline" loading={loading.confirmEmail} onClick={sendVerificationCode}>Get Code</Button>
             </Group>
             <Input
                 mt='sm'

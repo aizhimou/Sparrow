@@ -2,7 +2,7 @@ import React, {useContext, useEffect, useState} from 'react';
 import {Link, useNavigate, useSearchParams} from 'react-router-dom';
 import {UserContext} from '../context/User/index.jsx';
 import {API, showError, showSuccess} from '../helpers'
-import logo from '../assets/react.svg'
+import logo from '../assets/sparrow.svg';
 import {
   Container,
   Group,
@@ -88,7 +88,7 @@ const LoginForm = () => {
   return (
       <Container pt="150px" size="xs">
         <Group justify="center">
-          <Image src={logo} w={40}></Image>
+          <Image src={logo} w={60}></Image>
           <Title>Login</Title>
         </Group>
         <Paper p="xl" withBorder mt="md">
