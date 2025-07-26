@@ -88,12 +88,16 @@ function Header() {
     navigate('/login');
   }
 
+  const toHome = () => {
+    navigate("/")
+  }
+
   return (
       <Paper h={40} shadow="xs" withBorder
              style={{borderLeft: '0', borderRight: '0', borderTop: '0'}}>
         <Group m='sm' justify="space-around">
           <Group>
-            <Group gap="xs" mr={10} style={{cursor: 'pointer'}}>
+            <Group gap="xs" mr={10} onClick={toHome} style={{cursor: 'pointer'}}>
               <Image src={logo} w={40}></Image>
               <Title order={4}>{getSystemName()}</Title>
             </Group>

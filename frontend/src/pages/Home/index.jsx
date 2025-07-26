@@ -1,39 +1,38 @@
-import React, { useContext, useEffect } from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 import {
   API,
   showError,
   showNotice,
 } from '../../helpers';
-import { ConfigContext } from '../../context/Config/index.jsx';
-import {Center, Title} from "@mantine/core";
+import {ConfigContext} from '../../context/Config/index.jsx';
+import {Alert, Center, Group, Container, Title} from "@mantine/core";
 import {UserContext} from "../../context/User/index.jsx";
 
 const Home = () => {
-  const [statusState, statusDispatch] = useContext(ConfigContext);
-  const [userState] = useContext(UserContext);
+  const [notice, setNotice] = useState("");
 
-  const displayNotice = async () => {
-    const res = await API.get('/api/notice');
-    const { success, message, data } = res.data;
-    if (success) {
-      let oldNotice = localStorage.getItem('notice');
-      if (data !== oldNotice && data !== '') {
-        showNotice(data);
-        localStorage.setItem('notice', data);
-      }
+  const fetchNotice = async () => {
+    const res = await API.get('/api/config/name?name=Notice');
+    const {code, msg, data} = res.data;
+    if (code === 200) {
+      setNotice(data);
     } else {
-      showError(message);
+      showError(msg);
     }
   };
 
   useEffect(() => {
-    // displayNotice().then();
+    fetchNotice().then();
   }, []);
 
   return (
-      <Center mt={150}>
-        <Title>Home Page</Title>
-      </Center>
+      <Container size="lg" mt="lg">
+        {notice ?
+            <Alert variant="light" color="blue" title="System Notice"
+                   radius="md">
+              {notice}
+            </Alert> : null}
+      </Container>
   );
 };
 

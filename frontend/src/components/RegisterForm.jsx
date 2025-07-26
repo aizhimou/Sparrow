@@ -21,21 +21,18 @@ const RegisterForm = () => {
   let [loading, setLoading] = useState(false);
   let navigator = useNavigate();
 
-  useEffect(() => {
-    async function fetchConfig() {
-      try {
-        const res = await API.get('/api/config/name/public?name=EmailVerificationEnabled');
-        const { code, msg, data } = res.data;
-        if (code !== 200) {
-          console.error(msg);
-          return;
-        }
-        setEmailVerificationEnabled(data === 'true');
-      } catch (error) {
-        console.error('API request failed:', error);
-      }
+  const fetchConfig = async () => {
+    const res = await API.get('/api/config/name/public?name=EmailVerificationEnabled');
+    const { code, msg, data } = res.data;
+    if (code !== 200) {
+      console.error(msg);
+      return;
     }
-    fetchConfig();
+    setEmailVerificationEnabled(data === 'true');
+  }
+
+  useEffect(() => {
+    fetchConfig().then();
   }, []);
 
   const form = useForm({

@@ -9,17 +9,11 @@ const About = () => {
   const [aboutLoaded, setAboutLoaded] = useState(false);
 
   const displayAbout = async () => {
-    let aboutContent = localStorage.getItem('about');
-    if (aboutContent) {
-      setAbout(aboutContent);
-      return;
-    }
     const res = await API.get('/api/config/name?name=About');
     const {code, msg, data} = res.data;
     if (code === 200) {
       let content = marked.parse(data);
       setAbout(content);
-      localStorage.setItem('about', content);
     } else {
       showError(msg);
       setAbout('Loading about content failed...');
@@ -32,19 +26,18 @@ const About = () => {
   }, []);
 
   return (
-      <Container size="lg">
+      <Container size="lg" mt="xl">
         {aboutLoaded && about === '' ? (
-            <>
-              <Title order={4}>About</Title>
-              <Text>You can write some contents in setting to show in here. HTML
-                and Markdown are supported.</Text>
-            </>
-        ) :
-        <Container>
-          <div dangerouslySetInnerHTML={{__html: about}}></div>
-        </Container>
+                <>
+                  <Title order={4}>About</Title>
+                  <Text>You can write some contents in setting to show in here. HTML
+                    and Markdown are supported.</Text>
+                </>
+            ) :
+            <Container>
+              <div dangerouslySetInnerHTML={{__html: about}}></div>
+            </Container>
         }
-
       </Container>
   );
 };
