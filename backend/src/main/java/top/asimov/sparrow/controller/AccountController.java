@@ -1,6 +1,8 @@
 package top.asimov.sparrow.controller;
 
+import cn.dev33.satoken.stp.StpUtil;
 import cn.dev33.satoken.util.SaResult;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -16,6 +18,13 @@ public class AccountController {
 
   public AccountController(AccountService accountService) {
     this.accountService = accountService;
+  }
+
+  @GetMapping("/info")
+  public SaResult info() {
+    String userId = (String) StpUtil.getLoginId();
+    User user = accountService.getUserInfo(userId);
+    return SaResult.data(user);
   }
 
   @PostMapping("/resetPassword")

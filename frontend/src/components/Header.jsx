@@ -6,7 +6,13 @@ import {
   Image,
   Flex,
   NavLink,
-  Title, Avatar, Menu, Text, useComputedColorScheme, useMantineColorScheme
+  Title,
+  Avatar,
+  Menu,
+  Text,
+  useComputedColorScheme,
+  useMantineColorScheme,
+  Badge
 } from '@mantine/core';
 import logo from "../assets/sparrow.svg";
 import {
@@ -24,6 +30,7 @@ import {
 } from "../helpers/index.js";
 import {Link, useNavigate} from "react-router-dom";
 import {UserContext} from "../context/User/index.jsx";
+import {IconLogout2} from "@tabler/icons-react";
 
 function Header() {
 
@@ -41,44 +48,43 @@ function Header() {
       name: 'Home',
       to: '/',
       icon: IconHome,
-      login: true,
+      admin: false,
     },
     {
       name: 'User',
       to: '/user',
       icon: IconUser,
-      login: true,
+      admin: true,
     },
     {
       name: 'Setting',
-      to: '/setting',
+      to: '/systemSetting',
       icon: IconSettings,
-      login: true,
+      admin: true,
     },
     {
       name: 'About',
       to: '/about',
       icon: IconInfoCircle,
-      login: true,
+      admin: false,
     },
   ];
 
-  const renderLinks = () => {
-    return headerLinks.map((link) => {
-      if (link.login && !userState.user) {
-        return '';
-      }
-      return (
-          <Link to={link.to} key={link.name}
-                style={{textDecoration: 'none', color: 'inherit'}}>
-            <Group mr='lg'>
-              {React.createElement(link.icon, {size: 16})}
-              <Text fw={700} ml='-6'> {link.name} </Text>
-            </Group>
-          </Link>
-      );
-    });
-  };
+const renderLinks = () => {
+  if (!userState.user) return '';
+  const role = userState.user.role;
+  return headerLinks
+    .filter(link => role <= 0 || (role > 0 && !link.admin))
+    .map(link => (
+      <Link to={link.to} key={link.name}
+            style={{textDecoration: 'none', color: 'inherit'}}>
+        <Group mr='lg'>
+          {React.createElement(link.icon, {size: 16})}
+          <Text fw={700} ml='-6'> {link.name} </Text>
+        </Group>
+      </Link>
+    ));
+};
 
   async function logout() {
     await API.post('/api/auth/logout');
@@ -116,7 +122,13 @@ function Header() {
                     </Group>
                   </Menu.Target>
                   <Menu.Dropdown>
-                    <Menu.Item onClick={logout}>
+                    {userState.user.email ?
+                        <Menu.Item>{userState.user.email}</Menu.Item>
+                    : <></>}
+                    <Menu.Item leftSection={<IconSettings size={14} />} onClick={() => navigate('/userSetting')}>
+                      Setting
+                    </Menu.Item>
+                    <Menu.Item leftSection={<IconLogout2 size={14} />} onClick={logout}>
                       Logout
                     </Menu.Item>
                   </Menu.Dropdown>

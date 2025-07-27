@@ -7,9 +7,11 @@ import {
 import {ConfigContext} from '../../context/Config/index.jsx';
 import {Alert, Center, Group, Container, Title} from "@mantine/core";
 import {UserContext} from "../../context/User/index.jsx";
+import {Heatmap} from "@mantine/charts";
 
 const Home = () => {
   const [notice, setNotice] = useState("");
+  const [dates, setDates] = useState([]);
 
   const fetchNotice = async () => {
     const res = await API.get('/api/config/name?name=Notice');

@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from "react";
-import {API, showError, showSuccess} from "../helpers/index.js";
+import {API, showError, showSuccess} from "../../helpers/index.js";
 import {
   Button, Checkbox,
   TextInput,
@@ -7,7 +7,7 @@ import {
   Group,
   Stack,
   Textarea,
-  Title
+  Title, Container
 } from "@mantine/core";
 
 const SystemSetting = () => {
@@ -98,6 +98,7 @@ const SystemSetting = () => {
   }
 
   return (
+      <Container size="lg" mt="lg">
     <Stack>
       <Stack>
         <Title order={4}>Notice Setting</Title>
@@ -190,6 +191,7 @@ const SystemSetting = () => {
         <Button onClick={() => updateOption('About', inputs.About)} loading={loading.About}>Save about</Button>
       </Stack>
     </Stack>
+      </Container>
   );
 
 }

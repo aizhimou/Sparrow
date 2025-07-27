@@ -21,6 +21,17 @@ public class AccountService {
     this.mailSenderService = mailSenderService;
   }
 
+  public User getUserInfo(String userId) {
+    User user = userMapper.selectById(userId);
+    if (ObjectUtils.isEmpty(user)) {
+      throw new BusinessException("User not found");
+    }
+    // Clear sensitive fields
+    user.setPassword(null);
+    user.setSalt(null);
+    return user;
+  }
+
   public void sendBindEmailVerificationCode(String userId, String email) {
     User user = userMapper.selectById(userId);
     if (ObjectUtils.isEmpty(user)) {
