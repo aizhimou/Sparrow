@@ -6,19 +6,17 @@ import {marked} from "marked";
 const About = () => {
 
   const [about, setAbout] = useState('');
-  const [aboutLoaded, setAboutLoaded] = useState(false);
 
   const displayAbout = async () => {
     const res = await API.get('/api/config/name?name=About');
     const {code, msg, data} = res.data;
     if (code === 200) {
-      let content = marked.parse(data);
+      const content = marked.parse(data);
       setAbout(content);
     } else {
       showError(msg);
       setAbout('Loading about content failed...');
     }
-    setAboutLoaded(true);
   };
 
   useEffect(() => {
@@ -26,12 +24,13 @@ const About = () => {
   }, []);
 
   return (
-      <Container size="lg" mt="xl">
-        {aboutLoaded && about === '' ? (
+      <Container size="lg" mt="lg">
+        {about === '' ? (
                 <>
                   <Title order={4}>About</Title>
-                  <Text>You can write some contents in setting to show in here. HTML
-                    and Markdown are supported.</Text>
+                  <Text>You can write some contents in setting to show in
+                    here.</Text>
+                  <Text>HTML and Markdown are supported.</Text>
                 </>
             ) :
             <Container>

@@ -22,12 +22,10 @@ public class UserController {
   }
 
   @GetMapping("/list")
-  public SaResult listUsers(@RequestParam(required = false) String name,
-                            @RequestParam(required = false) String email,
+  public SaResult listUsers(@RequestParam(required = false) String keyword,
                             @RequestParam(defaultValue = "1") Integer page,
                             @RequestParam(defaultValue = "10") Integer size) {
-    User user = User.builder().username(name).email(email).build();
-    return SaResult.data(userService.listUsers(user, new Page<>(page, size)));
+    return SaResult.data(userService.listUsers(keyword, new Page<>(page, size)));
   }
 
   @PostMapping("/add")
@@ -37,26 +35,26 @@ public class UserController {
   }
 
   @PostMapping("/forbid")
-  public SaResult forbidUser(@RequestBody String userId) {
-    User user = userService.forbidUser(userId);
+  public SaResult forbidUser(@RequestBody User user) {
+    userService.forbidUser(user.getId());
     return SaResult.data(user);
   }
 
   @PostMapping("/enable")
-  public SaResult enableUser(@RequestBody String userId) {
-    User user = userService.enableUser(userId);
+  public SaResult enableUser(@RequestBody User user) {
+    userService.enableUser(user.getId());
     return SaResult.data(user);
   }
 
   @PostMapping("/upgrade")
-  public SaResult upgradeUser(@RequestBody String userId) {
-    User user = userService.upgradeUser(userId);
+  public SaResult upgradeUser(@RequestBody User user) {
+    userService.upgradeUser(user.getId());
     return SaResult.data(user);
   }
 
   @PostMapping("/downgrade")
-  public SaResult downgradeUser(@RequestBody String userId) {
-    User user = userService.downgradeUser(userId);
+  public SaResult downgradeUser(@RequestBody User user) {
+    userService.downgradeUser(user.getId());
     return SaResult.data(user);
   }
 
