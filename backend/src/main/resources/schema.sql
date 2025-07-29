@@ -2,13 +2,12 @@ CREATE TABLE if NOT EXISTS config
 (
     id        BIGINT auto_increment PRIMARY key,
     name      VARCHAR(100)      NOT NULL,
-    VALUE     longtext          NULL,
+    value     longtext          NULL,
     is_public tinyint DEFAULT 0 NOT NULL,
     CONSTRAINT config_pk_2 UNIQUE (name)
 );
 
-CREATE TABLE
-    if NOT EXISTS user
+CREATE TABLE if NOT EXISTS user
 (
     id         BIGINT auto_increment PRIMARY key,
     username   VARCHAR(50)                         NOT NULL,

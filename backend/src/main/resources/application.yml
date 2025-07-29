@@ -1,0 +1,38 @@
+server:
+  port: 8080
+
+spring:
+  application:
+    name: sparrow
+  datasource:
+    url: jdbc:mysql://192.168.1.113:34785/sparrow?useUnicode=true&characterEncoding=UTF-8&useSSL=false
+    #    url: jdbc:mysql://localhost:3306/sparrow?useUnicode=true&characterEncoding=UTF-8&useSSL=false
+    username: sparrow
+    password: abFYTNZYFwy2KWhi
+  sql:
+    init:
+      mode: always
+
+sa-token:
+  # Token name (also the cookie name)
+  token-name: sparrow
+  # Token validity period (seconds), default is 30 days, -1 means permanent
+  timeout: 2592000
+  # Token minimum active frequency (seconds), if token is not used within this time it will be frozen, default -1 means no limit
+  active-timeout: -1
+  # Allow multiple logins for the same account at different locations (true: allow, false: new login kicks out old login)
+  is-concurrent: true
+  # When multiple people log in to the same account, whether to share one token (true: share one token, false: new token for each login)
+  is-share: false
+  # Token style (default values: uuid, simple-uuid, random-32, random-64, random-128, tik)
+  token-style: uuid
+  # Output operation log
+  is-log: true
+
+logging:
+    level:
+      org.springframework.web: warn
+      org.springframework.boot: warn
+      org.apache.http: warn
+      org.mybatis: warn
+      top.asimov.sparrow: debug
