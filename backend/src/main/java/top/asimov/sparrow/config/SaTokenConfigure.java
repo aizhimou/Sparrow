@@ -12,8 +12,8 @@ public class SaTokenConfigure implements WebMvcConfigurer {
   @Override
   public void addInterceptors(InterceptorRegistry registry) {
     registry.addInterceptor(new SaInterceptor(handle -> StpUtil.checkLogin()))
-        .addPathPatterns("/**")
-        .excludePathPatterns("/api/auth/**", "/api/config/name/public", "/error");
+        .addPathPatterns("/api/**")
+        .excludePathPatterns("/api/auth/**", "/api/config/name/public");
   }
 }
 
