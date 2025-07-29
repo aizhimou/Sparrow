@@ -11,7 +11,7 @@ WORKDIR /app
 COPY backend/pom.xml .
 COPY backend/src ./src
 # copy the frontend build output to the backend resources
-COPY --from=frontend-build /app/build ./src/main/resources/static
+COPY --from=frontend-build /app/dist ./src/main/resources/static
 RUN mvn clean package -DskipTests
 
 FROM eclipse-temurin:17-jre-alpine
