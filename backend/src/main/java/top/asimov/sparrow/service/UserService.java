@@ -1,5 +1,6 @@
 package top.asimov.sparrow.service;
 
+import cn.dev33.satoken.stp.StpUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
@@ -25,7 +26,8 @@ public class UserService {
     QueryWrapper<User> queryWrapper = new QueryWrapper<>();
     queryWrapper.like("username", keyword)
                 .or()
-                .like("email", keyword);
+                .like("email", keyword)
+        .orderByDesc("created_at");
     return userMapper.selectPage(page, queryWrapper);
   }
 
@@ -66,6 +68,9 @@ public class UserService {
     user.setStatus(0);
     user.setUpdatedAt(LocalDateTime.now());
     userMapper.updateById(user);
+
+    // Logout the user if they are currently logged in
+    StpUtil.logout(userId);
   }
 
   public void enableUser(String userId) {

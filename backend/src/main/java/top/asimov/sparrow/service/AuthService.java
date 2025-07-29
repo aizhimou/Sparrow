@@ -33,6 +33,10 @@ public class AuthService {
       throw new BusinessException("User not found");
     }
 
+    if (1 != existUser.getStatus()) {
+      throw new BusinessException("User is not active");
+    }
+
     boolean verified = PasswordUtil.verifyPassword(password, existUser.getSalt(),
         existUser.getPassword());
     if (!verified) {
