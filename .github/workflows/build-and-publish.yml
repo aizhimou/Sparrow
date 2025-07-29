@@ -1,0 +1,56 @@
+name: Build and Publish Docker Image to GHCR
+
+# 触发工作流的事件
+on:
+  push:
+    branches:
+      - main  # 当有代码推送到 main 分支时触发
+  workflow_dispatch: # 允许手动在 Actions 页面触发此工作流
+
+# 环境变量，方便统一管理
+env:
+  REGISTRY: ghcr.io  # GitHub Container Registry 的地址
+  IMAGE_NAME: ${{ github.repository }} # 镜像名称，格式为 "用户名/仓库名"
+
+jobs:
+  build-and-push-image:
+    # 运行此 job 的虚拟机环境，ubuntu-latest x86_64
+    runs-on: ubuntu-latest
+
+    # 授予 job 推送 Docker 镜像到 GHCR 的权限
+    permissions:
+      contents: read       # 读取仓库内容的权限
+      packages: write      # 写入(推送) package (Docker镜像) 的权限
+
+    steps:
+      # 步骤 1: 检出代码
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      # 步骤 2: 登录到 GitHub Container Registry
+      # GITHUB_TOKEN 由 GitHub Actions 自动生成的，无需手动设置
+      - name: Log in to the Container registry
+        uses: docker/login-action@v3
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      # 步骤 3: 提取 Docker 镜像的元数据 (比如标签)
+      # 这个 action 会自动生成一些有用的标签，比如 latest, git-sha 等
+      - name: Extract Docker metadata
+        id: meta
+        uses: docker/metadata-action@v5
+        with:
+          images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
+
+      # 步骤 4: 构建并推送 Docker 镜像
+      # 使用 Dockerfile 进行构建并推送到 GHCR
+      - name: Build and push Docker image
+        uses: docker/build-push-action@v5
+        with:
+          context: .  # 使用当前目录作为构建上下文
+          push: true  # 推送镜像
+          tags: ${{ steps.meta.outputs.tags }} # 使用上一步生成的标签
+          labels: ${{ steps.meta.outputs.labels }} # 添加推荐的标签
+          platforms: linux/amd64 # 明确指定构建的平台为 linux/amd64
