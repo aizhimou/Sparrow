@@ -4,7 +4,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 /**
- * 业务异常类
+ * business exception
  */
 public class BusinessException extends RuntimeException {
 

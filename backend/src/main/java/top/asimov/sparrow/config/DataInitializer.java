@@ -6,7 +6,6 @@ import org.springframework.stereotype.Component;
 import org.springframework.util.ObjectUtils;
 import top.asimov.sparrow.mapper.UserMapper;
 import top.asimov.sparrow.model.User;
-import top.asimov.sparrow.service.UserService;
 import top.asimov.sparrow.util.PasswordUtil;
 
 @Component
@@ -26,11 +25,11 @@ public class DataInitializer {
     if (ObjectUtils.isEmpty(rootUser)) {
       User root = new User();
       root.setUsername("root");
-      String password = "root@user.123"; // 设置默认密码
+      String password = "root@user.123"; // set default password
       String salt = PasswordUtil.generateSalt(10);
       root.setSalt(salt);
       root.setPassword(PasswordUtil.generateEncryptedPassword(password, salt));
-      root.setRole(-1); // 设置为 root 用户
+      root.setRole(-1); // set role to root
       userMapper.insert(root);
       System.out.println("created default root user: root / root@user.123");
     }

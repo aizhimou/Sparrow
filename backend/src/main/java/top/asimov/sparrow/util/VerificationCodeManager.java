@@ -13,7 +13,7 @@ public class VerificationCodeManager {
   private static final int EXPIRE_MINUTES = 5;
   private static final Map<String, CodeInfo> codeMap = new ConcurrentHashMap<>();
 
-  // 定时清理过期验证码
+  // clean up expired codes every minute
   static {
     Executors.newSingleThreadScheduledExecutor().scheduleAtFixedRate(
         VerificationCodeManager::cleanExpiredCodes, 1, 1, TimeUnit.MINUTES
@@ -40,7 +40,7 @@ public class VerificationCodeManager {
       return false;
     }
     boolean valid = info.code.equals(code);
-    if (valid) codeMap.remove(email); // 验证成功后移除
+    if (valid) codeMap.remove(email); // remove code after successful validation
     return valid;
   }
 

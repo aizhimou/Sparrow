@@ -1,8 +1,9 @@
 package top.asimov.sparrow.exception;
 
 import cn.dev33.satoken.exception.NotLoginException;
+import cn.dev33.satoken.util.SaResult;
+import java.util.stream.Collectors;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindException;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
@@ -11,18 +12,14 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
-import cn.dev33.satoken.util.SaResult;
-
-import java.util.stream.Collectors;
-
 /**
- * 全局异常处理器
+ * Global Exception Handler
  */
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
     /**
-     * 处理自定义业务异常
+     * Handle custom business exceptions
      */
     @ExceptionHandler(BusinessException.class)
     public SaResult handleBusinessException(BusinessException e) {
@@ -30,7 +27,7 @@ public class GlobalExceptionHandler {
     }
 
     /**
-     * 处理参数校验异常
+     * Handle parameter validation exceptions
      */
     @ExceptionHandler(MethodArgumentNotValidException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
@@ -44,7 +41,7 @@ public class GlobalExceptionHandler {
     }
 
     /**
-     * 处理绑定异常
+     * Handle binding exceptions
      */
     @ExceptionHandler(BindException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
@@ -58,7 +55,7 @@ public class GlobalExceptionHandler {
     }
 
     /**
-     * 处理其他所有运行时异常
+     * Handle all other runtime exceptions
      */
     @ExceptionHandler(RuntimeException.class)
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
@@ -67,9 +64,9 @@ public class GlobalExceptionHandler {
     }
 
     /**
-     * 处理未登录异常
-     * @param e 未登录异常
-     * @return 未登录错误响应
+     * Handle not logged in exceptions
+     * @param e Not logged in exception
+     * @return Not logged in error response
      */
     @ExceptionHandler(NotLoginException.class)
     @ResponseStatus(HttpStatus.UNAUTHORIZED)
@@ -78,7 +75,7 @@ public class GlobalExceptionHandler {
     }
 
     /**
-     * 处理所有其他异常
+     * Handle all other exceptions
      */
     @ExceptionHandler(Exception.class)
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
