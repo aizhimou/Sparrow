@@ -1,19 +1,17 @@
 import { Navigate } from 'react-router-dom';
 import { history } from '../helpers';
-import {useContext} from "react";
-import {UserContext} from "../context/User/index.jsx";
 
-function PrivateRoute({ children }) {
-
-  const [userState, userDispatch] = useContext(UserContext);
-
-  if (!userState.user) {
-    return <Navigate to='/login' state={{ from: history.location }} />;
+function PrivateRoute({ children, requiredRole = 1}) {
+  let userItem = localStorage.getItem('user');
+  if (!userItem) {
+    return <Navigate to="/login" state={{ from: history.location }} />;
   }
 
-  /*if (!localStorage.getItem('user')) {
-
-  }*/
+  const user = JSON.parse(userItem);
+  // lower the role number means higher privilege
+  if (user.role > requiredRole) {
+    return <Navigate to="/403" replace />;
+  }
 
   return children;
 }
