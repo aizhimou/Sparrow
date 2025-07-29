@@ -22,7 +22,7 @@ import {
   IconSun,
   IconUser,
 } from '@tabler/icons-react';
-import { API, getSystemName, showSuccess } from '../helpers/index.js';
+import { API, showSuccess } from '../helpers/index.js';
 import { Link, useNavigate } from 'react-router-dom';
 import { UserContext } from '../context/User/UserContext.jsx';
 
@@ -88,22 +88,18 @@ function Header() {
     navigate('/login');
   }
 
-  const toHome = () => {
-    navigate('/');
-  };
-
   return (
     <Paper
-      h={40}
+      h={45}
       shadow="xs"
       withBorder
       style={{ borderLeft: '0', borderRight: '0', borderTop: '0' }}
     >
       <Group m="sm" justify="space-around">
         <Group>
-          <Group gap="xs" mr={10} onClick={toHome} style={{ cursor: 'pointer' }}>
+          <Group gap="xs" mr={10} onClick={()=>navigate('/')} style={{ cursor: 'pointer' }}>
             <Image src={logo} w={40}></Image>
-            <Title order={4}>{getSystemName()}</Title>
+            <Title order={4}>Sparrow</Title>
           </Group>
           <Flex>{renderLinks()}</Flex>
         </Group>

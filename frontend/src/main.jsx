@@ -7,7 +7,6 @@ import { MantineProvider } from '@mantine/core';
 import { UserProvider } from './context/User/UserProvider.jsx';
 import { Notifications } from '@mantine/notifications';
 import '@mantine/core/styles.css';
-import '@mantine/charts/styles.css';
 
 export function Main() {
   return (

@@ -2,12 +2,6 @@ import { notifications } from '@mantine/notifications';
 import { toastConstants } from '../constants/toast.constants.js';
 import '@mantine/notifications/styles.css';
 
-export function getSystemName() {
-  let system_name = localStorage.getItem('systemName');
-  if (!system_name) return 'Sparrow';
-  return system_name;
-}
-
 export function showError(error) {
   if (error.message) {
     if (error.name === 'AxiosError') {
@@ -17,6 +11,7 @@ export function showError(error) {
           const hasExpired = searchParams.get('expired') === 'true';
           if (!hasExpired) {
             window.location.href = '/login?expired=true';
+            localStorage.removeItem("user")
           }
           break; }
         case 429:
