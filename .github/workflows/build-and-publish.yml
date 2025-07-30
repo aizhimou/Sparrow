@@ -23,6 +23,16 @@ jobs:
       packages: write      # 写入(推送) package (Docker镜像) 的权限
 
     steps:
+      # 步骤 0: 检查 commit message 是否以 CI 开头
+      - name: Check commit message for CI prefix
+        id: check_ci
+        run: |
+          echo "GIT_COMMIT_MSG=$(git log -1 --pretty=%B)" >> $GITHUB_ENV
+          if [[ ! $(git log -1 --pretty=%B) =~ ^CI ]]; then
+            echo "Commit message does not start with CI, skipping build."
+            exit 78
+          fi
+
       # 步骤 1: 检出代码
       - name: Checkout repository
         uses: actions/checkout@v4
