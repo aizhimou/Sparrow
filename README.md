@@ -40,6 +40,56 @@ docker run -d \
 ```
 
 ### Run with Docker Compose
+With Docker Compose, you can easily set up both the Sparrow application and a MySQL database. 
+
+Below is a sample `docker-compose.yml` file that you can use to run Sparrow with MySQL.
+
+```bash
+version: '3.8'
+
+services:
+  mysql:
+    image: mysql:8.0
+    container_name: mysql
+    restart: unless-stopped
+    environment:
+      # change this to your desired root password
+      MYSQL_ROOT_PASSWORD: rootpassword
+      # create a database named sparrow automatically
+      MYSQL_DATABASE: sparrow
+      # change this to your desired username
+      MYSQL_USER: sparrow_user
+      # change this to your desired password
+      MYSQL_PASSWORD: sparrow_pass
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql-data:/var/lib/mysql
+    networks:
+      - sparrow-net
+
+  sparrow:
+    image: ghcr.io/aizhimou/sparrow:main
+    container_name: sparrow
+    depends_on:
+      - mysql
+    restart: unless-stopped
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/sparrow?useUnicode=true&characterEncoding=UTF-8
+      # keep the same username and password as in the mysql service
+      SPRING_DATASOURCE_USERNAME: sparrow_user
+      SPRING_DATASOURCE_PASSWORD: sparrow_pass
+    ports:
+      - "8080:8080"
+    networks:
+      - sparrow-net
+
+volumes:
+  mysql-data:
+
+networks:
+  sparrow-net:
+```
 
 ### Run with JAR
 
