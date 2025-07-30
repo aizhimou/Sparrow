@@ -92,6 +92,17 @@ networks:
 ```
 
 ### Run with JAR
+Download the latest JAR file from the [releases page](https://github.com/aizhimou/sparrow/releases) and run it with the following command:
 
+Make sure you have Java 17 installed on your machine. You can check your Java version with `java -version`.
+
+Replace the placeholders with your actual database details:
+
+```bash
+java -jar sparrow-<version>.jar \
+ -Dspring.datasource.url=jdbc:mysql://${your_mysql_host}:${your_mysql_port}/${your_database_name}?useUnicode=true&characterEncoding=UTF-8 \
+ -Dspring.datasource.username=${your_mysql_username} \
+ -Dspring.datasource.password=${your_mysql_password}
+```
 
 ## Development
