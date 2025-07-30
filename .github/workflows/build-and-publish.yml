@@ -30,7 +30,7 @@ jobs:
           echo "GIT_COMMIT_MSG=$(git log -1 --pretty=%B)" >> $GITHUB_ENV
           if [[ ! $(git log -1 --pretty=%B) =~ ^CI ]]; then
             echo "Commit message does not start with CI, skipping build."
-            exit 78
+            exit 0
           fi
 
       # 步骤 1: 检出代码
