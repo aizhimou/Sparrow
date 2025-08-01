@@ -43,7 +43,7 @@ function App() {
         <Route
           path="user"
           element={
-            <PrivateRoute requiredRole={0}>
+            <PrivateRoute requireAdmin={true}>
               <User />
             </PrivateRoute>
           }
@@ -51,7 +51,7 @@ function App() {
         <Route
           path="systemSetting"
           element={
-            <PrivateRoute requiredRole={0}>
+            <PrivateRoute requireAdmin={true}>
               <SystemSetting />
             </PrivateRoute>
           }

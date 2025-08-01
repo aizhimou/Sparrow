@@ -14,7 +14,7 @@ CREATE TABLE if NOT EXISTS user
     password   VARCHAR(100)                        NOT NULL,
     salt       VARCHAR(20)                         NOT NULL,
     email      VARCHAR(100)                        NULL,
-    role       tinyint   DEFAULT 1                 NOT NULL comment '-1:root, 0:admin, 1:user',
+    role       VARCHAR(20)   DEFAULT 'USER'        NOT NULL comment 'ADMIN,USER',
     status     tinyint   DEFAULT 1                 NOT NULL comment '1:enabled; 0:disabled',
     api_key    VARCHAR(30)                         NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,

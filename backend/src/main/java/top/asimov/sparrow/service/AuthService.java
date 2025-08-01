@@ -1,5 +1,6 @@
 package top.asimov.sparrow.service;
 
+import cn.dev33.satoken.stp.StpUtil;
 import com.baomidou.mybatisplus.extension.conditions.query.QueryChainWrapper;
 import java.time.LocalDateTime;
 import org.springframework.stereotype.Service;
@@ -25,24 +26,13 @@ public class AuthService {
     this.mailSenderService = mailSenderService;
   }
 
-  public User checkUserCredentials(String username, String password) {
-    QueryChainWrapper<User> query = new QueryChainWrapper<>(userMapper);
-    query.eq("username", username);
-    User existUser = query.one();
-    if (ObjectUtils.isEmpty(existUser)) {
-      throw new BusinessException("User not found");
-    }
+  public User login(String username, String password) {
+    User user = checkUserCredentials(username, password);
+    StpUtil.login(user.getId());
 
-    if (1 != existUser.getStatus()) {
-      throw new BusinessException("User is not active");
-    }
-
-    boolean verified = PasswordUtil.verifyPassword(password, existUser.getSalt(),
-        existUser.getPassword());
-    if (!verified) {
-      throw new BusinessException("Invalid password");
-    }
-    return existUser;
+    String role = user.getRole();
+    StpUtil.getSession().set("role", role);
+    return user;
   }
 
   public int userRegister(User user) {
@@ -74,7 +64,7 @@ public class AuthService {
         .password(PasswordUtil.generateEncryptedPassword(user.getPassword(), salt))
         .email(user.getEmail())
         .salt(salt)
-        .role(1) // default role is 1 (user)
+        .role("USER")
         .createdAt(LocalDateTime.now())
         .updatedAt(LocalDateTime.now())
         .build();
@@ -144,7 +134,8 @@ public class AuthService {
     }
 
     String forgetPasswordEnabled = configService.getConfig("ForgetPasswordEnabled");
-    if (!StringUtils.hasText(forgetPasswordEnabled) || !Boolean.parseBoolean(forgetPasswordEnabled)) {
+    if (!StringUtils.hasText(forgetPasswordEnabled) || !Boolean.parseBoolean(
+        forgetPasswordEnabled)) {
       throw new BusinessException("Password reset is disabled");
     }
 
@@ -168,6 +159,26 @@ public class AuthService {
     existingUser.setUpdatedAt(LocalDateTime.now());
 
     userMapper.updateById(existingUser);
+  }
+
+  private User checkUserCredentials(String username, String password) {
+    QueryChainWrapper<User> query = new QueryChainWrapper<>(userMapper);
+    query.eq("username", username);
+    User existUser = query.one();
+    if (ObjectUtils.isEmpty(existUser)) {
+      throw new BusinessException("User not found");
+    }
+
+    if (1 != existUser.getStatus()) {
+      throw new BusinessException("User is not active");
+    }
+
+    boolean verified = PasswordUtil.verifyPassword(password, existUser.getSalt(),
+        existUser.getPassword());
+    if (!verified) {
+      throw new BusinessException("Invalid password");
+    }
+    return existUser;
   }
 
 }

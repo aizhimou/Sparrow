@@ -8,6 +8,7 @@ import java.time.LocalDateTime;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ObjectUtils;
 import org.springframework.util.StringUtils;
+import top.asimov.sparrow.constant.Role;
 import top.asimov.sparrow.exception.BusinessException;
 import top.asimov.sparrow.mapper.UserMapper;
 import top.asimov.sparrow.model.User;
@@ -56,7 +57,7 @@ public class UserService {
     user.setPassword(encryptedPassword);
     user.setSalt(salt);
     user.setEmail(email);
-    user.setRole(1);
+    user.setRole(Role.USER);
     userMapper.insert(user);
   }
 
@@ -79,34 +80,6 @@ public class UserService {
       throw new BusinessException("User not found");
     }
     user.setStatus(1);
-    user.setUpdatedAt(LocalDateTime.now());
-    userMapper.updateById(user);
-  }
-
-  public void upgradeUser(String userId) {
-    User user = userMapper.selectById(userId);
-    if (ObjectUtils.isEmpty(user)) {
-      throw new BusinessException("User not found");
-    }
-    Integer oldRole = user.getRole();
-    if (oldRole == -1) {
-      throw new BusinessException("User is already an root user");
-    }
-    user.setRole(oldRole - 1);
-    user.setUpdatedAt(LocalDateTime.now());
-    userMapper.updateById(user);
-  }
-
-  public void downgradeUser(String userId) {
-    User user = userMapper.selectById(userId);
-    if (ObjectUtils.isEmpty(user)) {
-      throw new BusinessException("User not found");
-    }
-    Integer oldRole = user.getRole();
-    if (oldRole == 1) {
-      throw new BusinessException("User is already a regular user");
-      }
-    user.setRole(oldRole + 1);
     user.setUpdatedAt(LocalDateTime.now());
     userMapper.updateById(user);
   }

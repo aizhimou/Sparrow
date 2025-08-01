@@ -17,7 +17,7 @@ public class User {
     @TableId
     private String id;
     private String username;
-    private Integer role; // -1: root, 0: admin, 1: user
+    private String role; // ROOT, ADMIN, USER
 
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private String password;
@@ -26,7 +26,7 @@ public class User {
     private String salt;
 
     private String email;
-    private Integer status; // 0: inactive, 1: active
+    private int status; // 0: inactive, 1: active
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 

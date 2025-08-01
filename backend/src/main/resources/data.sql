@@ -4,6 +4,6 @@ select 1753775883,
        '3aaf4d8727ead6bcf61512ace7801a4b',
        'fYMtZ=DHj^$G',
        'root@sparrow.localhost',
-       -1
+       'ADMIN'
 from dual
 where not exists(select 1 from user where username = 'root');

@@ -6,7 +6,7 @@ spring:
     name: sparrow
   datasource:
     url: jdbc:mysql://192.168.1.113:34785/sparrow?useUnicode=true&characterEncoding=UTF-8&useSSL=false
-    #    url: jdbc:mysql://localhost:3306/sparrow?useUnicode=true&characterEncoding=UTF-8&useSSL=false
+#    url: jdbc:mysql://localhost:3306/sparrow?useUnicode=true&characterEncoding=UTF-8&useSSL=false
     username: sparrow
     password: abFYTNZYFwy2KWhi
   sql:
@@ -31,8 +31,6 @@ sa-token:
 
 logging:
     level:
-      org.springframework.web: warn
-      org.springframework.boot: warn
-      org.apache.http: warn
-      org.mybatis: warn
+      org.springframework: warn
       top.asimov.sparrow: debug
+      cn.dev33.satoken: info

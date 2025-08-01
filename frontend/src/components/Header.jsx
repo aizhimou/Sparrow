@@ -41,25 +41,23 @@ function Header() {
       name: 'Home',
       to: '/',
       icon: IconHome,
-      requiredRole: 1,
     },
     {
       name: 'User',
       to: '/user',
       icon: IconUser,
-      requiredRole: 0,
+      requireAdmin: true,
     },
     {
       name: 'Setting',
       to: '/systemSetting',
       icon: IconSettings,
-      requiredRole: 0,
+      requireAdmin: true,
     },
     {
       name: 'About',
       to: '/about',
       icon: IconInfoCircle,
-      requiredRole: 1,
     },
   ];
 
@@ -67,7 +65,7 @@ function Header() {
     if (!state.user) return '';
     const role = state.user.role;
     return headerLinks
-      .filter((link) => role <= link.requiredRole)
+      .filter((link) => link.requireAdmin ? role === 'ADMIN' : true)
       .map((link) => (
         <Link to={link.to} key={link.name} style={{ textDecoration: 'none', color: 'inherit' }}>
           <Group mr="lg">
@@ -89,13 +87,8 @@ function Header() {
   }
 
   return (
-    <Paper
-      h={45}
-      shadow="xs"
-      withBorder
-      style={{ borderLeft: '0', borderRight: '0', borderTop: '0' }}
-    >
-      <Group m="sm" justify="space-around">
+    <Paper shadow="xs" p={5}>
+      <Group justify="space-around" m={0}>
         <Group>
           <Group gap="xs" mr={10} onClick={()=>navigate('/')} style={{ cursor: 'pointer' }}>
             <Image src={logo} w={40}></Image>

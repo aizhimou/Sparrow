@@ -1,9 +1,7 @@
 package top.asimov.sparrow.controller;
 
-import cn.dev33.satoken.stp.SaTokenInfo;
 import cn.dev33.satoken.stp.StpUtil;
 import cn.dev33.satoken.util.SaResult;
-import org.springframework.util.ObjectUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -25,14 +23,8 @@ public class AuthController {
 
   @PostMapping("/login")
   public SaResult login(@RequestBody User user) {
-    User exsitUser = authService.checkUserCredentials(user.getUsername(),user.getPassword());
-    if (ObjectUtils.isEmpty(exsitUser)) {
-      return SaResult.error("username or password is incorrect");
-    }
-    StpUtil.login(exsitUser.getId());
-    SaTokenInfo tokenInfo = StpUtil.getTokenInfo();
-    exsitUser.setToken(tokenInfo.getTokenValue());
-    return SaResult.data(exsitUser);
+    User loginUser = authService.login(user.getUsername(), user.getPassword());
+    return SaResult.data(loginUser);
   }
 
   @PostMapping("/logout")

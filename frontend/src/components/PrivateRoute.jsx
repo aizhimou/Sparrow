@@ -1,7 +1,7 @@
 import { Navigate } from 'react-router-dom';
 import { history } from '../helpers';
 
-function PrivateRoute({ children, requiredRole = 1}) {
+function PrivateRoute({ children, requireAdmin = false}) {
   let userItem = localStorage.getItem('user');
   if (!userItem) {
     return <Navigate to="/login" state={{ from: history.location }} />;
@@ -9,7 +9,7 @@ function PrivateRoute({ children, requiredRole = 1}) {
 
   const user = JSON.parse(userItem);
   // lower the role number means higher privilege
-  if (user.role > requiredRole) {
+  if (requireAdmin && user.role !== 'ADMIN') {
     return <Navigate to="/403" replace />;
   }
 

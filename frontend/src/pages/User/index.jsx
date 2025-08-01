@@ -24,7 +24,6 @@ const User = () => {
   const [total, setTotal] = useState(0);
   const [keyword, setKeyword] = useState('');
   const [opened, { open, close }] = useDisclosure(false);
-  const roleMap = { '-1': 'Root', 0: 'Admin', 1: 'User' };
 
   const fetchUsers = async () => {
     const res = await API.get(`/api/user/list?page=${page}&size=${PAGE_SIZE}&keyword=${keyword}`);
@@ -32,28 +31,6 @@ const User = () => {
     if (code === 200) {
       setRecords(data.records);
       setTotal(data.total);
-    } else {
-      showError(msg);
-    }
-  };
-
-  const handleUpgrade = async (userId) => {
-    const res = await API.post('/api/user/upgrade', { id: userId });
-    const { code, msg } = res.data;
-    if (code === 200) {
-      showSuccess('User upgraded successfully');
-      fetchUsers().then();
-    } else {
-      showError(msg);
-    }
-  };
-
-  const handleDowngrade = async (userId) => {
-    const res = await API.post('/api/user/downgrade', { id: userId });
-    const { code, msg } = res.data;
-    if (code === 200) {
-      showSuccess('User downgraded successfully');
-      fetchUsers().then();
     } else {
       showError(msg);
     }
@@ -72,10 +49,7 @@ const User = () => {
   };
 
   const handleAddUser = async () => {
-    const roleMap = { Root: -1, Admin: 0, User: 1 };
-    const role = roleMap[addUserForm.values.role];
     const user = addUserForm.values;
-    user.role = role;
     const res = await API.post('/api/user/add', user);
     const { code, msg } = res.data;
     if (code === 200) {
@@ -131,10 +105,10 @@ const User = () => {
           }}
           style={{ flex: 1 }}
         />
-        <Button leftSection={<IconSearch size={16} />} onClick={fetchUsers} color="blue">
+        <Button onClick={fetchUsers}>
           Search
         </Button>
-        <Button leftSection={<IconPlus size={16} />} onClick={open} color="cyan">
+        <Button onClick={open}>
           New User
         </Button>
       </Group>
@@ -159,9 +133,9 @@ const User = () => {
               <Badge
                 radius="xs"
                 variant="light"
-                color={user.role < 0 ? 'red' : user.role === 0 ? 'orange' : 'green'}
+                color={user.role === 'ADMIN' ? 'red' : 'black'}
               >
-                {roleMap[user.role] || 'Unknown'}
+                {user.role}
               </Badge>
             ),
           },
@@ -185,26 +159,6 @@ const User = () => {
             textAlign: 'center',
             render: (record) => (
               <Group gap="sm" justify="right" wrap="nowrap">
-                <Button
-                  size="xs"
-                  width={80}
-                  variant="outline"
-                  color="grape"
-                  onClick={() => handleUpgrade(record.id)}
-                  disabled={record.status === 0 || record.role < 0}
-                >
-                  Upgrade
-                </Button>
-                <Button
-                  size="xs"
-                  color="violet"
-                  variant="outline"
-                  width={80}
-                  onClick={() => handleDowngrade(record.id)}
-                  disabled={record.status === 0 || record.role > 0}
-                >
-                  Downgrade
-                </Button>
                 <Button
                   size="xs"
                   variant="outline"
@@ -251,8 +205,8 @@ const User = () => {
             placeholder="Pick value"
             key={addUserForm.key('role')}
             {...addUserForm.getInputProps('role')}
-            data={['User', 'Admin', 'Root']}
-            defaultValue="User"
+            data={['USER', 'ADMIN']}
+            defaultValue="USER"
           />
           <PasswordInput
             mb="md"
