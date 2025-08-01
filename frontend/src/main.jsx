@@ -7,19 +7,13 @@ import { MantineProvider } from '@mantine/core';
 import { UserProvider } from './context/User/UserProvider.jsx';
 import { Notifications } from '@mantine/notifications';
 import '@mantine/core/styles.css';
-import { sparrowTheme } from './theme/sparrowTheme.js';
 
 export function Main() {
   return (
     <StrictMode>
       <UserProvider>
         <BrowserRouter>
-          {/*<MantineProvider defaultColorScheme="light">*/}
-          <MantineProvider
-              withGlobalStyles
-              withNormalizeCSS
-              theme={sparrowTheme}
-          >
+          <MantineProvider defaultColorScheme="light">
             <Notifications />
             <App />
           </MantineProvider>
