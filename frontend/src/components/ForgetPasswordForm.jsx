@@ -38,7 +38,7 @@ const ForgetPasswordForm = () => {
 
   const handleForgerPassword = async () => {
     let user = form.getValues();
-    const res = await API.post('/api/auth/forgetPassword', user);
+    const res = await API.post('/api/auth/forget-password', user);
     const { code, msg } = res.data;
     if (code !== 200) {
       showError(msg);
@@ -56,7 +56,7 @@ const ForgetPasswordForm = () => {
       showError('Please enter your email.');
       return;
     }
-    const res = await API.get(`/api/auth/sendForgetPasswordVerificationCode?email=${email}`);
+    const res = await API.get(`/api/auth/send-forget-password-verification-code?email=${email}`);
     const { code, msg } = res.data;
     if (code !== 200) {
       showError(msg);

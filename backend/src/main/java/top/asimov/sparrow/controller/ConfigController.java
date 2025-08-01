@@ -33,12 +33,6 @@ public class ConfigController {
     return SaResult.ok().setData(optionValue);
   }
 
-  @GetMapping("/name/public")
-  public SaResult getPublicConfig(@RequestParam(name = "name") String name) {
-    String configValue = configService.getPublicConfig(name);
-    return SaResult.ok().setData(configValue);
-  }
-
   @PostMapping("/name")
   public SaResult setConfig(@RequestBody Config config) {
     int result = configService.setConfig(config);

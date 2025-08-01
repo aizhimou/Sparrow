@@ -21,7 +21,7 @@ const RegisterForm = () => {
   let navigator = useNavigate();
 
   const fetchConfig = async () => {
-    const res = await API.get('/api/config/name/public?name=EmailVerificationEnabled');
+    const res = await API.get('/api/public/config?name=EmailVerificationEnabled');
     const { code, msg, data } = res.data;
     if (code !== 200) {
       console.error(msg);
@@ -78,7 +78,7 @@ const RegisterForm = () => {
   const getVerificationCode = async () => {
     setLoading(true);
     const email = form.getInputProps('email').value;
-    const res = await API.get(`/api/auth/sendRegistrationVerificationCode?email=${email}`);
+    const res = await API.get(`/api/auth/send-registration-verification-code?email=${email}`);
     const { code, msg } = res.data;
     if (code !== 200) {
       showError(msg);

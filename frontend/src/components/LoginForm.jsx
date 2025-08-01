@@ -61,21 +61,21 @@ const LoginForm = () => {
   };
 
   const handleForgerPassword = async () => {
-    const res = await API.get('/api/config/name/public?name=ForgetPasswordEnabled');
+    const res = await API.get('/api/public/config?name=ForgetPasswordEnabled');
     const { code, msg, data } = res.data;
     if (code !== 200) {
       showError(msg);
       return;
     }
     if (data === 'true') {
-      navigate('/forgetPassword');
+      navigate('/forget-password');
     } else {
       showError('Forget password feature is not enabled.');
     }
   };
 
   const handleRegister = async () => {
-    const res = await API.get('/api/config/name/public?name=RegisterEnabled');
+    const res = await API.get('/api/public/config?name=RegisterEnabled');
     const { code, msg, data } = res.data;
     if (code !== 200) {
       showError(msg);
