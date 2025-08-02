@@ -124,24 +124,33 @@ const User = () => {
             title: '#',
             render: (record, idx) => (page - 1) * PAGE_SIZE + idx + 1,
           },
-          { accessor: 'username', title: 'Username' },
-          { accessor: 'email', title: 'Email' },
+          {
+            title: 'Name',
+            accessor: 'username',
+          },
+          {
+            accessor: 'email',
+            title: 'Email'
+          },
           {
             accessor: 'role',
             title: 'Role',
+            textAlign: 'center',
             render: (user) => (
               <Badge
                 radius="xs"
                 variant="light"
-                color={user.role === 'ADMIN' ? 'red' : 'black'}
+                color={user.role === 'ADMIN' ? 'orange' : 'teal'}
               >
                 {user.role}
               </Badge>
             ),
           },
           {
+            title: 'Status',
             accessor: 'status',
-            title: 'status',
+            textAlign: 'center',
+
             render: (user) => (
               <Badge radius="xs" variant="light" color={user.status === 1 ? 'green' : 'gray'}>
                 {user.status === 1 ? 'Active' : 'Inactive'}
@@ -158,7 +167,7 @@ const User = () => {
             title: 'Actions',
             textAlign: 'center',
             render: (record) => (
-              <Group gap="sm" justify="right" wrap="nowrap">
+              <Group gap="sm" justify="center" wrap="nowrap">
                 <Button
                   size="xs"
                   variant="outline"

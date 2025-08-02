@@ -8,7 +8,6 @@ function PrivateRoute({ children, requireAdmin = false}) {
   }
 
   const user = JSON.parse(userItem);
-  // lower the role number means higher privilege
   if (requireAdmin && user.role !== 'ADMIN') {
     return <Navigate to="/403" replace />;
   }

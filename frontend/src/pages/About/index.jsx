@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Container, Text, Title } from '@mantine/core';
+import { Container, Text, Title, Typography } from '@mantine/core';
 import { API, showError } from '../../helpers/index.js';
 import { marked } from 'marked';
 
@@ -32,7 +32,11 @@ const About = () => {
         </>
       ) : (
         <Container>
-          <div dangerouslySetInnerHTML={{ __html: about }}></div>
+          <Typography>
+            <div
+                dangerouslySetInnerHTML={{ __html: about }}
+            />
+          </Typography>
         </Container>
       )}
     </Container>

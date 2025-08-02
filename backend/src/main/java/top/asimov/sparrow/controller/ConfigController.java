@@ -15,7 +15,6 @@ import top.asimov.sparrow.service.ConfigService;
 
 @RestController
 @RequestMapping("/api/config")
-@SaCheckRole(Role.ADMIN)
 public class ConfigController {
 
   private final ConfigService configService;
@@ -25,6 +24,7 @@ public class ConfigController {
   }
 
   @GetMapping("/all")
+  @SaCheckRole(Role.ADMIN)
   public SaResult getAllConfigs() {
     List<Config> allConfigs = configService.getAllConfigs();
     return SaResult.ok().setData(allConfigs);
@@ -37,12 +37,14 @@ public class ConfigController {
   }
 
   @PostMapping("/name")
+  @SaCheckRole(Role.ADMIN)
   public SaResult setConfig(@RequestBody Config config) {
     int result = configService.setConfig(config);
     return SaResult.ok().setData(result);
   }
 
   @PostMapping("/batch")
+  @SaCheckRole(Role.ADMIN)
   public SaResult batchSetConfigs(@RequestBody List<Config> configList) {
     int result = configService.batchSetConfigs(configList);
     return SaResult.ok().setData(result);

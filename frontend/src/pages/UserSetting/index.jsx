@@ -3,18 +3,18 @@ import { API, showError, showSuccess } from '../../helpers/index.js';
 import {
   Button,
   Container,
-  Divider,
+  Paper,
   Group,
   PasswordInput,
   Stack,
   TextInput,
-  Title,
+  Title, Badge, Text
 } from '@mantine/core';
 import { UserContext } from '../../context/User/UserContext.jsx';
 import { hasLength, useForm } from '@mantine/form';
 
 const UserSetting = () => {
-  const [state,] = useContext(UserContext);
+  const [state] = useContext(UserContext);
   const [resetPasswordLoading, setResetPasswordLoading] = useState(false);
   const [bindEmailLoading, setBindEmailLoading] = useState(false);
   const [getCodeLoading, setGetCodeLoading] = useState(false);
@@ -100,61 +100,81 @@ const UserSetting = () => {
   return (
     <Container size="lg" mt="lg">
       <Stack>
-        <Stack mt="lg">
-          <Title order={4}>Reset Password</Title>
-          <form onSubmit={resetPasswordForm.onSubmit((values) => resetPassword(values))}>
-            <PasswordInput
-              name="oldPassword"
-              label="Old Password"
-              placeholder="Please enter your old password"
-              key={resetPasswordForm.key('oldPassword')}
-              {...resetPasswordForm.getInputProps('oldPassword')}
-              style={{ flex: 1 }}
-            />
-            <PasswordInput
-              mt="sm"
-              name="newPassword"
-              label="New Password"
-              placeholder="Please enter new password"
-              key={resetPasswordForm.key('newPassword')}
-              {...resetPasswordForm.getInputProps('newPassword')}
-              style={{ flex: 1 }}
-            />
-            <Button mt="sm" loading={resetPasswordLoading} type="submit" fullWidth>
-              Confirm Reset
-            </Button>
-          </form>
-        </Stack>
-        <Divider />
-        <Stack mt="md">
-          <Title order={4}>Bind or rebind Email</Title>
-          <form onSubmit={bindEmailForm.onSubmit((values) => bindEmail(values))}>
-            <Group align="flex-end">
-              <TextInput
-                name="email"
-                label="Email"
-                placeholder="Please enter new email address"
-                key={bindEmailForm.key('email')}
-                {...bindEmailForm.getInputProps('email')}
+        <Paper shadow="xs" p="md">
+          <Stack>
+              <Title order={4}>Current State</Title>
+            <Group>
+              <Text>Email:</Text>
+              <Text>{state.user.email}</Text>
+            </Group>
+            <Group>
+              <Text>Role:</Text>
+              <Badge radius="sm">{state.user.role}</Badge>
+            </Group>
+          </Stack>
+        </Paper>
+        <Paper shadow="xs" p="md">
+          <Stack>
+            <Title order={4}>Reset Password</Title>
+            <form onSubmit={resetPasswordForm.onSubmit((values) => resetPassword(values))}>
+              <PasswordInput
+                name="oldPassword"
+                label="Old Password"
+                placeholder="Please enter your old password"
+                key={resetPasswordForm.key('oldPassword')}
+                {...resetPasswordForm.getInputProps('oldPassword')}
                 style={{ flex: 1 }}
               />
-              <Button variant="outline" loading={getCodeLoading} onClick={sendVerificationCode}>
-                Get Code
-              </Button>
-            </Group>
-            <TextInput
-              mt="sm"
-              name="verificationCode"
-              label="Verification Code"
-              placeholder="Please enter verification code from your email."
-              key={bindEmailForm.key('verificationCode')}
-              {...bindEmailForm.getInputProps('verificationCode')}
-            />
-            <Button mt="sm" type="submit" loading={bindEmailLoading} fullWidth>
-              Confirm Bind
-            </Button>
-          </form>
-        </Stack>
+              <PasswordInput
+                mt="sm"
+                name="newPassword"
+                label="New Password"
+                placeholder="Please enter new password"
+                key={resetPasswordForm.key('newPassword')}
+                {...resetPasswordForm.getInputProps('newPassword')}
+                style={{ flex: 1 }}
+              />
+              <Group justify="flex-end" mt="sm">
+                <Button mt="sm" loading={resetPasswordLoading} type="submit">
+                  Confirm Reset
+                </Button>
+              </Group>
+            </form>
+          </Stack>
+        </Paper>
+        <Paper shadow="xs" p="md">
+          <Stack>
+            <Title order={4}>Bind or rebind Email</Title>
+            <form onSubmit={bindEmailForm.onSubmit((values) => bindEmail(values))}>
+              <Group align="flex-end">
+                <TextInput
+                  name="email"
+                  label="Email"
+                  placeholder="Please enter new email address"
+                  key={bindEmailForm.key('email')}
+                  {...bindEmailForm.getInputProps('email')}
+                  style={{ flex: 1 }}
+                />
+                <Button variant="outline" loading={getCodeLoading} onClick={sendVerificationCode}>
+                  Get Code
+                </Button>
+              </Group>
+              <TextInput
+                mt="sm"
+                name="verificationCode"
+                label="Verification Code"
+                placeholder="Please enter verification code from your email."
+                key={bindEmailForm.key('verificationCode')}
+                {...bindEmailForm.getInputProps('verificationCode')}
+              />
+              <Group justify="flex-end" mt="sm">
+                <Button mt="sm" type="submit" loading={bindEmailLoading}>
+                  Confirm Bind
+                </Button>
+              </Group>
+            </form>
+          </Stack>
+        </Paper>
       </Stack>
     </Container>
   );

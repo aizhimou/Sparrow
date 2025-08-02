@@ -22,7 +22,7 @@ const Home = () => {
   return (
     <Container size="lg" mt="lg">
       {notice ? (
-        <Alert variant="light" color="#d5654d" title="System Notice" radius="md">
+        <Alert variant="light" color="blue" title="System Notice" radius="md">
           {notice}
         </Alert>
       ) : null}

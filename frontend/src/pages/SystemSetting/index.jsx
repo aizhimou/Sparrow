@@ -5,7 +5,7 @@ import {
   Checkbox,
   Container,
   Divider,
-  Group, PasswordInput,
+  Group, NumberInput, Paper, PasswordInput,
   Stack,
   Textarea,
   TextInput,
@@ -114,23 +114,28 @@ const SystemSetting = () => {
   return (
     <Container size="lg" mt="lg">
       <Stack>
+        <Paper shadow="xs" p="md">
         <Stack>
           <Title order={4}>Notice Setting</Title>
           <Textarea
-            resize="vertical"
             name="Notice"
             label="Notice"
             description="This notice will be displayed on the homepage. If you dont want to show notice, just leave it empty."
+            autosize
+            minRows={3}
             value={inputs.Notice}
             placeholder="Enter notice content here, and if you dont want to show notice, just leave it empty."
             onChange={(e) => handleInputChange(e, { name: e.target.name, value: e.target.value })}
           />
-          <Button onClick={() => updateOption('Notice', inputs.Notice)} loading={NoticeLoading}>
-            Save notice
-          </Button>
+          <Group justify="flex-end">
+            <Button onClick={() => updateOption('Notice', inputs.Notice)} loading={NoticeLoading}>
+              Save notice
+            </Button>
+          </Group>
         </Stack>
-        <Divider />
-        <Stack mt="md">
+        </Paper>
+        <Paper shadow="xs" p="md">
+        <Stack>
           <Title order={4}>Registration Settings</Title>
           <Group gap="xl">
             <Checkbox
@@ -159,10 +164,11 @@ const SystemSetting = () => {
             />
           </Group>
         </Stack>
-        <Divider />
-        <Stack mt="md">
+        </Paper>
+        <Paper shadow="xs" p="md">
+        <Stack>
           <Title order={4}>SMTP Settings</Title>
-          <Group justify="space-between" gap="sm">
+          <Group justify="space-between" gap="lg">
             <TextInput
               name="SMTPServer"
               label="SMTP Server"
@@ -171,7 +177,7 @@ const SystemSetting = () => {
               onChange={(e) => handleInputChange(e, { name: e.target.name, value: e.target.value })}
               style={{ flex: 1 }}
             />
-            <TextInput
+            <NumberInput
               name="SMTPPort"
               label="SMTP Port"
               value={inputs.SMTPPort}
@@ -196,26 +202,33 @@ const SystemSetting = () => {
               style={{ flex: 1 }}
             />
           </Group>
-          <Button onClick={updateSMTPConfig} loading={SmtpLoading}>
-            Save SMTP Configuration
-          </Button>
+          <Group justify="flex-end" mt="sm">
+            <Button onClick={updateSMTPConfig} loading={SmtpLoading}>
+              Save SMTP Configuration
+            </Button>
+          </Group>
         </Stack>
-        <Divider />
-        <Stack mt="md">
+        </Paper>
+        <Paper shadow="xs" p="md">
+        <Stack>
           <Title order={4}>About Setting</Title>
           <Textarea
-            resize="vertical"
             name="About"
             label="About Content"
-            description="This content will be displayed on the about page. Markdown are supported."
+            description="This content will be displayed on the about page. Markdown and HTML syntax are supported."
+            autosize
+            minRows={5}
             value={inputs.About}
             placeholder="Enter notice content here, and if you dont want to show notice, just leave it empty."
             onChange={(e) => handleInputChange(e, { name: e.target.name, value: e.target.value })}
           />
-          <Button onClick={() => updateOption('About', inputs.About)} loading={AboutLoading}>
-            Save about
-          </Button>
+          <Group justify="flex-end" mt="sm">
+            <Button onClick={() => updateOption('About', inputs.About)} loading={AboutLoading}>
+              Save about
+            </Button>
+          </Group>
         </Stack>
+        </Paper>
       </Stack>
     </Container>
   );

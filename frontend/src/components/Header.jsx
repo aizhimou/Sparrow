@@ -105,7 +105,6 @@ function Header() {
                 </Group>
               </Menu.Target>
               <Menu.Dropdown>
-                {state.user.email ? <Menu.Item>{state.user.email}</Menu.Item> : <></>}
                 <Menu.Item
                   leftSection={<IconSettings size={14} />}
                   onClick={() => navigate('/userSetting')}
