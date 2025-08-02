@@ -1,5 +1,8 @@
 package top.asimov.sparrow.service;
 
+import cn.dev33.satoken.apikey.model.ApiKeyModel;
+import cn.dev33.satoken.apikey.template.SaApiKeyUtil;
+import cn.dev33.satoken.stp.StpUtil;
 import java.time.LocalDateTime;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ObjectUtils;
@@ -30,6 +33,16 @@ public class AccountService {
     user.setPassword(null);
     user.setSalt(null);
     return user;
+  }
+
+  public String generateApiKey() {
+    String loginId = (String) StpUtil.getLoginId();
+    User user = userMapper.selectById(loginId);
+    ApiKeyModel akModel = SaApiKeyUtil.createApiKeyModel(loginId).setTitle(user.getUsername());
+    SaApiKeyUtil.saveApiKey(akModel);
+    user.setApiKey(akModel.getApiKey());
+    userMapper.updateById(user);
+    return akModel.getApiKey();
   }
 
   public void sendBindEmailVerificationCode(String userId, String email) {

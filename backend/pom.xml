@@ -66,6 +66,11 @@
       <version>${sa-token.version}</version>
     </dependency>
     <dependency>
+      <groupId>cn.dev33</groupId>
+      <artifactId>sa-token-apikey</artifactId>
+      <version>${sa-token.version}</version>
+    </dependency>
+    <dependency>
       <groupId>com.baomidou</groupId>
       <artifactId>mybatis-plus-spring-boot3-starter</artifactId>
       <version>${mybatis-plus.version}</version>

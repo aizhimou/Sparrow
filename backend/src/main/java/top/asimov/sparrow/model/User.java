@@ -26,6 +26,7 @@ public class User {
     private String salt;
 
     private String email;
+    private String apiKey;
     private int status; // 0: inactive, 1: active
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;

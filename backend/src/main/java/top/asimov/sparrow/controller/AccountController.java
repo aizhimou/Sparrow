@@ -27,19 +27,25 @@ public class AccountController {
     return SaResult.data(user);
   }
 
-  @PostMapping("/resetPassword")
+  @GetMapping("/generate-api-key")
+  public SaResult generateApiKey() {
+    String apiKey = accountService.generateApiKey();
+    return SaResult.data(apiKey);
+  }
+
+  @PostMapping("/reset-password")
   public SaResult resetPassword(@RequestBody User user) {
     accountService.resetPassword(user.getId(), user.getPassword(), user.getNewPassword());
     return SaResult.data(user);
   }
 
-  @PostMapping("/sendVerificationEmail")
+  @PostMapping("/send-verification-email")
   public SaResult sendVerificationEmail(@RequestBody User user) {
     accountService.sendBindEmailVerificationCode(user.getId(), user.getEmail());
     return SaResult.ok();
   }
 
-  @PostMapping("/bindEmail")
+  @PostMapping("/bind-email")
   public SaResult bindEmail(@RequestBody User user) {
     accountService.bindEmail(user.getId(), user.getEmail(), user.getVerificationCode());
     return SaResult.ok();
