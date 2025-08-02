@@ -8,7 +8,6 @@ import java.time.LocalDateTime;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ObjectUtils;
 import org.springframework.util.StringUtils;
-import top.asimov.sparrow.constant.Role;
 import top.asimov.sparrow.exception.BusinessException;
 import top.asimov.sparrow.mapper.UserMapper;
 import top.asimov.sparrow.model.User;
@@ -57,7 +56,7 @@ public class UserService {
     user.setPassword(encryptedPassword);
     user.setSalt(salt);
     user.setEmail(email);
-    user.setRole(Role.USER);
+    user.setStatus(1);
     userMapper.insert(user);
   }
 
