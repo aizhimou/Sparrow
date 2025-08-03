@@ -1,4 +1,8 @@
-# Sparrow
+<div align="center">
+  <img src="frontend/public/sparrow.svg" alt="sparrow" width="120" />
+  <h1>Sparrow</h1>
+</div>
+
 A lightweight fullstack starter built with Spring Boot &amp; React, perfect for tool systems, admin panels and mini apps.
 
 ## Key Features
