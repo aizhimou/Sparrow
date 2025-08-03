@@ -105,12 +105,8 @@ const User = () => {
           }}
           style={{ flex: 1 }}
         />
-        <Button onClick={fetchUsers}>
-          Search
-        </Button>
-        <Button onClick={open}>
-          New User
-        </Button>
+        <Button onClick={fetchUsers}>Search</Button>
+        <Button onClick={open}>New User</Button>
       </Group>
       <DataTable
         mt="md"
@@ -130,18 +126,14 @@ const User = () => {
           },
           {
             accessor: 'email',
-            title: 'Email'
+            title: 'Email',
           },
           {
             accessor: 'role',
             title: 'Role',
             textAlign: 'center',
             render: (user) => (
-              <Badge
-                radius="xs"
-                variant="light"
-                color={user.role === 'ADMIN' ? 'orange' : 'teal'}
-              >
+              <Badge radius="xs" variant="light" color={user.role === 'ADMIN' ? 'orange' : 'teal'}>
                 {user.role}
               </Badge>
             ),

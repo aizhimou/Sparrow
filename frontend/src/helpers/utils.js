@@ -6,14 +6,15 @@ export function showError(error) {
   if (error.message) {
     if (error.name === 'AxiosError') {
       switch (error.response.status) {
-        case 401:
-          { const searchParams = new URLSearchParams(window.location.search);
+        case 401: {
+          const searchParams = new URLSearchParams(window.location.search);
           const hasExpired = searchParams.get('expired') === 'true';
           if (!hasExpired) {
             window.location.href = '/login?expired=true';
-            localStorage.removeItem("user")
+            localStorage.removeItem('user');
           }
-          break; }
+          break;
+        }
         case 429:
           notifications.show({
             color: toastConstants.ERROR_COLOR,

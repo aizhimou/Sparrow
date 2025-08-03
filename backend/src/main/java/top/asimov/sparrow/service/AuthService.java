@@ -6,6 +6,7 @@ import java.time.LocalDateTime;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ObjectUtils;
 import org.springframework.util.StringUtils;
+import top.asimov.sparrow.constant.Role;
 import top.asimov.sparrow.exception.BusinessException;
 import top.asimov.sparrow.mapper.UserMapper;
 import top.asimov.sparrow.model.User;
@@ -64,7 +65,7 @@ public class AuthService {
         .password(PasswordUtil.generateEncryptedPassword(user.getPassword(), salt))
         .email(user.getEmail())
         .salt(salt)
-        .role("USER")
+        .role(Role.USER)
         .createdAt(LocalDateTime.now())
         .updatedAt(LocalDateTime.now())
         .build();

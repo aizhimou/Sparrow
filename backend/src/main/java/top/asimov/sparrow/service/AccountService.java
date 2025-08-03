@@ -38,7 +38,18 @@ public class AccountService {
   public String generateApiKey() {
     String loginId = (String) StpUtil.getLoginId();
     User user = userMapper.selectById(loginId);
-    ApiKeyModel akModel = SaApiKeyUtil.createApiKeyModel(loginId).setTitle(user.getUsername());
+
+    String previousApiKey = user.getApiKey();
+    if (StringUtils.hasText(previousApiKey)) {
+      // If the user already has an API key, delete it
+      SaApiKeyUtil.deleteApiKey(previousApiKey);
+    }
+
+    ApiKeyModel akModel = SaApiKeyUtil
+        .createApiKeyModel(loginId)
+        .setTitle(user.getUsername())
+        .setExpiresTime(-1)
+        .addScope(user.getRole());
     SaApiKeyUtil.saveApiKey(akModel);
     user.setApiKey(akModel.getApiKey());
     userMapper.updateById(user);

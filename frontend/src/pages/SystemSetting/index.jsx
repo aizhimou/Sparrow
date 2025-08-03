@@ -4,8 +4,10 @@ import {
   Button,
   Checkbox,
   Container,
-  Divider,
-  Group, NumberInput, Paper, PasswordInput,
+  Group,
+  NumberInput,
+  Paper,
+  PasswordInput,
   Stack,
   Textarea,
   TextInput,
@@ -59,19 +61,19 @@ const SystemSetting = () => {
 
   const setLoading = (name, loading) => {
     switch (name) {
-      case "Notice":
+      case 'Notice':
         setNoticeLoading(loading);
         break;
-      case "About":
+      case 'About':
         setAboutLoading(loading);
         break;
-      case "SMTP":
+      case 'SMTP':
         setSmtpLoading(loading);
         break;
       default:
         break;
     }
-  }
+  };
 
   const updateOption = async (name, value) => {
     setLoading(name, true);
@@ -115,119 +117,127 @@ const SystemSetting = () => {
     <Container size="lg" mt="lg">
       <Stack>
         <Paper shadow="xs" p="md">
-        <Stack>
-          <Title order={4}>Notice Setting</Title>
-          <Textarea
-            name="Notice"
-            label="Notice"
-            description="This notice will be displayed on the homepage. If you dont want to show notice, just leave it empty."
-            autosize
-            minRows={3}
-            value={inputs.Notice}
-            placeholder="Enter notice content here, and if you dont want to show notice, just leave it empty."
-            onChange={(e) => handleInputChange(e, { name: e.target.name, value: e.target.value })}
-          />
-          <Group justify="flex-end">
-            <Button onClick={() => updateOption('Notice', inputs.Notice)} loading={NoticeLoading}>
-              Save notice
-            </Button>
-          </Group>
-        </Stack>
+          <Stack>
+            <Title order={4}>Notice Setting</Title>
+            <Textarea
+              name="Notice"
+              label="Notice"
+              description="This notice will be displayed on the homepage. If you dont want to show notice, just leave it empty."
+              autosize
+              minRows={3}
+              value={inputs.Notice}
+              placeholder="Enter notice content here, and if you dont want to show notice, just leave it empty."
+              onChange={(e) => handleInputChange(e, { name: e.target.name, value: e.target.value })}
+            />
+            <Group justify="flex-end">
+              <Button onClick={() => updateOption('Notice', inputs.Notice)} loading={NoticeLoading}>
+                Save notice
+              </Button>
+            </Group>
+          </Stack>
         </Paper>
         <Paper shadow="xs" p="md">
-        <Stack>
-          <Title order={4}>Registration Settings</Title>
-          <Group gap="xl">
-            <Checkbox
-              name="RegisterEnabled"
-              label="Allow registration"
-              checked={inputs.RegisterEnabled === 'true'}
-              onChange={(e) =>
-                handleInputChange(e, { name: e.target.name, value: e.target.checked })
-              }
-            />
-            <Checkbox
-              name="EmailVerificationEnabled"
-              label="Require email verification when registering"
-              checked={inputs.EmailVerificationEnabled === 'true'}
-              onChange={(e) =>
-                handleInputChange(e, { name: e.target.name, value: e.target.checked })
-              }
-            />
-            <Checkbox
-              name="ForgetPasswordEnabled"
-              label="Allow forget password"
-              checked={inputs.ForgetPasswordEnabled === 'true'}
-              onChange={(e) =>
-                handleInputChange(e, { name: e.target.name, value: e.target.checked })
-              }
-            />
-          </Group>
-        </Stack>
+          <Stack>
+            <Title order={4}>Registration Settings</Title>
+            <Group gap="xl">
+              <Checkbox
+                name="RegisterEnabled"
+                label="Allow registration"
+                checked={inputs.RegisterEnabled === 'true'}
+                onChange={(e) =>
+                  handleInputChange(e, { name: e.target.name, value: e.target.checked })
+                }
+              />
+              <Checkbox
+                name="EmailVerificationEnabled"
+                label="Require email verification when registering"
+                checked={inputs.EmailVerificationEnabled === 'true'}
+                onChange={(e) =>
+                  handleInputChange(e, { name: e.target.name, value: e.target.checked })
+                }
+              />
+              <Checkbox
+                name="ForgetPasswordEnabled"
+                label="Allow forget password"
+                checked={inputs.ForgetPasswordEnabled === 'true'}
+                onChange={(e) =>
+                  handleInputChange(e, { name: e.target.name, value: e.target.checked })
+                }
+              />
+            </Group>
+          </Stack>
         </Paper>
         <Paper shadow="xs" p="md">
-        <Stack>
-          <Title order={4}>SMTP Settings</Title>
-          <Group justify="space-between" gap="lg">
-            <TextInput
-              name="SMTPServer"
-              label="SMTP Server"
-              value={inputs.SMTPServer}
-              placeholder="SMTP server address"
-              onChange={(e) => handleInputChange(e, { name: e.target.name, value: e.target.value })}
-              style={{ flex: 1 }}
-            />
-            <NumberInput
-              name="SMTPPort"
-              label="SMTP Port"
-              value={inputs.SMTPPort}
-              placeholder="SMTP server port"
-              onChange={(e) => handleInputChange(e, { name: e.target.name, value: e.target.value })}
-              style={{ flex: 1 }}
-            />
-            <TextInput
-              name="SMTPAccount"
-              label="SMTP Account"
-              value={inputs.SMTPAccount}
-              placeholder="SMTP account email"
-              onChange={(e) => handleInputChange(e, { name: e.target.name, value: e.target.value })}
-              style={{ flex: 1 }}
-            />
-            <PasswordInput
-              name="SMTPToken"
-              label="SMTP Token"
-              value={inputs.SMTPToken}
-              placeholder="SMTP account token or password"
-              onChange={(e) => handleInputChange(e, { name: e.target.name, value: e.target.value })}
-              style={{ flex: 1 }}
-            />
-          </Group>
-          <Group justify="flex-end" mt="sm">
-            <Button onClick={updateSMTPConfig} loading={SmtpLoading}>
-              Save SMTP Configuration
-            </Button>
-          </Group>
-        </Stack>
+          <Stack>
+            <Title order={4}>SMTP Settings</Title>
+            <Group justify="space-between" gap="lg">
+              <TextInput
+                name="SMTPServer"
+                label="SMTP Server"
+                value={inputs.SMTPServer}
+                placeholder="SMTP server address"
+                onChange={(e) =>
+                  handleInputChange(e, { name: e.target.name, value: e.target.value })
+                }
+                style={{ flex: 1 }}
+              />
+              <NumberInput
+                name="SMTPPort"
+                label="SMTP Port"
+                value={inputs.SMTPPort}
+                placeholder="SMTP server port"
+                onChange={(e) =>
+                  handleInputChange(e, { name: e.target.name, value: e.target.value })
+                }
+                style={{ flex: 1 }}
+              />
+              <TextInput
+                name="SMTPAccount"
+                label="SMTP Account"
+                value={inputs.SMTPAccount}
+                placeholder="SMTP account email"
+                onChange={(e) =>
+                  handleInputChange(e, { name: e.target.name, value: e.target.value })
+                }
+                style={{ flex: 1 }}
+              />
+              <PasswordInput
+                name="SMTPToken"
+                label="SMTP Token"
+                value={inputs.SMTPToken}
+                placeholder="SMTP account token or password"
+                onChange={(e) =>
+                  handleInputChange(e, { name: e.target.name, value: e.target.value })
+                }
+                style={{ flex: 1 }}
+              />
+            </Group>
+            <Group justify="flex-end" mt="sm">
+              <Button onClick={updateSMTPConfig} loading={SmtpLoading}>
+                Save SMTP Configuration
+              </Button>
+            </Group>
+          </Stack>
         </Paper>
         <Paper shadow="xs" p="md">
-        <Stack>
-          <Title order={4}>About Setting</Title>
-          <Textarea
-            name="About"
-            label="About Content"
-            description="This content will be displayed on the about page. Markdown and HTML syntax are supported."
-            autosize
-            minRows={5}
-            value={inputs.About}
-            placeholder="Enter notice content here, and if you dont want to show notice, just leave it empty."
-            onChange={(e) => handleInputChange(e, { name: e.target.name, value: e.target.value })}
-          />
-          <Group justify="flex-end" mt="sm">
-            <Button onClick={() => updateOption('About', inputs.About)} loading={AboutLoading}>
-              Save about
-            </Button>
-          </Group>
-        </Stack>
+          <Stack>
+            <Title order={4}>About Setting</Title>
+            <Textarea
+              name="About"
+              label="About Content"
+              description="This content will be displayed on the about page. Markdown and HTML syntax are supported."
+              autosize
+              minRows={5}
+              value={inputs.About}
+              placeholder="Enter notice content here, and if you dont want to show notice, just leave it empty."
+              onChange={(e) => handleInputChange(e, { name: e.target.name, value: e.target.value })}
+            />
+            <Group justify="flex-end" mt="sm">
+              <Button onClick={() => updateOption('About', inputs.About)} loading={AboutLoading}>
+                Save about
+              </Button>
+            </Group>
+          </Stack>
         </Paper>
       </Stack>
     </Container>

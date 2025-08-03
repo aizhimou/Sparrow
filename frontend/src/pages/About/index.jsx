@@ -33,9 +33,7 @@ const About = () => {
       ) : (
         <Container>
           <Typography>
-            <div
-                dangerouslySetInnerHTML={{ __html: about }}
-            />
+            <div dangerouslySetInnerHTML={{ __html: about }} />
           </Typography>
         </Container>
       )}

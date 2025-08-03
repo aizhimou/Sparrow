@@ -1,7 +1,7 @@
 import { Navigate } from 'react-router-dom';
 import { history } from '../helpers';
 
-function PrivateRoute({ children, requireAdmin = false}) {
+function PrivateRoute({ children, requireAdmin = false }) {
   let userItem = localStorage.getItem('user');
   if (!userItem) {
     return <Navigate to="/login" state={{ from: history.location }} />;

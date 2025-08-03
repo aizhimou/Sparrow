@@ -3,6 +3,7 @@ package top.asimov.sparrow.config;
 import cn.dev33.satoken.apikey.loader.SaApiKeyDataLoader;
 import cn.dev33.satoken.apikey.model.ApiKeyModel;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import java.util.List;
 import org.springframework.stereotype.Component;
 import org.springframework.util.ObjectUtils;
 import top.asimov.sparrow.mapper.UserMapper;
@@ -32,6 +33,8 @@ public class SaApiKeyDataLoaderImpl implements SaApiKeyDataLoader {
     akModel.setLoginId(user.getId());
     akModel.setApiKey(apiKey);
     akModel.setTitle(user.getUsername());
+    akModel.setScopes(List.of(user.getRole()));
+    akModel.setExpiresTime(-1);
     return akModel;
   }
 

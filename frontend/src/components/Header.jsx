@@ -50,7 +50,7 @@ function Header() {
     },
     {
       name: 'Setting',
-      to: '/systemSetting',
+      to: '/system-setting',
       icon: IconSettings,
       requireAdmin: true,
     },
@@ -65,7 +65,7 @@ function Header() {
     if (!state.user) return '';
     const role = state.user.role;
     return headerLinks
-      .filter((link) => link.requireAdmin ? role === 'ADMIN' : true)
+      .filter((link) => (link.requireAdmin ? role === 'ADMIN' : true))
       .map((link) => (
         <Link to={link.to} key={link.name} style={{ textDecoration: 'none', color: 'inherit' }}>
           <Group mr="lg">
@@ -90,7 +90,7 @@ function Header() {
     <Paper shadow="xs" p={5}>
       <Group justify="space-around" m={0}>
         <Group>
-          <Group gap="xs" mr={10} onClick={()=>navigate('/')} style={{ cursor: 'pointer' }}>
+          <Group gap="xs" mr={10} onClick={() => navigate('/')} style={{ cursor: 'pointer' }}>
             <Image src={logo} w={40}></Image>
             <Title order={4}>Sparrow</Title>
           </Group>
@@ -107,9 +107,9 @@ function Header() {
               <Menu.Dropdown>
                 <Menu.Item
                   leftSection={<IconSettings size={14} />}
-                  onClick={() => navigate('/userSetting')}
+                  onClick={() => navigate('/user-setting')}
                 >
-                  Setting
+                  Account
                 </Menu.Item>
                 <Menu.Item leftSection={<IconLogout2 size={14} />} onClick={logout}>
                   Logout

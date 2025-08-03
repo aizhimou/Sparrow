@@ -12,7 +12,7 @@ import User from './pages/User/index.jsx';
 import RegisterForm from './components/RegisterForm.jsx';
 import ForgetPasswordForm from './components/ForgetPasswordForm.jsx';
 import Layout from './components/Layout.jsx';
-import Forbidden from "./pages/Forbidden/index.jsx";
+import Forbidden from './pages/Forbidden/index.jsx';
 
 function App() {
   const [, dispatch] = useContext(UserContext);
@@ -49,7 +49,7 @@ function App() {
           }
         />
         <Route
-          path="systemSetting"
+          path="system-setting"
           element={
             <PrivateRoute requireAdmin={true}>
               <SystemSetting />
@@ -57,7 +57,7 @@ function App() {
           }
         />
         <Route
-          path="UserSetting"
+          path="user-setting"
           element={
             <PrivateRoute>
               <UserSetting />
@@ -75,7 +75,7 @@ function App() {
 
         <Route path="login" element={<LoginForm />} />
         <Route path="register" element={<RegisterForm />} />
-        <Route path="forgetPassword" element={<ForgetPasswordForm />} />
+        <Route path="forget-password" element={<ForgetPasswordForm />} />
         <Route path="403" element={<Forbidden />} />
 
         <Route path="*" element={<NotFound />} />

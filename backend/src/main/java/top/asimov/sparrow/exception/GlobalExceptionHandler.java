@@ -1,6 +1,7 @@
 package top.asimov.sparrow.exception;
 
 import cn.dev33.satoken.exception.NotLoginException;
+import cn.dev33.satoken.exception.NotPermissionException;
 import cn.dev33.satoken.util.SaResult;
 import java.util.stream.Collectors;
 import org.springframework.http.HttpStatus;
@@ -75,11 +76,14 @@ public class GlobalExceptionHandler {
     }
 
     /**
-     * Handle all other exceptions
+     * Handle not permission exceptions
+     * @param e Not permission exception
+     * @return Not permission error response
      */
-    @ExceptionHandler(Exception.class)
-    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-    public SaResult handleException(Exception e) {
-        return SaResult.error("An unexpected error occurred: " + e.getMessage());
+    @ExceptionHandler(NotPermissionException.class)
+    @ResponseStatus(HttpStatus.UNAUTHORIZED)
+    public SaResult handleNotPermissionException(NotPermissionException e) {
+        return SaResult.error(e.getMessage());
     }
+
 }

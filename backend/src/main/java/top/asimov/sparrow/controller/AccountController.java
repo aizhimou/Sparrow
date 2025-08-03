@@ -7,11 +7,13 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import top.asimov.sparrow.annotation.SaCheckRoleOrApiKey;
 import top.asimov.sparrow.model.User;
 import top.asimov.sparrow.service.AccountService;
 
 @RestController
 @RequestMapping("/api/account")
+@SaCheckRoleOrApiKey
 public class AccountController {
 
   private final AccountService accountService;

@@ -8,20 +8,31 @@ import {
   PasswordInput,
   Stack,
   TextInput,
-  Title, Badge, Text, Modal, PinInput
+  Title,
+  Badge,
+  Text,
+  Modal,
+  CopyButton,
+  Tooltip,
+  ActionIcon,
 } from '@mantine/core';
 import { UserContext } from '../../context/User/UserContext.jsx';
 import { hasLength, useForm } from '@mantine/form';
-import {useDisclosure} from "@mantine/hooks";
-import {IconAt, IconLock} from "@tabler/icons-react";
+import { useDisclosure } from '@mantine/hooks';
+import { IconAt, IconCheck, IconCopy, IconLock } from '@tabler/icons-react';
 
 const UserSetting = () => {
-  const [state] = useContext(UserContext);
+  const [state, dispatch] = useContext(UserContext);
   const [resetPasswordLoading, setResetPasswordLoading] = useState(false);
   const [bindEmailLoading, setBindEmailLoading] = useState(false);
   const [getCodeLoading, setGetCodeLoading] = useState(false);
-  const [resetPasswordOpened, { open: openResetPassword, close: closeResetPassword }] = useDisclosure(false);
+  const [resetPasswordOpened, { open: openResetPassword, close: closeResetPassword }] =
+    useDisclosure(false);
   const [bindEmailOpened, { open: openBindEmail, close: closeBindEmail }] = useDisclosure(false);
+  const [
+    confirmGenerateApiKeyOpened,
+    { open: openConfirmGenerateApiKey, close: closeConfirmGenerateApiKey },
+  ] = useDisclosure(false);
 
   const resetPassword = async (values) => {
     setResetPasswordLoading(true);
@@ -78,12 +89,20 @@ const UserSetting = () => {
     const { code, msg, data } = res.data;
     if (code === 200) {
       showSuccess('API Key generated successfully!');
-      // Update the user state with the new API key
-      state.user.apiKey = data.apiKey;
+      // update the apiKey in the context
+      const user = {
+        ...state.user,
+        apiKey: data,
+      };
+      dispatch({
+        type: 'login',
+        payload: user,
+      });
+      localStorage.setItem('user', JSON.stringify(user));
     } else {
       showError(msg);
     }
-  }
+  };
 
   const resetPasswordForm = useForm({
     mode: 'uncontrolled',
@@ -118,58 +137,72 @@ const UserSetting = () => {
       <Stack>
         <Paper shadow="xs" p="md">
           <Stack>
-            <Title order={4}>Current State</Title>
+            <Title order={4}>Account Setting</Title>
             <Group>
-              <Text c="dimmed">Username:</Text>
               <Text>{state.user.username}</Text>
-            </Group>
-            <Group>
-              <Text c="dimmed">Role:</Text>
-              <Badge variant="light" radius="sm">{state.user.role}</Badge>
+              <Badge variant="light" radius="sm" color="orange">
+                {state.user.role}
+              </Badge>
             </Group>
             <Group>
               <Text c="dimmed">Email:</Text>
-              <Text>{state.user.email ? state.user.email : 'Not set' }</Text>
+              <Text>{state.user.email ? state.user.email : 'Not set'}</Text>
             </Group>
             <Group>
               <Text c="dimmed">API Key:</Text>
               <Text>{state.user.apiKey ? state.user.apiKey : 'Not set'}</Text>
+              {state.user.apiKey ? (
+                <CopyButton value={state.user.apiKey} timeout={1000}>
+                  {({ copied, copy }) => (
+                    <Tooltip label={copied ? 'Copied' : 'Copy'} position="right" withArrow>
+                      <ActionIcon color={copied ? 'teal' : 'gray'} variant="subtle" onClick={copy}>
+                        {copied ? <IconCheck size={16} /> : <IconCopy size={16} />}
+                      </ActionIcon>
+                    </Tooltip>
+                  )}
+                </CopyButton>
+              ) : null}
             </Group>
-            <Group>
-              <Button size='xs' onClick={openResetPassword}>Reset Password</Button>
-              <Button size='xs' onClick={openBindEmail}>
+            <Group mt="md">
+              <Button onClick={openResetPassword}>Reset Password</Button>
+              <Button onClick={openBindEmail}>
                 {state.user.email ? 'Rebind Email' : 'Bind Email'}
               </Button>
-              <Button size='xs' onClick={generateApiKey}>
-                {state.user.apiKey ? 'Generate API Key' : 'Re-Generate API Key'}
+              <Button onClick={openConfirmGenerateApiKey}>
+                {state.user.apiKey ? 'Change API Key' : 'Generate API Key'}
               </Button>
             </Group>
           </Stack>
         </Paper>
       </Stack>
 
-      <Modal opened={resetPasswordOpened} onClose={closeResetPassword} title="Reset Password" centered>
+      <Modal
+        opened={resetPasswordOpened}
+        onClose={closeResetPassword}
+        title="Reset Password"
+        centered
+      >
         <form onSubmit={resetPasswordForm.onSubmit((values) => resetPassword(values))}>
           <PasswordInput
-              name="oldPassword"
-              label="Old Password"
-              withAsterisk
-              leftSection={<IconLock size={16} />}
-              placeholder="Please enter your old password"
-              key={resetPasswordForm.key('oldPassword')}
-              {...resetPasswordForm.getInputProps('oldPassword')}
-              style={{ flex: 1 }}
+            name="oldPassword"
+            label="Old Password"
+            withAsterisk
+            leftSection={<IconLock size={16} />}
+            placeholder="Please enter your old password"
+            key={resetPasswordForm.key('oldPassword')}
+            {...resetPasswordForm.getInputProps('oldPassword')}
+            style={{ flex: 1 }}
           />
           <PasswordInput
-              mt="sm"
-              name="newPassword"
-              label="New Password"
-              withAsterisk
-              leftSection={<IconLock size={16} />}
-              placeholder="Please enter new password"
-              key={resetPasswordForm.key('newPassword')}
-              {...resetPasswordForm.getInputProps('newPassword')}
-              style={{ flex: 1 }}
+            mt="sm"
+            name="newPassword"
+            label="New Password"
+            withAsterisk
+            leftSection={<IconLock size={16} />}
+            placeholder="Please enter new password"
+            key={resetPasswordForm.key('newPassword')}
+            {...resetPasswordForm.getInputProps('newPassword')}
+            style={{ flex: 1 }}
           />
           <Group justify="flex-end" mt="sm">
             <Button mt="sm" loading={resetPasswordLoading} type="submit">
@@ -183,27 +216,27 @@ const UserSetting = () => {
         <form onSubmit={bindEmailForm.onSubmit((values) => bindEmail(values))}>
           <Group align="flex-end">
             <TextInput
-                name="email"
-                label="Email"
-                withAsterisk
-                leftSection={<IconAt size={16} />}
-                placeholder="Please enter new email address"
-                key={bindEmailForm.key('email')}
-                {...bindEmailForm.getInputProps('email')}
-                style={{ flex: 1 }}
+              name="email"
+              label="Email"
+              withAsterisk
+              leftSection={<IconAt size={16} />}
+              placeholder="Please enter new email address"
+              key={bindEmailForm.key('email')}
+              {...bindEmailForm.getInputProps('email')}
+              style={{ flex: 1 }}
             />
             <Button variant="outline" loading={getCodeLoading} onClick={sendVerificationCode}>
               Get Code
             </Button>
           </Group>
           <TextInput
-              mt="sm"
-              name="verificationCode"
-              withAsterisk
-              label="Verification Code"
-              placeholder="Please enter verification code from your email."
-              key={bindEmailForm.key('verificationCode')}
-              {...bindEmailForm.getInputProps('verificationCode')}
+            mt="sm"
+            name="verificationCode"
+            withAsterisk
+            label="Verification Code"
+            placeholder="Please enter verification code from your email."
+            key={bindEmailForm.key('verificationCode')}
+            {...bindEmailForm.getInputProps('verificationCode')}
           />
           <Group justify="flex-end" mt="sm">
             <Button mt="sm" type="submit" loading={bindEmailLoading}>
@@ -211,6 +244,27 @@ const UserSetting = () => {
             </Button>
           </Group>
         </form>
+      </Modal>
+
+      <Modal
+        opened={confirmGenerateApiKeyOpened}
+        onClose={closeConfirmGenerateApiKey}
+        title="Confirm Generation"
+        centered
+      >
+        <Text fw={500}>
+          Are you sure to generate a new API Key? This will invalidate your current API Key.
+        </Text>
+        <Group justify="flex-end" mt="md">
+          <Button
+            color="red"
+            onClick={() => {
+              generateApiKey().then(closeConfirmGenerateApiKey);
+            }}
+          >
+            Confirm
+          </Button>
+        </Group>
       </Modal>
     </Container>
   );

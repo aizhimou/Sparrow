@@ -9,12 +9,14 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import top.asimov.sparrow.annotation.SaCheckRoleOrApiKey;
 import top.asimov.sparrow.constant.Role;
 import top.asimov.sparrow.model.Config;
 import top.asimov.sparrow.service.ConfigService;
 
 @RestController
 @RequestMapping("/api/config")
+@SaCheckRoleOrApiKey
 public class ConfigController {
 
   private final ConfigService configService;
