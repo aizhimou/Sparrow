@@ -10,10 +10,11 @@
     <relativePath/>
   </parent>
   <groupId>top.asimov</groupId>
-  <artifactId>sparrow-server</artifactId>
+  <artifactId>sparrow</artifactId>
   <version>0.1.1</version>
-  <name>sparrow-server</name>
-  <description>sparrow server</description>
+  <name>sparrow</name>
+  <description>sparrow</description>
+  <url>https://github.com/aizhimou/sparrow/</url>
 
   <properties>
     <java.version>17</java.version>
