@@ -65,6 +65,7 @@ public class AuthService {
         .password(PasswordUtil.generateEncryptedPassword(user.getPassword(), salt))
         .email(user.getEmail())
         .salt(salt)
+        .status(1)
         .role(Role.USER)
         .createdAt(LocalDateTime.now())
         .updatedAt(LocalDateTime.now())
