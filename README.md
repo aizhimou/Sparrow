@@ -9,6 +9,7 @@ A lightweight fullstack starter built with Spring Boot &amp; React, perfect for 
 ![register](documents/assets/register.png)
 
 ## Key Features
+- Light / Dark mode
 - User login and registration
 - Role-based access control
 - Configurable system settings
