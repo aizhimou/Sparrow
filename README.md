@@ -5,6 +5,16 @@
 
 A lightweight fullstack starter built with Spring Boot &amp; React, perfect for tool systems, admin panels and mini apps.
 
+## Screenshots
+<div style="display: flex; gap: 16px;">
+  <img src="documents/assets/login.png" alt="login"  />
+  <img src="documents/assets/register.png" alt="register"  />
+</div>
+<div style="display: flex; gap: 16px;">
+  <img src="documents/assets/user-list.png" alt="user-list" />
+  <img src="documents/assets/system-setting.png" alt="system-setting"  />
+</div>
+
 ## Key Features
 - User login and registration
 - Role-based access control
