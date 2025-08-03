@@ -1,7 +1,7 @@
 # Sparrow
 A lightweight fullstack starter built with Spring Boot &amp; React, perfect for tool systems, admin panels and mini apps.
 
-## 1. Key Features
+## Key Features
 - User login and registration
 - Role-based access control
 - Configurable system settings
@@ -10,7 +10,7 @@ A lightweight fullstack starter built with Spring Boot &amp; React, perfect for 
 - User password reset with email verification
 
 
-## 2. Key TechStack
+## Key TechStack
 
 ### Backend
 - Java 17
@@ -25,31 +25,31 @@ A lightweight fullstack starter built with Spring Boot &amp; React, perfect for 
 - [Mantine DataTable](https://icflorescu.github.io/mantine-datatable/) ^8.2.0
 - [tabler icons](https://tabler.io/icons) ^3.34.0
 
-## 3. Deployment
+## Deployment
 
 Default username and password is `root` / `Root@123.`.
 
-### 3.1 Run with Docker
+### Run with Docker
 **You need to prepare a mysql database before you run the docker image.**
 
 [Here](documents/deployment/docker-run.sh) is a sample `docker run command` that you can use to run Sparrow with your own MySQL.
 
 
-### 3.2 Run with Docker Compose
+### Run with Docker Compose
 With Docker Compose, you can easily set up both the Sparrow application and a MySQL database. 
 
 [Here](documents/deployment/docker-compose.yml) is a sample `docker-compose.yml` file that you can use to run Sparrow.
 
 
-### 3.3 Run with JAR
+### Run with JAR
 **Make sure you have Java 17 installed on your machine.**
 
 Download the latest JAR file from the [releases page](https://github.com/aizhimou/sparrow/releases) and run it with [this](documents/deployment/jar-run.sh) command.
 
 
-## 4. Development
+## Development
 
-### 4.1 Source Code directory structure
+### Source Code directory structure
 ```
 sparrow
 ├── backend  // Backend source code directory
@@ -70,32 +70,32 @@ sparrow
 └── README.md
 ```
 
-### 4.2 Role Based Access Control
+### Role Based Access Control
 ![Architecture Diagram](documents/assets/sparrow-role-based-permission.drawio.svg)
 
 All api can be authenticated with a token or a api key in the same role.
 
-### 4.3 Develop
+### Develop
 
-#### 4.3.1 Connect to you own MySQL database
+#### Connect to you own MySQL database
 You can change the database connection settings in the `application.yml` file in the `backend/src/main/resources` directory.
 
 The default initial database schema and data can be found in the `backend/src/main/resources/schema.sql` and `backend/src/main/resources/data.sql` files.
 The database will be automatically created when you run the application.
 
-### 4.3.2 Run the backend
+### Run the backend
 You can run the backend with Maven or your favorite IDE. Make sure you have Java 17 and Maven installed on.
 
-#### 4.3.3 Run the frontend
+#### Run the frontend
 Use `npm install` to install the dependencies, then use `npm run dev` to start the development server.
 
 Local network proxy is enabled by default, you can change the proxy settings in the `vite.config.js` file in the `frontend` directory if you need to.
 
-### 4.3.4 Write your own business code
+### Write your own business code
 Write anything you want to build your own application.
 
-### 4.3.5 Build
-#### 4.3.5.1 Build JAR file
+###  Build
+#### Build JAR file
 1. Build the frontend first with `npm run build`
 2. copy the `frontend/dist` directory to the `backend/src/main/resources/static` directory.
 3. Run `mvn clean package` in the `backend` directory to build the JAR file.
@@ -103,6 +103,6 @@ Write anything you want to build your own application.
 5. You can run the JAR file with `java -jar target/sparrow-<version>.jar` command, where `<version>` is the version of the JAR file.
 6. The application will start, and you can access it at `http://localhost:8080`.
 
-#### 4.3.5.2 Build Docker image
+#### Build Docker image
 You can use the `Dockerfile` in the root directory to build the Docker image.
 
