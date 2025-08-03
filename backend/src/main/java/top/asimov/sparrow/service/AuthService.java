@@ -1,5 +1,6 @@
 package top.asimov.sparrow.service;
 
+import cn.dev33.satoken.stp.StpUtil;
 import com.baomidou.mybatisplus.extension.conditions.query.QueryChainWrapper;
 import java.time.LocalDateTime;
 import org.springframework.stereotype.Service;
@@ -23,6 +24,15 @@ public class AuthService {
     this.userMapper = userMapper;
     this.configService = configService;
     this.mailSenderService = mailSenderService;
+  }
+
+  public User login(String username, String password) {
+    User user = checkUserCredentials(username, password);
+    StpUtil.login(user.getId());
+
+    String role = user.getRole();
+    StpUtil.getSession().set("role", role);
+    return user;
   }
 
   public int userRegister(User user) {

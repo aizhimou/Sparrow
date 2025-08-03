@@ -21,6 +21,12 @@ public class AuthController {
     this.authService = authService;
   }
 
+  @PostMapping("/login")
+  public SaResult login(@RequestBody User user) {
+    User loginUser = authService.login(user.getUsername(), user.getPassword());
+    return SaResult.data(loginUser);
+  }
+
   @PostMapping("/logout")
   public SaResult logout() {
     StpUtil.logout();
