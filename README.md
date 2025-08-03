@@ -3,10 +3,12 @@ A lightweight fullstack starter built with Spring Boot &amp; React, perfect for 
 
 ## 1. Key Features
 - User login and registration
-- User password reset with email verification
 - Role-based access control
-- Simple user management
 - Configurable system settings
+- API key authentication
+- Basic CRUD operations (user management)
+- User password reset with email verification
+
 
 ## 2. Key TechStack
 
@@ -24,6 +26,8 @@ A lightweight fullstack starter built with Spring Boot &amp; React, perfect for 
 - [tabler icons](https://tabler.io/icons) ^3.34.0
 
 ## 3. Deployment
+
+Default username and password is `root` / `Root@123.`.
 
 ### 3.1 Run with Docker
 **You need to prepare a mysql database before you run the docker image.**
@@ -44,3 +48,61 @@ Download the latest JAR file from the [releases page](https://github.com/aizhimo
 
 
 ## 4. Development
+
+### 4.1 Source Code directory structure
+```
+sparrow
+├── backend  // Backend source code directory
+│   ├── pom.xml  // Maven configuration file
+│   ├── src  // Java Source code directory
+├── Dockerfile  // Dockerfile for building the backend image
+├── documents  // Documentation directory
+│   └── deployment
+├── frontend  // Frontend source code directory
+│   ├── eslint.config.js  // ESLint configuration file
+│   ├── index.html  // Main HTML file
+│   ├── package-lock.json  // NPM lock file
+│   ├── package.json  // NPM configuration file
+│   ├── public  // Public assets directory
+│   ├── src  // React source code directory
+│   └── vite.config.js  // Vite configuration file
+├── LICENSE
+└── README.md
+```
+
+### 4.2 Role Based Access Control
+![Architecture Diagram](documents/assets/sparrow-role-based-permission.drawio.svg)
+
+All api can be authenticated with a token or a api key in the same role.
+
+### 4.3 Develop
+
+#### 4.3.1 Connect to you own MySQL database
+You can change the database connection settings in the `application.yml` file in the `backend/src/main/resources` directory.
+
+The default initial database schema and data can be found in the `backend/src/main/resources/schema.sql` and `backend/src/main/resources/data.sql` files.
+The database will be automatically created when you run the application.
+
+### 4.3.2 Run the backend
+You can run the backend with Maven or your favorite IDE. Make sure you have Java 17 and Maven installed on.
+
+#### 4.3.3 Run the frontend
+Use `npm install` to install the dependencies, then use `npm run dev` to start the development server.
+
+Local network proxy is enabled by default, you can change the proxy settings in the `vite.config.js` file in the `frontend` directory if you need to.
+
+### 4.3.4 Write your own business code
+Write anything you want to build your own application.
+
+### 4.3.5 Build
+#### 4.3.5.1 Build JAR file
+1. Build the frontend first with `npm run build`
+2. copy the `frontend/dist` directory to the `backend/src/main/resources/static` directory.
+3. Run `mvn clean package` in the `backend` directory to build the JAR file.
+4. The JAR file will be generated in the `backend/target` directory.
+5. You can run the JAR file with `java -jar target/sparrow-<version>.jar` command, where `<version>` is the version of the JAR file.
+6. The application will start, and you can access it at `http://localhost:8080`.
+
+#### 4.3.5.2 Build Docker image
+You can use the `Dockerfile` in the root directory to build the Docker image.
+
