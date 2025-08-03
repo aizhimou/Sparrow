@@ -8,6 +8,8 @@ A lightweight fullstack starter built with Spring Boot &amp; React, perfect for 
 ## Screenshots
 ![register](documents/assets/register.png)
 
+see more screenshots in [this directory](documents/assets).
+
 ## Key Features
 - Light / Dark mode
 - User login and registration
