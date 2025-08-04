@@ -3,6 +3,8 @@
   <h1>Sparrow</h1>
 </div>
 
+[![README](https://img.shields.io/badge/README-English-red?style=flat-square)](README.md)
+
 一个基于 Spring Boot 和 React 构建的轻量级全栈项目模板，适用于工具类系统、小型应用和管理后台。
 
 演示地址: [https://sparrow.asimov.top](https://sparrow.asimov.top) 账户: `root` 密码: `Root@123.`

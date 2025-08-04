@@ -3,6 +3,8 @@
   <h1>Sparrow</h1>
 </div>
 
+[![中文 README](https://img.shields.io/badge/README-%E4%B8%AD%E6%96%87-red?style=flat-square)](README-zh.md)
+
 A lightweight fullstack starter built with Spring Boot &amp; React, perfect for tool systems, admin panels and mini apps.
 
 Demo site: [https://sparrow.asimov.top](https://sparrow.asimov.top), username: `root`, password: `Root@123.`
