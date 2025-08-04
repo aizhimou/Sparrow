@@ -5,10 +5,17 @@
 
 A lightweight fullstack starter built with Spring Boot &amp; React, perfect for tool systems, admin panels and mini apps.
 
-## Screenshots
-![register](documents/assets/register.png)
+## Introduction
+While AI has made it easier to turn ideas into reality, building a clean, reliable, and extensible project foundation still requires thoughtful design, solid tech choices, and hands-on experience. 
 
-see more screenshots in [this directory](documents/assets).
+Sparrow is a lightweight fullstack starter built with Spring Boot and React, designed as a practical starting point for tool systems, admin panels, and mini apps. 
+
+It aims to reduce the overhead of setting up core infrastructure, helping developers focus more on building what matters.
+
+## Screenshots
+![register](documents/assets/screenshots/register.png)
+
+see more screenshots in [this directory](documents/assets/screenshots/).
 
 ## Key Features
 - Light / Dark mode
@@ -83,7 +90,7 @@ sparrow
 ### Role Based Access Control
 ![Architecture Diagram](documents/assets/sparrow-role-based-permission.drawio.svg)
 
-All api can be authenticated with a token or a api key in the same role.
+All api can be authenticated with a token or an api key in the same role.
 
 ### Develop
 
