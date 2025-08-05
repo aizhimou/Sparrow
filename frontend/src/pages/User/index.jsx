@@ -16,8 +16,10 @@ import { API, showError, showSuccess } from '../../helpers/index.js';
 import { IconPlus, IconSearch } from '@tabler/icons-react';
 import { useForm } from '@mantine/form';
 import { useDisclosure } from '@mantine/hooks';
+import { useTranslation } from 'react-i18next';
 
 const User = () => {
+  const { t } = useTranslation();
   const PAGE_SIZE = 10;
   const [page, setPage] = useState(1);
   const [records, setRecords] = useState([]);
@@ -94,7 +96,7 @@ const User = () => {
       <Group mt="lg">
         <Input
           leftSection={<IconSearch size={16} />}
-          placeholder="Enter username or email to query"
+          placeholder={t('enter_username_or_email')}
           name="keyword"
           value={keyword}
           onChange={(e) => setKeyword(e.target.value)}
@@ -105,8 +107,8 @@ const User = () => {
           }}
           style={{ flex: 1 }}
         />
-        <Button onClick={fetchUsers}>Search</Button>
-        <Button onClick={open}>New User</Button>
+        <Button onClick={fetchUsers}>{t('search')}</Button>
+        <Button onClick={open}>{t('new_user')}</Button>
       </Group>
       <DataTable
         mt="md"
@@ -121,16 +123,16 @@ const User = () => {
             render: (record, idx) => (page - 1) * PAGE_SIZE + idx + 1,
           },
           {
-            title: 'Name',
+            title: t('name'),
             accessor: 'username',
           },
           {
             accessor: 'email',
-            title: 'Email',
+            title: t('email'),
           },
           {
             accessor: 'role',
-            title: 'Role',
+            title: t('role'),
             textAlign: 'center',
             render: (user) => (
               <Badge radius="xs" variant="light" color={user.role === 'ADMIN' ? 'orange' : 'teal'}>
@@ -139,24 +141,24 @@ const User = () => {
             ),
           },
           {
-            title: 'Status',
+            title: t('status'),
             accessor: 'status',
             textAlign: 'center',
 
             render: (user) => (
               <Badge radius="xs" variant="light" color={user.status === 1 ? 'green' : 'gray'}>
-                {user.status === 1 ? 'Active' : 'Inactive'}
+                {user.status === 1 ? t('active') : t('inactive')}
               </Badge>
             ),
           },
           {
             accessor: 'createdAt',
-            title: 'Created At',
+            title: t('created_at'),
             render: ({ createdAt }) => dayjs(createdAt).format('YYYY-MM-DD HH:mm'),
           },
           {
             accessor: 'actions',
-            title: 'Actions',
+            title: t('actions'),
             textAlign: 'center',
             render: (record) => (
               <Group gap="sm" justify="center" wrap="nowrap">
@@ -168,7 +170,7 @@ const User = () => {
                   onClick={() => handleToggleStatus(record.id, record.status)}
                   style={{ width: 95 }}
                 >
-                  {record.status === 1 ? 'Deactivate' : 'Activate'}
+                  {record.status === 1 ? t('deactivate') : t('activate')}
                 </Button>
               </Group>
             ),
@@ -179,31 +181,31 @@ const User = () => {
         page={page}
         onPageChange={setPage}
       />
-      <Modal opened={opened} onClose={close} title="Add New User" centered>
+      <Modal opened={opened} onClose={close} title={t('add_new_user')} centered>
         <form onSubmit={addUserForm.onSubmit(handleAddUser)}>
           <TextInput
             mb="md"
             withAsterisk
-            label="Username"
+            label={t('username')}
             name="username"
-            placeholder="Enter username"
+            placeholder={t('enter_username')}
             key={addUserForm.key('username')}
             {...addUserForm.getInputProps('username')}
           />
           <TextInput
             mb="md"
-            label="Email"
+            label={t('email')}
             name="email"
-            placeholder="Enter email"
+            placeholder={t('enter_email')}
             key={addUserForm.key('email')}
             {...addUserForm.getInputProps('email')}
           />
           <Select
             mb="md"
             withAsterisk
-            label="Choose Role"
+            label={t('choose_role')}
             name="role"
-            placeholder="Pick value"
+            placeholder={t('pick_value')}
             key={addUserForm.key('role')}
             {...addUserForm.getInputProps('role')}
             data={['USER', 'ADMIN']}
@@ -212,25 +214,25 @@ const User = () => {
           <PasswordInput
             mb="md"
             withAsterisk
-            label="Password"
+            label={t('password')}
             name="password"
             type="password"
-            placeholder="Enter password"
+            placeholder={t('enter_password')}
             key={addUserForm.key('password')}
             {...addUserForm.getInputProps('password')}
           />
           <PasswordInput
             mb="md"
             withAsterisk
-            label="Confirm Password"
+            label={t('confirm_password')}
             name="confirmPassword"
             type="password"
             key={addUserForm.key('confirmPassword')}
-            placeholder="Enter password again"
+            placeholder={t('enter_password_again')}
             {...addUserForm.getInputProps('confirmPassword')}
           />
           <Group justify="flex-end" mt="md">
-            <Button type="submit">Submit</Button>
+            <Button type="submit">{t('submit')}</Button>
           </Group>
         </form>
       </Modal>

@@ -13,8 +13,10 @@ import {
   TextInput,
   Title,
 } from '@mantine/core';
+import { useTranslation } from 'react-i18next';
 
 const SystemSetting = () => {
+  const { t } = useTranslation();
   let [inputs, setInputs] = useState({
     RegisterEnabled: false,
     EmailVerificationEnabled: false,
@@ -118,31 +120,30 @@ const SystemSetting = () => {
       <Stack>
         <Paper shadow="xs" p="md">
           <Stack>
-            <Title order={4}>Notice Setting</Title>
+            <Title order={4}>{t('notice_setting')}</Title>
             <Textarea
               name="Notice"
-              label="Notice"
-              description="This notice will be displayed on the homepage. If you dont want to show notice, just leave it empty."
+              label={t('notice')}
               autosize
               minRows={3}
               value={inputs.Notice}
-              placeholder="Enter notice content here, and if you dont want to show notice, just leave it empty."
+              placeholder={t('enter_notice_content')}
               onChange={(e) => handleInputChange(e, { name: e.target.name, value: e.target.value })}
             />
             <Group justify="flex-end">
               <Button onClick={() => updateOption('Notice', inputs.Notice)} loading={NoticeLoading}>
-                Save notice
+                {t('save_notice')}
               </Button>
             </Group>
           </Stack>
         </Paper>
         <Paper shadow="xs" p="md">
           <Stack>
-            <Title order={4}>Registration Settings</Title>
+            <Title order={4}>{t('registration_settings')}</Title>
             <Group gap="xl">
               <Checkbox
                 name="RegisterEnabled"
-                label="Allow registration"
+                label={t('allow_registration')}
                 checked={inputs.RegisterEnabled === 'true'}
                 onChange={(e) =>
                   handleInputChange(e, { name: e.target.name, value: e.target.checked })
@@ -150,7 +151,7 @@ const SystemSetting = () => {
               />
               <Checkbox
                 name="EmailVerificationEnabled"
-                label="Require email verification when registering"
+                label={t('require_email_verification')}
                 checked={inputs.EmailVerificationEnabled === 'true'}
                 onChange={(e) =>
                   handleInputChange(e, { name: e.target.name, value: e.target.checked })
@@ -158,7 +159,7 @@ const SystemSetting = () => {
               />
               <Checkbox
                 name="ForgetPasswordEnabled"
-                label="Allow forget password"
+                label={t('allow_forget_password')}
                 checked={inputs.ForgetPasswordEnabled === 'true'}
                 onChange={(e) =>
                   handleInputChange(e, { name: e.target.name, value: e.target.checked })
@@ -169,13 +170,13 @@ const SystemSetting = () => {
         </Paper>
         <Paper shadow="xs" p="md">
           <Stack>
-            <Title order={4}>SMTP Settings</Title>
+            <Title order={4}>{t('smtp_settings')}</Title>
             <Group justify="space-between" gap="lg">
               <TextInput
                 name="SMTPServer"
-                label="SMTP Server"
+                label={t('smtp_server')}
                 value={inputs.SMTPServer}
-                placeholder="SMTP server address"
+                placeholder={t('smtp_server_address')}
                 onChange={(e) =>
                   handleInputChange(e, { name: e.target.name, value: e.target.value })
                 }
@@ -183,9 +184,9 @@ const SystemSetting = () => {
               />
               <NumberInput
                 name="SMTPPort"
-                label="SMTP Port"
+                label={t('smtp_port')}
                 value={inputs.SMTPPort}
-                placeholder="SMTP server port"
+                placeholder={t('smtp_server_port')}
                 onChange={(e) =>
                   handleInputChange(e, { name: e.target.name, value: e.target.value })
                 }
@@ -193,9 +194,9 @@ const SystemSetting = () => {
               />
               <TextInput
                 name="SMTPAccount"
-                label="SMTP Account"
+                label={t('smtp_account')}
                 value={inputs.SMTPAccount}
-                placeholder="SMTP account email"
+                placeholder={t('smtp_account_email')}
                 onChange={(e) =>
                   handleInputChange(e, { name: e.target.name, value: e.target.value })
                 }
@@ -203,9 +204,9 @@ const SystemSetting = () => {
               />
               <PasswordInput
                 name="SMTPToken"
-                label="SMTP Token"
+                label={t('smtp_token')}
                 value={inputs.SMTPToken}
-                placeholder="SMTP account token or password"
+                placeholder={t('smtp_token_or_password')}
                 onChange={(e) =>
                   handleInputChange(e, { name: e.target.name, value: e.target.value })
                 }
@@ -214,27 +215,26 @@ const SystemSetting = () => {
             </Group>
             <Group justify="flex-end" mt="sm">
               <Button onClick={updateSMTPConfig} loading={SmtpLoading}>
-                Save SMTP Configuration
+                {t('save_smtp_configuration')}
               </Button>
             </Group>
           </Stack>
         </Paper>
         <Paper shadow="xs" p="md">
           <Stack>
-            <Title order={4}>About Setting</Title>
+            <Title order={4}>{t('about_setting')}</Title>
             <Textarea
               name="About"
-              label="About Content"
-              description="This content will be displayed on the about page. Markdown and HTML syntax are supported."
+              label={t('about_content')}
               autosize
               minRows={5}
               value={inputs.About}
-              placeholder="Enter notice content here, and if you dont want to show notice, just leave it empty."
+              placeholder={t('enter_about_content')}
               onChange={(e) => handleInputChange(e, { name: e.target.name, value: e.target.value })}
             />
             <Group justify="flex-end" mt="sm">
               <Button onClick={() => updateOption('About', inputs.About)} loading={AboutLoading}>
-                Save about
+                {t('save_about')}
               </Button>
             </Group>
           </Stack>

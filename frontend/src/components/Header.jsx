@@ -35,28 +35,28 @@ function Header() {
   };
   const [state, dispatch] = useContext(UserContext);
   const navigate = useNavigate();
-  const { i18n } = useTranslation();
+  const { i18n, t } = useTranslation();
 
   const headerLinks = [
     {
-      name: 'Home',
+      name: t('header_home'),
       to: '/',
       icon: IconHome,
     },
     {
-      name: 'User',
+      name: t('header_user'),
       to: '/user',
       icon: IconUser,
       requireAdmin: true,
     },
     {
-      name: 'Setting',
+      name: t('header_setting'),
       to: '/system-setting',
       icon: IconSettings,
       requireAdmin: true,
     },
     {
-      name: 'About',
+      name: t('header_about'),
       to: '/about',
       icon: IconInfoCircle,
     },
@@ -83,7 +83,7 @@ function Header() {
     await API.post('/api/auth/logout');
     dispatch({ type: 'logout' });
     localStorage.removeItem('user');
-    showSuccess('Logout successful!');
+    showSuccess(t('logout_success'));
     navigate('/login');
   }
 
@@ -93,7 +93,7 @@ function Header() {
         <Group>
           <Group gap="xs" mr={10} onClick={() => navigate('/')} style={{ cursor: 'pointer' }}>
             <Image src={logo} w={40}></Image>
-            <Title order={4}>Sparrow</Title>
+            <Title order={4}>{t('header_title')}</Title>
           </Group>
           <Flex>{renderLinks()}</Flex>
         </Group>
@@ -110,10 +110,10 @@ function Header() {
                   leftSection={<IconSettings size={14} />}
                   onClick={() => navigate('/user-setting')}
                 >
-                  Account
+                  {t('header_account')}
                 </Menu.Item>
                 <Menu.Item leftSection={<IconLogout2 size={14} />} onClick={logout}>
-                  Logout
+                  {t('header_logout')}
                 </Menu.Item>
               </Menu.Dropdown>
             </Menu>
@@ -136,8 +136,8 @@ function Header() {
               </ActionIcon>
             </Menu.Target>
             <Menu.Dropdown>
-              <Menu.Item onClick={() => i18n.changeLanguage('en')}>English</Menu.Item>
-              <Menu.Item onClick={() => i18n.changeLanguage('zh')}>中文</Menu.Item>
+              <Menu.Item onClick={() => i18n.changeLanguage('en')}>{t('header_lang_en')}</Menu.Item>
+              <Menu.Item onClick={() => i18n.changeLanguage('zh')}>{t('header_lang_zh')}</Menu.Item>
             </Menu.Dropdown>
           </Menu>
           <ActionIcon variant="default" size="sm">

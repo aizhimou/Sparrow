@@ -2,9 +2,11 @@ import React, { useEffect, useState } from 'react';
 import { Container, Text, Title, Typography } from '@mantine/core';
 import { API, showError } from '../../helpers/index.js';
 import { marked } from 'marked';
+import { useTranslation } from 'react-i18next';
 
 const About = () => {
   const [about, setAbout] = useState('');
+  const { t } = useTranslation();
 
   const displayAbout = async () => {
     const res = await API.get('/api/config/name?name=About');
@@ -14,7 +16,7 @@ const About = () => {
       setAbout(content);
     } else {
       showError(msg);
-      setAbout('Loading about content failed...');
+      setAbout(t('about_load_failed'));
     }
   };
 
@@ -26,9 +28,9 @@ const About = () => {
     <Container size="lg" mt="lg">
       {about === '' ? (
         <>
-          <Title order={4}>About</Title>
-          <Text>You can write some contents in setting to show in here.</Text>
-          <Text>HTML and Markdown are supported.</Text>
+          <Title order={4}>{t('header_about')}</Title>
+          <Text>{t('about_tip_content')}</Text>
+          <Text>{t('about_tip_html_and_md_supported')}</Text>
         </>
       ) : (
         <Container>

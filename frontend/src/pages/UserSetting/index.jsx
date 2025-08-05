@@ -20,8 +20,10 @@ import { UserContext } from '../../context/User/UserContext.jsx';
 import { hasLength, useForm } from '@mantine/form';
 import { useDisclosure } from '@mantine/hooks';
 import { IconAt, IconCheck, IconCopy, IconLock } from '@tabler/icons-react';
+import { useTranslation } from 'react-i18next';
 
 const UserSetting = () => {
+  const { t } = useTranslation();
   const [state, dispatch] = useContext(UserContext);
   const [resetPasswordLoading, setResetPasswordLoading] = useState(false);
   const [bindEmailLoading, setBindEmailLoading] = useState(false);
@@ -137,7 +139,7 @@ const UserSetting = () => {
       <Stack>
         <Paper shadow="xs" p="md">
           <Stack>
-            <Title order={4}>Account Setting</Title>
+            <Title order={4}>{t('account_setting')}</Title>
             <Group>
               <Text>{state.user.username}</Text>
               <Badge variant="light" radius="sm" color="orange">
@@ -145,16 +147,16 @@ const UserSetting = () => {
               </Badge>
             </Group>
             <Group>
-              <Text c="dimmed">Email:</Text>
-              <Text>{state.user.email ? state.user.email : 'Not set'}</Text>
+              <Text c="dimmed">{t('email')}:</Text>
+              <Text>{state.user.email ? state.user.email : t('not_set')}</Text>
             </Group>
             <Group>
               <Text c="dimmed">API Key:</Text>
-              <Text>{state.user.apiKey ? state.user.apiKey : 'Not set'}</Text>
+              <Text>{state.user.apiKey ? state.user.apiKey : t('not_set')}</Text>
               {state.user.apiKey ? (
                 <CopyButton value={state.user.apiKey} timeout={1000}>
                   {({ copied, copy }) => (
-                    <Tooltip label={copied ? 'Copied' : 'Copy'} position="right" withArrow>
+                    <Tooltip label={copied ? t('copied') : t('copy')} position="right" withArrow>
                       <ActionIcon color={copied ? 'teal' : 'gray'} variant="subtle" onClick={copy}>
                         {copied ? <IconCheck size={16} /> : <IconCopy size={16} />}
                       </ActionIcon>
@@ -164,12 +166,12 @@ const UserSetting = () => {
               ) : null}
             </Group>
             <Group mt="md">
-              <Button onClick={openResetPassword}>Reset Password</Button>
+              <Button onClick={openResetPassword}>{t('reset_password')}</Button>
               <Button onClick={openBindEmail}>
-                {state.user.email ? 'Rebind Email' : 'Bind Email'}
+                {state.user.email ? t('rebind_email') : t('bind_email')}
               </Button>
               <Button onClick={openConfirmGenerateApiKey}>
-                {state.user.apiKey ? 'Change API Key' : 'Generate API Key'}
+                {state.user.apiKey ? t('change_api_key') : t('generate_api_key')}
               </Button>
             </Group>
           </Stack>
@@ -179,16 +181,16 @@ const UserSetting = () => {
       <Modal
         opened={resetPasswordOpened}
         onClose={closeResetPassword}
-        title="Reset Password"
+        title={t('reset_password')}
         centered
       >
         <form onSubmit={resetPasswordForm.onSubmit((values) => resetPassword(values))}>
           <PasswordInput
             name="oldPassword"
-            label="Old Password"
+            label={t('old_password')}
             withAsterisk
             leftSection={<IconLock size={16} />}
-            placeholder="Please enter your old password"
+            placeholder={t('enter_old_password')}
             key={resetPasswordForm.key('oldPassword')}
             {...resetPasswordForm.getInputProps('oldPassword')}
             style={{ flex: 1 }}
@@ -196,51 +198,51 @@ const UserSetting = () => {
           <PasswordInput
             mt="sm"
             name="newPassword"
-            label="New Password"
+            label={t('new_password')}
             withAsterisk
             leftSection={<IconLock size={16} />}
-            placeholder="Please enter new password"
+            placeholder={t('enter_new_password')}
             key={resetPasswordForm.key('newPassword')}
             {...resetPasswordForm.getInputProps('newPassword')}
             style={{ flex: 1 }}
           />
           <Group justify="flex-end" mt="sm">
             <Button mt="sm" loading={resetPasswordLoading} type="submit">
-              Confirm Reset
+              {t('confirm_reset')}
             </Button>
           </Group>
         </form>
       </Modal>
 
-      <Modal opened={bindEmailOpened} onClose={closeBindEmail} title="Bind Email" centered>
+      <Modal opened={bindEmailOpened} onClose={closeBindEmail} title={t('bind_email')} centered>
         <form onSubmit={bindEmailForm.onSubmit((values) => bindEmail(values))}>
           <Group align="flex-end">
             <TextInput
               name="email"
-              label="Email"
+              label={t('email')}
               withAsterisk
               leftSection={<IconAt size={16} />}
-              placeholder="Please enter new email address"
+              placeholder={t('enter_new_email')}
               key={bindEmailForm.key('email')}
               {...bindEmailForm.getInputProps('email')}
               style={{ flex: 1 }}
             />
             <Button variant="outline" loading={getCodeLoading} onClick={sendVerificationCode}>
-              Get Code
+              {t('get_code')}
             </Button>
           </Group>
           <TextInput
             mt="sm"
             name="verificationCode"
             withAsterisk
-            label="Verification Code"
-            placeholder="Please enter verification code from your email."
+            label={t('verification_code')}
+            placeholder={t('enter_verification_code')}
             key={bindEmailForm.key('verificationCode')}
             {...bindEmailForm.getInputProps('verificationCode')}
           />
           <Group justify="flex-end" mt="sm">
             <Button mt="sm" type="submit" loading={bindEmailLoading}>
-              Confirm Bind
+              {t('confirm_bind')}
             </Button>
           </Group>
         </form>
@@ -249,11 +251,11 @@ const UserSetting = () => {
       <Modal
         opened={confirmGenerateApiKeyOpened}
         onClose={closeConfirmGenerateApiKey}
-        title="Confirm Generation"
+        title={t('confirm_generation')}
         centered
       >
         <Text fw={500}>
-          Are you sure to generate a new API Key? This will invalidate your current API Key.
+          {t('confirm_generate_api_key_tip')}
         </Text>
         <Group justify="flex-end" mt="md">
           <Button
@@ -262,7 +264,7 @@ const UserSetting = () => {
               generateApiKey().then(closeConfirmGenerateApiKey);
             }}
           >
-            Confirm
+            {t('confirm')}
           </Button>
         </Group>
       </Modal>

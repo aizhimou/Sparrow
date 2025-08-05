@@ -11,6 +11,8 @@ import {
   Title,
 } from '@mantine/core';
 import { useForm } from '@mantine/form';
+import { useTranslation } from 'react-i18next';
+
 import logo from '../assets/sparrow.svg';
 import { API, showError, showSuccess } from '../helpers/index.js';
 import { useNavigate } from 'react-router-dom';
@@ -19,6 +21,7 @@ const RegisterForm = () => {
   let [emailVerificationEnabled, setEmailVerificationEnabled] = useState(null);
   let [loading, setLoading] = useState(false);
   let navigator = useNavigate();
+  const { t } = useTranslation();
 
   const fetchConfig = async () => {
     const res = await API.get('/api/public/config?name=EmailVerificationEnabled');
@@ -46,16 +49,16 @@ const RegisterForm = () => {
       username: (value) =>
         3 <= value.length && value.length <= 10
           ? null
-          : 'Username must be between 3 and 20 characters',
+          : t('username_length_tip'),
       password: (value) =>
-        value.length < 6 ? 'Password must be at least 6 characters long' : null,
+        value.length < 6 ? t('password_length_tip') : null,
       confirmPassword: (value, values) =>
-        value !== values.password ? 'Passwords do not match' : null,
+        value !== values.password ? t('password_not_match') : null,
       email: (value) =>
         emailVerificationEnabled
           ? /^\S+@\S+$/.test(value)
             ? null
-            : 'Invalid email address'
+            : t('invalid_email')
           : null,
     },
   });
@@ -71,7 +74,7 @@ const RegisterForm = () => {
       showError(msg);
       return;
     }
-    showSuccess('Registration successful, please login.');
+    showSuccess(t('register_success'));
     navigator('/login');
   };
 
@@ -85,64 +88,65 @@ const RegisterForm = () => {
       return;
     }
     setLoading(false);
-    showSuccess('Verification code sent to your email. Please check your inbox or spam folder.');
+    showSuccess(t('code_sent'));
   };
 
   return (
     <Container pt="150px" size="xs">
       <Group justify="center">
         <Image src={logo} w={40}></Image>
-        <Title>Register</Title>
+        <Title>{t('register')}</Title>
       </Group>
       <Paper p="xl" withBorder mt="md">
         <form onSubmit={form.onSubmit(handleRegister)}>
           <Stack>
             <TextInput
-              label="Username"
+              label={t('username')}
               name="username"
-              description="Username must be between 3 and 20 characters"
-              placeholder="Please enter your username"
+              description={t('username_length_tip')}
+              placeholder={t('username_placeholder')}
               key={form.key('username')}
               {...form.getInputProps('username')}
             />
             <PasswordInput
-              label="Password"
+              label={t('password')}
               name="password"
-              description="Password must be at least 6 characters long"
-              placeholder="Please enter your password"
+              description={t('password_length_tip')}
+              placeholder={t('password_placeholder')}
               key={form.key('password')}
               {...form.getInputProps('password')}
             />
             <PasswordInput
-              label="Confirm Password"
+              label={t('confirm_password')}
               name="confirmPassword"
-              description="Please enter your password again to confirm"
-              placeholder="Please enter your password again"
+              description={t('confirm_password_description')}
+              placeholder={t('confirm_password_placeholder')}
               key={form.key('confirmPassword')}
               {...form.getInputProps('confirmPassword')}
             />
             {emailVerificationEnabled ? (
               <>
                 <TextInput
-                  label="Email"
+                  label={t('email')}
                   name="email"
-                  placeholder="Please enter your email"
-                  description="Please enter a valid email address"
+                  placeholder={t('email_placeholder')}
+                  description={t('email_description')}
                   key={form.key('email')}
                   {...form.getInputProps('email')}
                   style={{ flex: 1 }}
                 />
                 <Group align="flex-end">
                   <TextInput
-                    label="Verification Code"
+                    label={t('verification_code')}
                     name="verificationCode"
-                    placeholder="Please enter the verification code"
+                    placeholder={t('verification_code_placeholder')}
+                    description={t('verification_code_description')}
                     key={form.key('verificationCode')}
                     {...form.getInputProps('verificationCode')}
                     style={{ flex: 1 }}
                   />
                   <Button variant="outline" onClick={getVerificationCode} loading={loading}>
-                    Get Code
+                    {t('get_code')}
                   </Button>
                 </Group>
               </>
@@ -156,7 +160,7 @@ const RegisterForm = () => {
               type="submit"
               gradient={{ from: 'blue', to: 'cyan', deg: 90 }}
             >
-              Submit
+              {t('submit')}
             </Button>
           </Stack>
         </form>

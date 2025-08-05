@@ -14,10 +14,12 @@ import logo from '../assets/sparrow.svg';
 import { useForm } from '@mantine/form';
 import { API, showError, showSuccess } from '../helpers/index.js';
 import { useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 
 const ForgetPasswordForm = () => {
   const [loading, setLoading] = useState(false);
   const navigator = useNavigate();
+  const { t } = useTranslation();
 
   const form = useForm({
     initialValues: {
@@ -27,12 +29,11 @@ const ForgetPasswordForm = () => {
       confirmPassword: '',
     },
     validate: {
-      email: (value) => (/^\S+@\S+$/.test(value) ? null : 'Invalid email address'),
-      // verificationCode: (value) => (value.length === 6 ? null : 'Verification code must be 6 characters long'),
+      email: (value) => (/^\S+@\S+$/.test(value) ? null : t('invalid_email')),
       password: (value) =>
-        value.length < 6 ? 'Password must be at least 6 characters long' : null,
+        value.length < 6 ? t('password_length_tip') : null,
       confirmPassword: (value, values) =>
-        value !== values.password ? 'Passwords do not match' : null,
+        value !== values.password ? t('password_not_match') : null,
     },
   });
 
@@ -44,7 +45,7 @@ const ForgetPasswordForm = () => {
       showError(msg);
       return;
     }
-    showSuccess('Password reset successfully, please login with your new password.');
+    showSuccess(t('reset_success'));
     form.reset();
     navigator('/login');
   };
@@ -53,7 +54,7 @@ const ForgetPasswordForm = () => {
     setLoading(true);
     const email = form.getInputProps('email').value;
     if (!email) {
-      showError('Please enter your email.');
+      showError(t('please_enter_email'));
       return;
     }
     const res = await API.get(`/api/auth/send-forget-password-verification-code?email=${email}`);
@@ -63,53 +64,53 @@ const ForgetPasswordForm = () => {
       return;
     }
     setLoading(false);
-    showSuccess('Verification code sent to your email, please check your inbox or spam folder.');
+    showSuccess(t('code_sent'));
   };
 
   return (
     <Container pt="150px" size="xs">
       <Group justify="center">
         <Image src={logo} w={40}></Image>
-        <Title>Reset Password</Title>
+        <Title>{t('forget_password')}</Title>
       </Group>
       <Paper p="xl" withBorder mt="md">
         <form onSubmit={form.onSubmit(handleForgerPassword)}>
           <Stack>
             <TextInput
               name="email"
-              label="Email"
-              description="Please enter the email associated with your account"
-              placeholder="Please enter your email"
+              label={t('email')}
+              description={t('email_description')}
+              placeholder={t('email_placeholder')}
               key={form.key('email')}
               {...form.getInputProps('email')}
             />
             <Group align="flex-end">
               <TextInput
-                label="Verification Code"
+                label={t('verification_code')}
                 name="verificationCode"
-                placeholder="Please enter the verification code"
-                description="We will send a verificationCode code to your email"
+                placeholder={t('verification_code_placeholder')}
+                description={t('verification_code_description')}
                 key={form.key('verificationCode')}
                 {...form.getInputProps('verificationCode')}
                 style={{ flex: 1 }}
               />
               <Button variant="outline" onClick={getVerificationCode} loading={loading}>
-                Get Code
+                {t('get_code')}
               </Button>
             </Group>
             <PasswordInput
-              label="Password"
+              label={t('password')}
               name="password"
-              description="Password must be at least 6 characters long"
-              placeholder="Please enter your password"
+              description={t('password_length_tip')}
+              placeholder={t('password_placeholder')}
               key={form.key('password')}
               {...form.getInputProps('password')}
             />
             <PasswordInput
-              label="Confirm Password"
+              label={t('confirm_password')}
               name="confirmPassword"
-              description="Please enter your password again to confirm"
-              placeholder="Please enter your password again"
+              description={t('confirm_password_description')}
+              placeholder={t('confirm_password_placeholder')}
               key={form.key('confirmPassword')}
               {...form.getInputProps('confirmPassword')}
             />
@@ -118,7 +119,7 @@ const ForgetPasswordForm = () => {
               variant="gradient"
               gradient={{ from: 'blue', to: 'cyan', deg: 90 }}
             >
-              Submit
+              {t('submit')}
             </Button>
           </Stack>
         </form>
