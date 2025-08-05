@@ -124,6 +124,7 @@ const SystemSetting = () => {
             <Textarea
               name="Notice"
               label={t('notice')}
+              description={t('notice_description')}
               autosize
               minRows={3}
               value={inputs.Notice}
@@ -226,6 +227,7 @@ const SystemSetting = () => {
             <Textarea
               name="About"
               label={t('about_content')}
+              description={t('about_description')}
               autosize
               minRows={5}
               value={inputs.About}
