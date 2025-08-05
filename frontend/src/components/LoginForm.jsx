@@ -16,12 +16,14 @@ import {
   Title,
 } from '@mantine/core';
 import { useForm } from '@mantine/form';
+import { useTranslation } from 'react-i18next';
 
 const LoginForm = () => {
   const [searchParams] = useSearchParams();
   const [, dispatch] = useContext(UserContext);
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
+  const { t } = useTranslation();
 
   useEffect(() => {
     if (searchParams.get('expired')) {
@@ -92,22 +94,22 @@ const LoginForm = () => {
     <Container pt="150px" size="xs">
       <Group justify="center">
         <Image src={logo} w={60}></Image>
-        <Title>Login</Title>
+        <Title>{t('login')}</Title>
       </Group>
       <Paper p="xl" withBorder mt="md">
         <form onSubmit={loginForm.onSubmit(login)}>
           <Stack>
             <TextInput
               name="username"
-              label="Username"
-              placeholder="Please enter your username"
+              label={t('username')}
+              placeholder={t('username_placeholder')}
               key={loginForm.key('username')}
               {...loginForm.getInputProps('username')}
             />
             <PasswordInput
               name="password"
-              label="Password"
-              placeholder="Please enter your password"
+              label={t('password')}
+              placeholder={t('password_placeholder')}
               key={loginForm.key('password')}
               {...loginForm.getInputProps('password')}
             />
@@ -117,14 +119,14 @@ const LoginForm = () => {
               loading={loading}
               gradient={{ from: 'blue', to: 'cyan', deg: 90 }}
             >
-              Submit
+              {t('login')}
             </Button>
             <Group justify="space-between">
               <Anchor onClick={handleForgerPassword} size="sm">
-                Forgot password?
+                {t('forgot_password')}
               </Anchor>
               <Anchor onClick={handleRegister} size="sm">
-                Register an account.
+                {t('register_account')}
               </Anchor>
             </Group>
           </Stack>

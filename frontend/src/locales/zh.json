@@ -1,0 +1,9 @@
+{
+  "login": "登录",
+  "username": "用户名",
+  "username_placeholder": "请输入用户名",
+  "password": "密码",
+  "password_placeholder": "请输入密码",
+  "forgot_password": "忘记密码？",
+  "register_account": "注册账号"
+}

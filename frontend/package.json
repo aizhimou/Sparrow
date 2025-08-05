@@ -14,15 +14,17 @@
     "@mantine/form": "^8.2.1",
     "@mantine/hooks": "^8.2.1",
     "@mantine/notifications": "^8.2.1",
-    "mantine-datatable": "^8.2.0",
     "@tabler/icons-react": "^3.34.0",
     "axios": "^1.11.0",
     "clsx": "^2.1.1",
     "dayjs": "^1.11.13",
     "history": "^5.3.0",
+    "mantine-datatable": "^8.2.0",
     "marked": "^16.0.0",
     "react": "^19.1.0",
     "react-dom": "^19.1.0",
+    "i18next": "^25.3.2",
+    "react-i18next": "^15.6.1",
     "react-router-dom": "^7.7.0"
   },
   "devDependencies": {

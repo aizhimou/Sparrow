@@ -1,0 +1,9 @@
+{
+  "login": "Login",
+  "username": "Username",
+  "username_placeholder": "Please enter your username",
+  "password": "Password",
+  "password_placeholder": "Please enter your password",
+  "forgot_password": "Forgot password?",
+  "register_account": "Register an account."
+}

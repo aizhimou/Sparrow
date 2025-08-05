@@ -15,7 +15,7 @@ import logo from '../assets/sparrow.svg';
 import {
   IconBrandGithub,
   IconHome,
-  IconInfoCircle,
+  IconInfoCircle, IconLanguage,
   IconLogout2,
   IconMoon,
   IconSettings,
@@ -25,6 +25,7 @@ import {
 import { API, showSuccess } from '../helpers/index.js';
 import { Link, useNavigate } from 'react-router-dom';
 import { UserContext } from '../context/User/UserContext.jsx';
+import { useTranslation } from 'react-i18next';
 
 function Header() {
   const computedColorScheme = useComputedColorScheme();
@@ -32,9 +33,9 @@ function Header() {
   const toggleColorScheme = () => {
     setColorScheme(colorScheme === 'dark' ? 'light' : 'dark');
   };
-
   const [state, dispatch] = useContext(UserContext);
-  let navigate = useNavigate();
+  const navigate = useNavigate();
+  const { i18n } = useTranslation();
 
   const headerLinks = [
     {
@@ -128,6 +129,17 @@ function Header() {
           >
             <IconBrandGithub />
           </ActionIcon>
+          <Menu>
+            <Menu.Target>
+              <ActionIcon variant="default" size="sm">
+                <IconLanguage />
+              </ActionIcon>
+            </Menu.Target>
+            <Menu.Dropdown>
+              <Menu.Item onClick={() => i18n.changeLanguage('en')}>English</Menu.Item>
+              <Menu.Item onClick={() => i18n.changeLanguage('zh')}>中文</Menu.Item>
+            </Menu.Dropdown>
+          </Menu>
           <ActionIcon variant="default" size="sm">
             {'dark' === computedColorScheme ? (
               <IconSun onClick={toggleColorScheme} />
