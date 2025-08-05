@@ -3,6 +3,8 @@ package top.asimov.sparrow.service;
 import cn.dev33.satoken.stp.StpUtil;
 import com.baomidou.mybatisplus.extension.conditions.query.QueryChainWrapper;
 import java.time.LocalDateTime;
+import org.springframework.context.MessageSource;
+import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ObjectUtils;
 import org.springframework.util.StringUtils;
@@ -19,12 +21,14 @@ public class AuthService {
   private final UserMapper userMapper;
   private final ConfigService configService;
   private final MailSenderService mailSenderService;
+  private final MessageSource messageSource;
 
   public AuthService(UserMapper userMapper, ConfigService configService,
-      MailSenderService mailSenderService) {
+      MailSenderService mailSenderService, MessageSource messageSource) {
     this.userMapper = userMapper;
     this.configService = configService;
     this.mailSenderService = mailSenderService;
+    this.messageSource = messageSource;
   }
 
   public User login(String username, String password) {
@@ -168,7 +172,8 @@ public class AuthService {
     query.eq("username", username);
     User existUser = query.one();
     if (ObjectUtils.isEmpty(existUser)) {
-      throw new BusinessException("User not found");
+      throw new BusinessException(messageSource.getMessage("user.not.found", null,
+          LocaleContextHolder.getLocale()));
     }
 
     if (1 != existUser.getStatus()) {

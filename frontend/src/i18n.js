@@ -7,12 +7,12 @@ i18n
 .use(initReactI18next)
 .init({
   resources: {
-    en: { translation: en },
-    zh: { translation: zh }
+    en: {translation: en},
+    zh: {translation: zh}
   },
   lng: 'en', // default language
   fallbackLng: 'en',
-  interpolation: { escapeValue: false }
-});
+  interpolation: {escapeValue: false}
+}).then();
 
 export default i18n;
