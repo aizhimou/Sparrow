@@ -114,7 +114,7 @@ Use `npm install` to install the dependencies, then use `npm run dev` to start t
 Local network proxy is enabled by default, you can change the proxy settings in the `vite.config.js` file in the `frontend` directory if you need to.
 
 ### Write your own business code
-Write anything you want to build your own application.
+Write anything you want to build your own application 💡
 
 ###  Build
 #### Build JAR file

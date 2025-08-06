@@ -11,7 +11,7 @@
   </parent>
   <groupId>top.asimov</groupId>
   <artifactId>sparrow</artifactId>
-  <version>0.1.1</version>
+  <version>0.2.1</version>
   <name>sparrow</name>
   <description>sparrow</description>
   <url>https://github.com/aizhimou/sparrow/</url>
