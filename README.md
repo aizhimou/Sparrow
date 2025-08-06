@@ -23,6 +23,7 @@ see more screenshots in [this directory](documents/assets/screenshots/).
 
 ## Key Features
 - Light / Dark mode
+- Full multi-language support
 - User login and registration
 - Role-based access control
 - Configurable system settings
@@ -122,7 +123,6 @@ Write anything you want to build your own application.
 3. Run `mvn clean package` in the `backend` directory to build the JAR file.
 4. The JAR file will be generated in the `backend/target` directory.
 5. You can run the JAR file with `java -jar target/sparrow-<version>.jar` command, where `<version>` is the version of the JAR file.
-6. The application will start, and you can access it at `http://localhost:8080`.
 
 #### Build Docker image
 You can use the `Dockerfile` in the root directory to build the Docker image.
