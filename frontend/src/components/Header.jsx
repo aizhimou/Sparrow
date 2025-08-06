@@ -79,6 +79,11 @@ function Header() {
       ));
   };
 
+  function changeLanguageWithStorage(lng) {
+    i18n.changeLanguage(lng);
+    localStorage.setItem('language', lng);
+  }
+
   async function logout() {
     await API.post('/api/auth/logout');
     dispatch({ type: 'logout' });
@@ -136,8 +141,8 @@ function Header() {
               </ActionIcon>
             </Menu.Target>
             <Menu.Dropdown>
-              <Menu.Item onClick={() => i18n.changeLanguage('en')}>{t('header_lang_en')}</Menu.Item>
-              <Menu.Item onClick={() => i18n.changeLanguage('zh')}>{t('header_lang_zh')}</Menu.Item>
+              <Menu.Item onClick={() => changeLanguageWithStorage('en')}>{t('header_lang_en')}</Menu.Item>
+              <Menu.Item onClick={() => changeLanguageWithStorage('zh')}>{t('header_lang_zh')}</Menu.Item>
             </Menu.Dropdown>
           </Menu>
           <ActionIcon variant="default" size="sm">

@@ -45,7 +45,7 @@ const UserSetting = () => {
     });
     const { code, msg } = res.data;
     if (code === 200) {
-      showSuccess('Password reset successfully! Use new password to login next time.');
+      showSuccess(t('password_reset_success'));
     } else {
       showError(msg);
     }
@@ -62,7 +62,7 @@ const UserSetting = () => {
     const res = await API.post('/api/account/send-verification-email', user);
     const { code, msg } = res.data;
     if (code === 200) {
-      showSuccess('Verification code sent to your email, please check your inbox or spam folder.');
+      showSuccess(t('verification_code_sent'));
     } else {
       showError(msg);
     }
@@ -79,7 +79,7 @@ const UserSetting = () => {
     const res = await API.get('/api/account/bind-email', user);
     const { code, msg } = res.data;
     if (code === 200) {
-      showSuccess('Email bound successfully! ');
+      showSuccess(t('email_bound_success'));
     } else {
       showError(msg);
     }
@@ -90,7 +90,7 @@ const UserSetting = () => {
     const res = await API.get('/api/account/generate-api-key');
     const { code, msg, data } = res.data;
     if (code === 200) {
-      showSuccess('API Key generated successfully!');
+      showSuccess(t('api_key_generated'));
       // update the apiKey in the context
       const user = {
         ...state.user,

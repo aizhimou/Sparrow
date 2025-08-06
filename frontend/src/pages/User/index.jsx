@@ -43,7 +43,7 @@ const User = () => {
     const res = await API.post(`/api/user/${funStatus}`, { id: userId });
     const { code, msg } = res.data;
     if (code === 200) {
-      showSuccess('User status updated successfully');
+      showSuccess(t('user_status_updated'));
       fetchUsers().then();
     } else {
       showError(msg);
@@ -57,7 +57,7 @@ const User = () => {
     if (code === 200) {
       close(); // Close the modal
       addUserForm.reset(); // Reset the form
-      showSuccess('User created successfully');
+      showSuccess(t('user_created_success'));
       fetchUsers().then();
     } else {
       showError(msg);

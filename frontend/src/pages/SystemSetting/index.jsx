@@ -90,7 +90,7 @@ const SystemSetting = () => {
     const { code, msg } = res.data;
     if (code === 200) {
       setInputs((inputs) => ({ ...inputs, [name]: value }));
-      showSuccess('Configuration updated successfully!');
+      showSuccess(t('config_updated'));
     } else {
       showError(msg);
     }
@@ -108,7 +108,7 @@ const SystemSetting = () => {
     const res = await API.post('/api/config/batch', SMTPConfig);
     const { code, msg } = res.data;
     if (code === 200) {
-      showSuccess('SMTP configuration updated successfully!');
+      showSuccess(t('smtp_config_updated'));
     } else {
       showError(msg);
     }
@@ -120,20 +120,20 @@ const SystemSetting = () => {
       <Stack>
         <Paper shadow="xs" p="md">
           <Stack>
-            <Title order={4}>{t('notice_setting')}</Title>
+            <Title order={4}>{t('announcement_setting')}</Title>
             <Textarea
               name="Notice"
-              label={t('notice')}
-              description={t('notice_description')}
+              label={t('announcement')}
+              description={t('announcement_description')}
               autosize
               minRows={3}
               value={inputs.Notice}
-              placeholder={t('enter_notice_content')}
+              placeholder={t('enter_announcement_content')}
               onChange={(e) => handleInputChange(e, { name: e.target.name, value: e.target.value })}
             />
             <Group justify="flex-end">
               <Button onClick={() => updateOption('Notice', inputs.Notice)} loading={NoticeLoading}>
-                {t('save_notice')}
+                {t('save_announcement')}
               </Button>
             </Group>
           </Stack>

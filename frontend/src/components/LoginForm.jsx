@@ -27,7 +27,7 @@ const LoginForm = () => {
 
   useEffect(() => {
     if (searchParams.get('expired')) {
-      showError('Not logged in or session expired, please login again.');
+      showError(t('not_logged_in_or_expired'));
     }
   }, []);
 
@@ -72,7 +72,7 @@ const LoginForm = () => {
     if (data === 'true') {
       navigate('/forget-password');
     } else {
-      showError('Forget password feature is not enabled.');
+      showError(t('forget_password_not_enabled'));
     }
   };
 
@@ -86,7 +86,7 @@ const LoginForm = () => {
     if (data === 'true') {
       navigate('/register');
     } else {
-      showError('Register feature is not enabled.');
+      showError(t('register_not_enabled'));
     }
   };
 

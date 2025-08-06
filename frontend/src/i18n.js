@@ -3,6 +3,8 @@ import { initReactI18next } from 'react-i18next';
 import en from './locales/en.json';
 import zh from './locales/zh.json';
 
+const savedLng = localStorage.getItem('language') || 'en';
+
 i18n
 .use(initReactI18next)
 .init({
@@ -10,7 +12,7 @@ i18n
     en: {translation: en},
     zh: {translation: zh}
   },
-  lng: 'en', // default language
+  lng: savedLng, // default language
   fallbackLng: 'en',
   interpolation: {escapeValue: false}
 }).then();
