@@ -4,6 +4,8 @@ import cn.dev33.satoken.apikey.model.ApiKeyModel;
 import cn.dev33.satoken.apikey.template.SaApiKeyUtil;
 import cn.dev33.satoken.stp.StpUtil;
 import java.time.LocalDateTime;
+import org.springframework.context.MessageSource;
+import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ObjectUtils;
 import org.springframework.util.StringUtils;
@@ -18,16 +20,18 @@ public class AccountService {
 
   private final UserMapper userMapper;
   private final MailSenderService mailSenderService;
+  private final MessageSource messageSource;
 
-  public AccountService(UserMapper userMapper, MailSenderService mailSenderService) {
+  public AccountService(UserMapper userMapper, MailSenderService mailSenderService, MessageSource messageSource) {
     this.userMapper = userMapper;
     this.mailSenderService = mailSenderService;
+    this.messageSource = messageSource;
   }
 
   public User getUserInfo(String userId) {
     User user = userMapper.selectById(userId);
     if (ObjectUtils.isEmpty(user)) {
-      throw new BusinessException("User not found");
+      throw new BusinessException(messageSource.getMessage("user.not.found", null, LocaleContextHolder.getLocale()));
     }
     // Clear sensitive fields
     user.setPassword(null);
@@ -57,13 +61,7 @@ public class AccountService {
   }
 
   public void sendBindEmailVerificationCode(String userId, String email) {
-    User user = userMapper.selectById(userId);
-    if (ObjectUtils.isEmpty(user)) {
-      throw new BusinessException("User not found");
-    }
-    if (!StringUtils.hasText(email)) {
-      throw new BusinessException("Email cannot be empty");
-    }
+    User user = checkUserWithEmail(userId, email);
 
     String code = VerificationCodeManager.generateCode();
     VerificationCodeManager.saveCode(userId, email, code);
@@ -75,15 +73,10 @@ public class AccountService {
   }
 
   public void bindEmail(String userId, String email, String code) {
-    User user = userMapper.selectById(userId);
-    if (ObjectUtils.isEmpty(user)) {
-      throw new BusinessException("User not found");
-    }
-    if (!StringUtils.hasText(email)) {
-      throw new BusinessException("Email cannot be empty");
-    }
+    User user = checkUserWithEmail(userId, email);
+
     if (!VerificationCodeManager.checkCode(userId, email, code)) {
-      throw new BusinessException("Invalid or expired verification code");
+      throw new BusinessException(messageSource.getMessage("user.verification.invalid", null, LocaleContextHolder.getLocale()));
     }
 
     user.setEmail(email);
@@ -94,12 +87,12 @@ public class AccountService {
   public void resetPassword(String userId, String oldPassword, String newPassword) {
     User user = userMapper.selectById(userId);
     if (ObjectUtils.isEmpty(user)) {
-      throw new BusinessException("User not found");
+      throw new BusinessException(messageSource.getMessage("user.not.found", null, LocaleContextHolder.getLocale()));
     }
     // Verify old password
     boolean verified = PasswordUtil.verifyPassword(oldPassword, user.getSalt(), user.getPassword());
     if (!verified) {
-      throw new BusinessException("Old password is incorrect");
+      throw new BusinessException(messageSource.getMessage("user.old.password.incorrect", null, LocaleContextHolder.getLocale()));
     }
 
     // Update to new password
@@ -109,6 +102,17 @@ public class AccountService {
     user.setSalt(salt);
     user.setUpdatedAt(LocalDateTime.now());
     userMapper.updateById(user);
+  }
+
+  private User checkUserWithEmail(String userId, String email) {
+    User user = userMapper.selectById(userId);
+    if (ObjectUtils.isEmpty(user)) {
+      throw new BusinessException(messageSource.getMessage("user.not.found", null, LocaleContextHolder.getLocale()));
+    }
+    if (!StringUtils.hasText(email)) {
+      throw new BusinessException(messageSource.getMessage("user.empty.email", null, LocaleContextHolder.getLocale()));
+    }
+    return user;
   }
 
 }

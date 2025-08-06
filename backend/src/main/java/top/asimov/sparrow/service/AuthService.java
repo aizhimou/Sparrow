@@ -42,12 +42,12 @@ public class AuthService {
 
   public int userRegister(User user) {
     if (ObjectUtils.isEmpty(user.getUsername()) || ObjectUtils.isEmpty(user.getPassword())) {
-      throw new BusinessException("Username and password cannot be empty");
+      throw new BusinessException(messageSource.getMessage("user.empty.username.password", null, LocaleContextHolder.getLocale()));
     }
 
     String registerEnabled = configService.getConfig("RegisterEnabled");
     if (!StringUtils.hasText(registerEnabled) || !Boolean.parseBoolean(registerEnabled)) {
-      throw new BusinessException("User registration is disabled");
+      throw new BusinessException(messageSource.getMessage("user.register.disabled", null, LocaleContextHolder.getLocale()));
     }
 
     String emailVerificationEnabled = configService.getConfig("EmailVerificationEnabled");
@@ -60,7 +60,7 @@ public class AuthService {
     query.eq("username", user.getUsername());
     User existingUser = query.one();
     if (!ObjectUtils.isEmpty(existingUser)) {
-      throw new BusinessException("Username is already taken");
+      throw new BusinessException(messageSource.getMessage("user.username.taken", null, LocaleContextHolder.getLocale()));
     }
 
     String salt = PasswordUtil.generateSalt(10);
@@ -79,7 +79,7 @@ public class AuthService {
 
   public void sendRegistrationVerificationCode(String email) {
     if (!StringUtils.hasText(email)) {
-      throw new BusinessException("Email cannot be empty");
+      throw new BusinessException(messageSource.getMessage("user.empty.email", null, LocaleContextHolder.getLocale()));
     }
 
     // check if email is already registered
@@ -87,7 +87,7 @@ public class AuthService {
     query.eq("email", email);
     User existingUser = query.one();
     if (!ObjectUtils.isEmpty(existingUser)) {
-      throw new BusinessException("Email is already registered");
+      throw new BusinessException(messageSource.getMessage("user.email.registered", null, LocaleContextHolder.getLocale()));
     }
 
     String code = VerificationCodeManager.generateCode();
@@ -102,18 +102,18 @@ public class AuthService {
 
   public void checkRegistrationVerificationCode(String email, String code) {
     if (!StringUtils.hasText(email) || !StringUtils.hasText(code)) {
-      throw new BusinessException("Email and verification code cannot be empty");
+      throw new BusinessException(messageSource.getMessage("user.empty.email.code", null, LocaleContextHolder.getLocale()));
     }
 
     boolean valid = VerificationCodeManager.checkCode("new_user", email, code);
     if (!valid) {
-      throw new BusinessException("Invalid or expired verification code");
+      throw new BusinessException(messageSource.getMessage("user.verification.invalid", null, LocaleContextHolder.getLocale()));
     }
   }
 
   public void sendForgetPasswordVerificationCode(String email) {
     if (!StringUtils.hasText(email)) {
-      throw new BusinessException("Email cannot be empty");
+      throw new BusinessException(messageSource.getMessage("user.empty.email", null, LocaleContextHolder.getLocale()));
     }
 
     // check if email is registered
@@ -121,7 +121,7 @@ public class AuthService {
     query.eq("email", email);
     User existingUser = query.one();
     if (ObjectUtils.isEmpty(existingUser)) {
-      throw new BusinessException("Email is not registered");
+      throw new BusinessException(messageSource.getMessage("user.email.not.registered", null, LocaleContextHolder.getLocale()));
     }
 
     String code = VerificationCodeManager.generateCode();
@@ -136,13 +136,13 @@ public class AuthService {
 
   public void forgetPassword(User user) {
     if (ObjectUtils.isEmpty(user.getEmail()) || !StringUtils.hasText(user.getVerificationCode())) {
-      throw new BusinessException("Email and verification code cannot be empty");
+      throw new BusinessException(messageSource.getMessage("user.empty.email.code", null, LocaleContextHolder.getLocale()));
     }
 
     String forgetPasswordEnabled = configService.getConfig("ForgetPasswordEnabled");
     if (!StringUtils.hasText(forgetPasswordEnabled) || !Boolean.parseBoolean(
         forgetPasswordEnabled)) {
-      throw new BusinessException("Password reset is disabled");
+      throw new BusinessException(messageSource.getMessage("user.forget.password.disabled", null, LocaleContextHolder.getLocale()));
     }
 
     // check if email is registered
@@ -150,13 +150,13 @@ public class AuthService {
     query.eq("email", user.getEmail());
     User existingUser = query.one();
     if (ObjectUtils.isEmpty(existingUser)) {
-      throw new BusinessException("Email is not registered");
+      throw new BusinessException(messageSource.getMessage("user.email.not.registered", null, LocaleContextHolder.getLocale()));
     }
 
     boolean valid = VerificationCodeManager.checkCode(existingUser.getId(), user.getEmail(),
         user.getVerificationCode());
     if (!valid) {
-      throw new BusinessException("Invalid or expired verification code");
+      throw new BusinessException(messageSource.getMessage("user.verification.invalid", null, LocaleContextHolder.getLocale()));
     }
 
     String salt = PasswordUtil.generateSalt(10);
@@ -172,18 +172,17 @@ public class AuthService {
     query.eq("username", username);
     User existUser = query.one();
     if (ObjectUtils.isEmpty(existUser)) {
-      throw new BusinessException(messageSource.getMessage("user.not.found", null,
-          LocaleContextHolder.getLocale()));
+      throw new BusinessException(messageSource.getMessage("user.not.found", null, LocaleContextHolder.getLocale()));
     }
 
     if (1 != existUser.getStatus()) {
-      throw new BusinessException("User is not active");
+      throw new BusinessException(messageSource.getMessage("user.not.active", null, LocaleContextHolder.getLocale()));
     }
 
     boolean verified = PasswordUtil.verifyPassword(password, existUser.getSalt(),
         existUser.getPassword());
     if (!verified) {
-      throw new BusinessException("Invalid password");
+      throw new BusinessException(messageSource.getMessage("user.invalid.password", null, LocaleContextHolder.getLocale()));
     }
     return existUser;
   }
