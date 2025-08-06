@@ -69,7 +69,7 @@ const RegisterForm = () => {
       return;
     }
     const res = await API.post('/api/auth/register', user);
-    const { code, msg, data } = res.data;
+    const { code, msg } = res.data;
     if (code !== 200) {
       showError(msg);
       return;
@@ -85,6 +85,7 @@ const RegisterForm = () => {
     const { code, msg } = res.data;
     if (code !== 200) {
       showError(msg);
+      setLoading(false);
       return;
     }
     setLoading(false);
