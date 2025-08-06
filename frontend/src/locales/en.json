@@ -36,7 +36,7 @@
   "header_logout": "Logout",
   "logout_success": "Logout successful!",
   "header_lang_en": "English",
-  "header_lang_zh": "中文",
+  "header_lang_zh": "简体中文",
   "about_tip_content": "You can write some contents in setting to show in here.",
   "about_tip_html_and_md_supported": "HTML and Markdown are supported.",
   "about_load_failed": "Loading about content failed...",
