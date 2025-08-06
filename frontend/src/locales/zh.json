@@ -36,7 +36,7 @@
   "header_logout": "退出登录",
   "logout_success": "退出成功！",
   "header_lang_en": "English",
-  "header_lang_zh": "中文",
+  "header_lang_zh": "简体中文",
   "about_tip_content": "你可以在设置中编写内容展示在这里。",
   "about_tip_html_and_md_supported": "支持 HTML 和 Markdown 格式。",
   "about_load_failed": "加载关于页面内容失败...",
