@@ -1,5 +1,7 @@
 package top.asimov.sparrow.service;
 
+import static top.asimov.sparrow.constant.System.DEFAULT_ROOT_USER_ID;
+
 import cn.dev33.satoken.stp.StpUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
@@ -65,6 +67,9 @@ public class UserService {
   }
 
   public void forbidUser(String userId) {
+    if (String.valueOf(DEFAULT_ROOT_USER_ID).equals(userId)) {
+      throw new BusinessException(messageSource.getMessage("user.forbid.root", null, LocaleContextHolder.getLocale()));
+    }
     User user = userMapper.selectById(userId);
     if (ObjectUtils.isEmpty(user)) {
       throw new BusinessException(messageSource.getMessage("user.not.found", null, LocaleContextHolder.getLocale()));
