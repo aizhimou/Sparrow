@@ -35,6 +35,9 @@ const UserSetting = () => {
     confirmGenerateApiKeyOpened,
     { open: openConfirmGenerateApiKey, close: closeConfirmGenerateApiKey },
   ] = useDisclosure(false);
+  const [changeUsernameOpened, { open: openChangeUsername, close: closeChangeUsername }] =
+    useDisclosure(false);
+  const [newUsername, setNewUsername] = useState('');
 
   const resetPassword = async (values) => {
     setResetPasswordLoading(true);
@@ -106,6 +109,23 @@ const UserSetting = () => {
     }
   };
 
+  const changeUsername = async () => {
+    const res = await API.post('/api/account/change-username', {
+      id: state.user.id,
+      username: newUsername,
+    });
+    const { code, msg, data } = res.data;
+    if (code === 200) {
+      showSuccess(t('username_changed_success'));
+      dispatch({ type: 'login', payload: data });
+      localStorage.setItem('user', JSON.stringify(data));
+      closeChangeUsername();
+    } else {
+      showError(msg);
+    }
+  }
+
+
   const resetPasswordForm = useForm({
     mode: 'uncontrolled',
     initialValues: {
@@ -166,6 +186,7 @@ const UserSetting = () => {
               ) : null}
             </Group>
             <Group mt="md">
+              <Button onClick={openChangeUsername}>{t('change_username')}</Button>
               <Button onClick={openResetPassword}>{t('reset_password')}</Button>
               <Button onClick={openBindEmail}>
                 {state.user.email ? t('rebind_email') : t('bind_email')}
@@ -182,7 +203,6 @@ const UserSetting = () => {
         opened={resetPasswordOpened}
         onClose={closeResetPassword}
         title={t('reset_password')}
-        centered
       >
         <form onSubmit={resetPasswordForm.onSubmit((values) => resetPassword(values))}>
           <PasswordInput
@@ -214,7 +234,7 @@ const UserSetting = () => {
         </form>
       </Modal>
 
-      <Modal opened={bindEmailOpened} onClose={closeBindEmail} title={t('bind_email')} centered>
+      <Modal opened={bindEmailOpened} onClose={closeBindEmail} title={t('bind_email')}>
         <form onSubmit={bindEmailForm.onSubmit((values) => bindEmail(values))}>
           <Group align="flex-end">
             <TextInput
@@ -252,7 +272,6 @@ const UserSetting = () => {
         opened={confirmGenerateApiKeyOpened}
         onClose={closeConfirmGenerateApiKey}
         title={t('confirm_generation')}
-        centered
       >
         <Text fw={500}>
           {t('confirm_generate_api_key_tip')}
@@ -263,6 +282,28 @@ const UserSetting = () => {
             onClick={() => {
               generateApiKey().then(closeConfirmGenerateApiKey);
             }}
+          >
+            {t('confirm')}
+          </Button>
+        </Group>
+      </Modal>
+
+      <Modal
+          opened={changeUsernameOpened}
+          onClose={closeChangeUsername}
+          title={t('change_username')}
+      >
+        <TextInput withAsterisk
+            label={t('new_username')}
+            placeholder={t('enter_new_username')}
+                   value={newUsername}
+                   onChange={(event) => setNewUsername(event.currentTarget.value)}
+        />
+        <Group justify="flex-end" mt="md">
+          <Button
+              onClick={() => {
+                changeUsername().then();
+              }}
           >
             {t('confirm')}
           </Button>

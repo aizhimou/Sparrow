@@ -3,6 +3,7 @@ package top.asimov.sparrow.service;
 import cn.dev33.satoken.apikey.model.ApiKeyModel;
 import cn.dev33.satoken.apikey.template.SaApiKeyUtil;
 import cn.dev33.satoken.stp.StpUtil;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import java.time.LocalDateTime;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
@@ -58,6 +59,27 @@ public class AccountService {
     user.setApiKey(akModel.getApiKey());
     userMapper.updateById(user);
     return akModel.getApiKey();
+  }
+
+  public User changeUsername(String userId, String newUsername) {
+    if (!StringUtils.hasText(newUsername)) {
+      throw new BusinessException(messageSource.getMessage("user.empty.username", null, LocaleContextHolder.getLocale()));
+    }
+    User user = userMapper.selectById(userId);
+    if (ObjectUtils.isEmpty(user)) {
+      throw new BusinessException(messageSource.getMessage("user.not.found", null, LocaleContextHolder.getLocale()));
+    }
+
+    QueryWrapper<User> queryWrapper = new QueryWrapper<>();
+    queryWrapper.eq("username", newUsername);
+    if (userMapper.selectOne(queryWrapper) != null) {
+      throw new BusinessException(messageSource.getMessage("user.username.taken", null, LocaleContextHolder.getLocale()));
+    }
+
+    user.setUsername(newUsername);
+    user.setUpdatedAt(LocalDateTime.now());
+    userMapper.updateById(user);
+    return user;
   }
 
   public void sendBindEmailVerificationCode(String userId, String email) {
