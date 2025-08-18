@@ -118,5 +118,9 @@
   "warning": "警告",
   "success": "成功",
   "info": "信息",
-  "notice": "通知"
+  "notice": "通知",
+  "change_username": "修改用户名",
+  "enter_new_username": "请输入新用户名",
+  "new_username": "新用户名",
+  "username_changed_success": "用户名修改成功！"
 }

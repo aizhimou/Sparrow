@@ -29,6 +29,11 @@ public class AccountController {
     return SaResult.data(user);
   }
 
+  @PostMapping("/change-username")
+  public SaResult changeUsername(@RequestBody User user) {
+    return SaResult.data(accountService.changeUsername(user.getId(), user.getUsername()));
+  }
+
   @GetMapping("/generate-api-key")
   public SaResult generateApiKey() {
     String apiKey = accountService.generateApiKey();

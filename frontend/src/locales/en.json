@@ -118,5 +118,9 @@
   "warning": "Warning",
   "info": "Info",
   "success": "Success",
-  "notice": "Notice"
+  "notice": "Notice",
+  "change_username": "Change Username",
+  "enter_new_username": "Please enter new username",
+  "new_username": "New Username",
+  "username_changed_success": "Username changed successfully!"
 }
